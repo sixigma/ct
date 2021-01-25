@@ -70,6 +70,9 @@
     <ClCompile Include="dataIOManager.cpp">
       <Filter>Framework\Text-Related</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Game\GameScene\Players</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -152,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="dataIOManager.h">
       <Filter>Framework\Text-Related</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>Game\GameScene\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Game\GameScene\Players</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
