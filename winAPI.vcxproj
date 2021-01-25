@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
+    <ClInclude Include="character.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="fontParser.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="dataIOManager.h" />
     <ClInclude Include="keyAnimManager.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="textManager.h" />
     <ClInclude Include="loadingScene.h" />
     <ClInclude Include="startScene.h" />
@@ -188,6 +190,7 @@
     <ClCompile Include="dataIOManager.cpp" />
     <ClCompile Include="keyAnimManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="textManager.cpp" />
     <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="startScene.cpp" />
