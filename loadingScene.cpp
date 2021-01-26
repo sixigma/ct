@@ -208,6 +208,9 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	//file.close();
 	++loadingParams->_currentCount;
 
+	// 오프닝 영상 소리
+	SND->addSound("오프닝", "res/videos/Chrono Trigger Opening.mp3", true, false);
+
 	// 글꼴 사용 준비
 	TXT->prepareToUseFonts();
 

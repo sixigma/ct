@@ -45,14 +45,12 @@ void gameNode::release()
 	{
 		RNG->releaseSingleton();
 		KEY->releaseSingleton();
-		IMG->release();
-		IMG->releaseSingleton();
+		SC->release();
+		SC->releaseSingleton();
 		TIME->release();
 		TIME->releaseSingleton();
 		FX->release();
 		FX->releaseSingleton();
-		SC->release();
-		SC->releaseSingleton();
 		SND->release();
 		SND->releaseSingleton();
 		KAN->release();
@@ -60,6 +58,8 @@ void gameNode::release()
 		DATA->releaseSingleton();
 		TXT->release();
 		TXT->releaseSingleton();
+		IMG->release();
+		IMG->releaseSingleton();
 	}
 	ReleaseDC(_hWnd, _hDC);
 }

@@ -176,6 +176,7 @@
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="videoPlayer.h" />
     <ClInclude Include="winAPI.h" />
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +208,7 @@
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="videoPlayer.cpp" />
     <ClCompile Include="winAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

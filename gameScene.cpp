@@ -16,7 +16,6 @@ HRESULT gameScene::init()
 {
 	_currOrg = _newOrg = { 0, 0 };
 
-
 	_totRegion = { 0, 0, 3036, 640 };
 	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.top };
 
