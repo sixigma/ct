@@ -31,7 +31,7 @@ HRESULT playground::init()
 	SC->changeScene("로딩 장면");
 
 	_blackScreenAlpha = 0x00;
-
+	_fadeCount = 0;
 	_currMasterVolume = 1.f;
 	_currBGMVolume = _currSFXVolume = 0.5f;
 
@@ -67,6 +67,13 @@ void playground::update()
 	{
 		// 페이드아웃에 맞게 알파 값을 변경한다.
 		if (_blackScreenAlpha < 0xFF) _blackScreenAlpha += min(0x22, 0xFF - _blackScreenAlpha);
+		if (_blackScreenAlpha == 0xFF) {
+			if (_fadeCount++ == 30)
+			{
+				_shouldFadeOut = FALSE;
+				_fadeCount = 0;
+			}
+		}
 	}
 	else if (_blackScreenAlpha != 0x00)
 	{

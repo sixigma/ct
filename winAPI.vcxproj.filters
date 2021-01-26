@@ -73,6 +73,9 @@
     <ClCompile Include="player.cpp">
       <Filter>Game\GameScene\Players</Filter>
     </ClCompile>
+    <ClCompile Include="videoPlayer.cpp">
+      <Filter>Framework\Video-Related</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -161,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Game\GameScene\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="videoPlayer.h">
+      <Filter>Framework\Video-Related</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
