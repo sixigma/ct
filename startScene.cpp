@@ -15,7 +15,10 @@ startScene::~startScene()
 HRESULT startScene::init()
 {
 	vP->init();
-	vP->playOpening();
+	if (!KEY->press(VK_SPACE))
+	{
+		vP->playOpening();
+	}
 	return S_OK;
 }
 
@@ -31,7 +34,7 @@ void startScene::update()
 
 void startScene::render()
 {
-	if (KEY->down(VK_SPACE))
+	if (KEY->press(VK_SPACE))
 	{
 		_shouldFadeOut = TRUE;
 		SC->changeScene("게임 장면");

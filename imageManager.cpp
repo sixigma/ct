@@ -245,26 +245,18 @@ void imageManager::loopRender(string strKey, HDC hDC, const LPRECT drawArea, int
 void imageManager::setRctClipRgn(HDC hDC, int x, int y, int width, int height)
 {
 	_hClipRgn = CreateRectRgn(x, y, x + width, y + height);
-	if (_hOClipRgn == nullptr) GetClipRgn(hDC, _hOClipRgn);
-	else return;
 	SelectClipRgn(hDC, _hClipRgn);
 }
 
 void imageManager::setEllipticClipRgn(HDC hDC, int x, int y, int width, int height)
 {
 	_hClipRgn = CreateEllipticRgn(x, y, x + width, y + height);
-	if (_hOClipRgn == nullptr) GetClipRgn(hDC, _hOClipRgn);
-	else return;
 	SelectClipRgn(hDC, _hClipRgn);
 }
 
 void imageManager::resetClipRgn(HDC hDC)
 {
-	if (_hOClipRgn != nullptr)
-	{
-		SelectClipRgn(hDC, _hOClipRgn);
-		_hOClipRgn = nullptr;
-	}
+	SelectClipRgn(hDC, nullptr);
 }
 
 void imageManager::execZ()
