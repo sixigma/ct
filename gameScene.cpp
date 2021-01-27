@@ -29,10 +29,16 @@ void gameScene::release()
 
 void gameScene::update()
 {
-	if (KEY->down('X') && TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
+	if (TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		TXT->toggleTextWindowPos();
+		if (KEY->down('X')) TXT->toggleTextWindowPos();
 	}
+
+
+
+
+	if (!_isInBattle) TXT->updateDialog();
+	else TXT->updateBattleMsg();
 }
 
 void gameScene::render()
@@ -44,9 +50,15 @@ void gameScene::render()
 
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
 
+
+
+
+
+
 	if (TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		TXT->renderDialog(getMemDC());
+		if (!_isInBattle) TXT->renderDialog(getMemDC());
+		else TXT->renderBattleMsg(getMemDC());
 	}
 
 #ifdef _DEBUG

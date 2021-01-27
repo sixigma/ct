@@ -15,9 +15,9 @@ RECT		_camMovLim, _totRegion;
 BOOL		_shouldChNotMove, _shouldBePaused, _shouldFadeOut, _shouldShowMenu;
 float		_currMasterVolume, _currBGMVolume, _currSFXVolume;
 string		_playChNames[7]{ "Crono", "Lucca", "Marle", "Frog", "Robo", "Ayla", "Magus"};
-string		_currentLine = "";
-int			_battleGaugeSpeed = 4, _textSpeed = 4, _textWindowSkin = 0, _battleGaugeType = 1;
-BOOL		_isActiveBattle = true, _shouldRenderUsingWindowCoords = false;
+string		_currStr = "";
+int			_battleGaugeSpeed = 4, _battleMsgSpeed = 4, _textWindowSkin = 0, _battleGaugeType = 1;
+BOOL		_isInBattle = FALSE, _isActiveBattle = TRUE, _shouldRenderUsingWindowCoords = FALSE;
 vector<int>	_events;
 
 playground _pg;

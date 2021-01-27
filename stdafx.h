@@ -43,10 +43,10 @@ extern RECT			_camMovLim, _totRegion;
 extern BOOL			_shouldChNotMove, _shouldBePaused, _shouldFadeOut, _shouldShowMenu;
 extern float		_currMasterVolume, _currBGMVolume, _currSFXVolume;
 extern string		_playChNames[7];
-extern string		_currentLine;
-extern int			_battleGaugeSpeed, _textSpeed, _textWindowSkin, _battleGaugeType;
+extern string		_currStr;
+extern int			_battleGaugeSpeed, _battleMsgSpeed, _textWindowSkin, _battleGaugeType;
 extern vector<int>	_events;
-extern BOOL			_isActiveBattle, _shouldRenderUsingWindowCoords;
+extern BOOL			_isInBattle, _isActiveBattle, _shouldRenderUsingWindowCoords;
 
 #include "keyManager.h"
 #include "randomNumber.h"
