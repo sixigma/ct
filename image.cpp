@@ -680,55 +680,100 @@ void image::animRender(HDC hDC, int destX, int destY, animation* anim)
 		anim->getFrameWidth(), anim->getFrameHeight());
 }
 
-void image::loopRender(HDC hDC, const LPRECT drawArea, int offSetX, int offSetY)
+void image::loopRender(HDC hDC, const LPRECT destArea, int offSetX, int offSetY)
 {
 	if (offSetX < 0) offSetX = _imageInfo->width + (offSetX % _imageInfo->width);
 	if (offSetY < 0) offSetY = _imageInfo->height + (offSetY % _imageInfo->height);
 
-	int srcWidth{}, srcHeight{};
-	RECT rctDest{}, rctSrc{};
+	int tempSrcW{}, tempSrcH{};
+	RECT tempDestRct{}, tempSrcRct{};
 
-	int drawAreaX = drawArea->left;					
-	int drawAreaY = drawArea->top;
-	int drawAreaW = drawArea->right - drawAreaX;
-	int drawAreaH = drawArea->bottom - drawAreaY;
+	int destAreaX = destArea->left;
+	int destAreaY = destArea->top;
+	int destAreaW = destArea->right - destAreaX;
+	int destAreaH = destArea->bottom - destAreaY;
 
-	for (int y = 0; y < drawAreaH; y += srcHeight)
+	for (int y = 0; y < destAreaH; y += tempSrcH)
 	{
-		rctSrc.top = (y + offSetY) % _imageInfo->height;
-		rctSrc.bottom = _imageInfo->height;
+		tempSrcRct.top = (y + offSetY) % _imageInfo->height;
+		tempSrcRct.bottom = _imageInfo->height;
+		tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
 
-		srcHeight = rctSrc.bottom - rctSrc.top;
-
-		if (y + srcHeight > drawAreaH)
+		if (y + tempSrcH > destAreaH)
 		{
-			rctSrc.bottom -= (y + srcHeight) - drawAreaH;
-			srcHeight = rctSrc.bottom - rctSrc.top;
+			tempSrcRct.bottom -= (y + tempSrcH) - destAreaH;
+			tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
 		}
 
-		rctDest.top = y + drawAreaY;
-		rctDest.bottom = rctDest.top + srcHeight;
+		tempDestRct.top = y + destAreaY;
+		// tempDestRct.bottom = destRct.top + srcHeight;
 
-		for (int x = 0; x < drawAreaW; x += srcWidth)
+		for (int x = 0; x < destAreaW; x += tempSrcW)
 		{
-			rctSrc.left = (x + offSetX) % _imageInfo->width;
-			rctSrc.right = _imageInfo->width;
+			tempSrcRct.left = (x + offSetX) % _imageInfo->width;
+			tempSrcRct.right = _imageInfo->width;
+			tempSrcW = tempSrcRct.right - tempSrcRct.left;
 
-			srcWidth = rctSrc.right - rctSrc.left;
-
-			if (x + srcWidth > drawAreaW)
+			if (x + tempSrcW > destAreaW)
 			{
-				rctSrc.right -= (x + srcWidth) - drawAreaW;
-				srcWidth = rctSrc.right - rctSrc.left;
+				tempSrcRct.right -= (x + tempSrcW) - destAreaW;
+				tempSrcW = tempSrcRct.right - tempSrcRct.left;
 			}
 
-			rctDest.left = x + drawAreaX;
-			rctDest.right = rctDest.left + srcWidth;
+			tempDestRct.left = x + destAreaX;
+			// tempDestRct.right = destRct.left + srcWidth;
 
-			render(hDC, rctDest.left, rctDest.top,
-				rctSrc.left, rctSrc.top,
-				rctSrc.right - rctSrc.left,
-				rctSrc.bottom - rctSrc.top);
+			render(hDC, tempDestRct.left, tempDestRct.top,
+				tempSrcRct.left, tempSrcRct.top, tempSrcW, tempSrcH);
+		}
+	}
+}
+
+void image::loopRenderP(HDC hDC, const LPRECT destArea, const LPRECT srcArea, int offSetX, int offSetY)
+{
+	if (offSetX < 0) offSetX = srcArea->right + (offSetX % (srcArea->right - srcArea->left));
+	if (offSetY < 0) offSetY = srcArea->bottom + (offSetY % (srcArea->bottom - srcArea->top));
+
+	int tempSrcW{}, tempSrcH{};
+	RECT tempDestRct{}, tempSrcRct{};
+
+	int destAreaX = destArea->left;
+	int destAreaY = destArea->top;
+	int destAreaW = destArea->right - destAreaX;
+	int destAreaH = destArea->bottom - destAreaY;
+
+	for (int y = 0; y < destAreaH; y += tempSrcH)
+	{
+		tempSrcRct.top = srcArea->top + (y + offSetY) % (srcArea->bottom - srcArea->top);
+		tempSrcRct.bottom = srcArea->top + (srcArea->bottom - srcArea->top);
+		tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
+
+		if (y + tempSrcH > destAreaH)
+		{
+			tempSrcRct.bottom -= (y + tempSrcH) - destAreaH;
+			tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
+		}
+
+		tempDestRct.top = y + destAreaY;
+		// tempDestRct.bottom = destRct.top + tempSrcH;
+
+		for (int x = 0; x < destAreaW; x += tempSrcW)
+		{
+			tempSrcRct.left = srcArea->left + (x + offSetX) % (srcArea->right - srcArea->left);
+			tempSrcRct.right = srcArea->left + (srcArea->right - srcArea->left);
+			tempSrcW = tempSrcRct.right - tempSrcRct.left;
+
+			if (x + tempSrcW > destAreaW)
+			{
+				tempSrcRct.right -= (x + tempSrcW) - destAreaW;
+				tempSrcW = tempSrcRct.right - tempSrcRct.left;
+			}
+
+			tempDestRct.left = x + destAreaX;
+			// tempDestRct.right = destRct.left + tempSrcW;
+
+			render(hDC, tempDestRct.left, tempDestRct.top,
+				tempSrcRct.left, tempSrcRct.top, tempSrcW, tempSrcH);
 		}
 	}
 }
@@ -737,7 +782,7 @@ COLORREF image::changeColor(COLORREF originalColor, COLORREF newColor)
 {
 	HDC hTempDC = CreateCompatibleDC(_imageInfo->hMemDC);
 	BITMAPINFO bI = { 0 };
-	DWORD* ptrToBitmapBits = nullptr;
+	DWORD* bitmapData = nullptr;
 	bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bI.bmiHeader.biBitCount = 32;
 	bI.bmiHeader.biWidth = _imageInfo->width;
@@ -753,17 +798,17 @@ COLORREF image::changeColor(COLORREF originalColor, COLORREF newColor)
 	BYTE newG = static_cast<BYTE>((newColor >> 8) & 0xFF);
 	BYTE newR = static_cast<BYTE>((newColor) & 0xFF);
 
-	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&ptrToBitmapBits), 0, 0);
-	if (hTempBitmap == NULL) return originalColor;
+	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&bitmapData), 0, 0);
+	if (hTempBitmap == nullptr) return originalColor;
 	HBITMAP hTempOBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 	BitBlt(hTempDC, 0, 0, _imageInfo->width, _imageInfo->height, _imageInfo->hMemDC, 0, 0, SRCCOPY);
 	size_t area = static_cast<size_t>(_imageInfo->width * _imageInfo->height);
 	for (size_t i = 0; i < area; ++i)
 	{
-		BYTE* ptrToCurrPixel = reinterpret_cast<BYTE*>(&ptrToBitmapBits[i]);
-		if ((ptrToCurrPixel[0] == originalB) && (ptrToCurrPixel[1] == originalG) && (ptrToCurrPixel[2] == originalR))
+		BYTE* currPixelData = reinterpret_cast<BYTE*>(&bitmapData[i]);
+		if ((currPixelData[0] == originalB) && (currPixelData[1] == originalG) && (currPixelData[2] == originalR))
 		{
-			ptrToCurrPixel[0] = newB; ptrToCurrPixel[1] = newG; ptrToCurrPixel[2] = newR;
+			currPixelData[0] = newB; currPixelData[1] = newG; currPixelData[2] = newR;
 		}
 	}
 	BitBlt(_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, hTempDC, 0, 0, SRCCOPY);
@@ -776,7 +821,7 @@ COLORREF image::changeAllColors(COLORREF newColor, COLORREF exceptionalColor)
 {
 	HDC hTempDC = CreateCompatibleDC(_imageInfo->hMemDC);
 	BITMAPINFO bI = { 0 };
-	DWORD* ptrToBitmapBits = nullptr;
+	DWORD* bitmapData = nullptr;
 	bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bI.bmiHeader.biBitCount = 32;
 	bI.bmiHeader.biWidth = _imageInfo->width;
@@ -792,17 +837,17 @@ COLORREF image::changeAllColors(COLORREF newColor, COLORREF exceptionalColor)
 	BYTE exceptG = static_cast<BYTE>((exceptionalColor >> 8) & 0xFF);
 	BYTE exceptR = static_cast<BYTE>(exceptionalColor & 0xFF);
 
-	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&ptrToBitmapBits), 0, 0);
-	if (hTempBitmap == NULL) return newColor;
+	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&bitmapData), 0, 0);
+	if (hTempBitmap == nullptr) return newColor;
 	HBITMAP hTempOBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 	BitBlt(hTempDC, 0, 0, _imageInfo->width, _imageInfo->height, _imageInfo->hMemDC, 0, 0, SRCCOPY);
 	size_t area = static_cast<size_t>(_imageInfo->width * _imageInfo->height);
 	for (size_t i = 0; i < area; ++i)
 	{
-		BYTE* ptrToCurrPixel = reinterpret_cast<BYTE*>(&ptrToBitmapBits[i]);
-		if ((ptrToCurrPixel[0] != exceptB) || (ptrToCurrPixel[1] != exceptG) || (ptrToCurrPixel[2] != exceptR))
+		BYTE* currPixelData = reinterpret_cast<BYTE*>(&bitmapData[i]);
+		if ((currPixelData[0] != exceptB) || (currPixelData[1] != exceptG) || (currPixelData[2] != exceptR))
 		{
-			ptrToCurrPixel[0] = newB; ptrToCurrPixel[1] = newG; ptrToCurrPixel[2] = newR;
+			currPixelData[0] = newB; currPixelData[1] = newG; currPixelData[2] = newR;
 		}
 	}
 	BitBlt(_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, hTempDC, 0, 0, SRCCOPY);

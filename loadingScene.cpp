@@ -108,7 +108,11 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	++loadingParams->_currentCount;
 
 	// 기타 그림
-	IMG->addF("텍스트 창 스킨 셋", "res/images/textWindowSkins.bmp", 1024, 2560, 1, 8);
+	IMG->addF("글 출력 창 스킨 타일셋", "res/images/tilesets/skinTileset.bmp", 256, 1024, 8, 32);
+	IMG->add("대사 출력 창 스킨", 1024, 320); // 초기 빈 비트맵
+	IMG->add("전투 메시지 창 스킨", 1024, 96); // 초기 빈 비트맵
+	IMG->add("설정 메시지 창 스킨", 898, 128); // 초기 빈 비트맵
+	IMG->setAllWindowSkins();
 	IMG->addF("흰색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("비활성 타일셋0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("하늘색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
@@ -175,7 +179,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->find("녹색 UI 글꼴")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
 	++loadingParams->_currentCount;
 
-	ifstream file;
+//	ifstream file;
 	string line;
 	// 배경음
 	//file.open("res/bgm/fileList.txt");

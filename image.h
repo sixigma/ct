@@ -85,7 +85,11 @@ public:
 
 	void animRender(HDC hDC, int destX, int destY, animation* anim);
 
-	void loopRender(HDC hDC, const LPRECT drawArea, int offSetX, int offSetY);
+	// 지정 영역이 채워지도록 그림을 반복 출력 하는 함수
+	void loopRender(HDC hDC, const LPRECT drawArea, int offSetX = 0, int offSetY = 0);
+
+	// 지정 영역(destArea로 지정한다.)이 채워지도록 그림 일부(srcArea로 영역을 지정한다.)를 반복 출력 하는 함수
+	void loopRenderP(HDC hDC, const LPRECT destArea, const LPRECT srcArea, int offSetX = 0, int offSetY = 0);
 
 	// 이미지 특정 색을 변경하고 새 색을 반환하는 함수(32 비트 비트맵 전용)
 	COLORREF changeColor(COLORREF originalColor, COLORREF newColor);

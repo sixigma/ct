@@ -189,6 +189,7 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="gameScene.cpp" />
     <ClCompile Include="dataIOManager.cpp" />
+    <ClCompile Include="imageManager_textWindowSkin.cpp" />
     <ClCompile Include="keyAnimManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="player.cpp" />

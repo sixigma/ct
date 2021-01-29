@@ -47,7 +47,8 @@ void textManager::setCurrFontImage(int searchValue)
 }
 
 textManager::textManager():
-	_shouldWindowUseTheTopPane(FALSE), _shouldWindowHaveChoices(FALSE), _isWholeCurrStrShown(FALSE),
+	_shouldWindowUseTheTopPane(FALSE), _shouldBeAutoClosed(FALSE), _isGoingToBeAutoClosed(FALSE),
+	_shouldWindowHaveChoices(FALSE), _isWholeCurrStrShown(FALSE),
 	_windowClipCount(0), _waitCount(0), _fP(new fontParser), _choiceSelected(0)
 {
 	HDC hDC = GetDC(_hWnd);
@@ -74,7 +75,7 @@ HRESULT textManager::init()
 void textManager::release()
 {
 	clearLineQ();
-	clearBattleMsg();
+	clearMsgQ();
 
 	iSS.clear();
 	iSS.str(string());
@@ -95,7 +96,7 @@ void textManager::clearLineQ()
 	if (!_dialogLineQ.empty()) _dialogLineQ = {};
 }
 
-void textManager::clearBattleMsg()
+void textManager::clearMsgQ()
 {
 	if (!_battleMsgQ.empty()) _battleMsgQ = {};
 }
@@ -104,7 +105,7 @@ void textManager::updateDialog()
 {
 	if (_textWindowState == TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		if (!_dialogLineQ.empty()) // 출력이 예약된 스트링이 있으면
+		if (!_dialogLineQ.empty()) // 출력 대기 중인 스트링이 있으면
 		{
 			_textWindowState = TEXT_WINDOW_STATE::OPENING;
 			_windowClipCount = 0;
@@ -112,6 +113,7 @@ void textManager::updateDialog()
 			_isWholeCurrStrShown = FALSE;
 			_shouldWindowHaveChoices = FALSE;
 			_shouldBeAutoClosed = FALSE;
+			_isGoingToBeAutoClosed = FALSE;
 			if (!_currStr.empty()) _currStr.clear();
 
 			// istringstream 변수 비우기
@@ -144,12 +146,12 @@ void textManager::updateDialog()
 					while (!_dialogLineQ.empty() && (_dialogLineQ.front().first != _choiceSelected && _dialogLineQ.front().first != 0))
 					{
 						_dialogLineQ.pop();
+						if (_dialogLineQ.empty()) return;
 					}
-					if (_dialogLineQ.empty()) return;
 				}
 				iSS.str(_dialogLineQ.front().second);
 			}
-				
+			
 			iSS.get(_character);
 			if (iSS.fail())
 				_isWholeCurrStrShown = TRUE;
@@ -172,21 +174,55 @@ void textManager::updateDialog()
 						}
 						else if (_character == '>')
 						{
-							if (tempStr[0] == 'w') // 기다리기이면(즉 <w>가 있으면)
+							if (tempStr[0] == 'w') // 기다리기이면(즉 <w자연수>가 있으면)
 							{
 								try
 								{
-									_waitCount = stoi(tempStr.substr(1));
+									int count = stoi(tempStr.substr(1));
+									if (count > 0) _waitCount = count;
 								}
 								catch (const invalid_argument& e)
 								{
-									break;
+									UNREFERENCED_PARAMETER(e);
+								}
+							}
+							else if (tempStr == "acf") // 강제 자동 닫기(시간이 지나야만 닫는다.)이면(즉 <acf>가 있으면)
+							{
+								_waitCount = 60;
+								_isGoingToBeAutoClosed = TRUE;
+								_shouldBeAutoClosed = TRUE;
+							}
+							else if (tempStr.substr(0, 3) == "acf") // 강제 자동 닫기(시간이 지나야만 닫는다.)이면(즉 <acf자연수>가 있으면)
+							{
+								try
+								{
+									int count = stoi(tempStr.substr(3));
+									if (count > 0) _waitCount = count;
+									_isGoingToBeAutoClosed = TRUE;
+									_shouldBeAutoClosed = TRUE;
+								}
+								catch (const invalid_argument& e)
+								{
+									UNREFERENCED_PARAMETER(e);
+								}
+							}
+							else if (tempStr.substr(0,2) == "ac") // 자동 닫기이면(즉 <ac자연수>가 있으면)
+							{
+								try
+								{
+									int count = stoi(tempStr.substr(2));
+									if (count > 0) _waitCount = count;
+									_isGoingToBeAutoClosed = TRUE;
+								}
+								catch (const invalid_argument& e)
+								{
+									UNREFERENCED_PARAMETER(e);
 								}
 							}
 							else if (tempStr == "ac") // 자동 닫기이면(즉 <ac>가 있으면)
 							{
-								_waitCount = 60; // 리마인더: 전투 메시지이면 _battleMsgCount에 의존하여야 한다.
-								_shouldBeAutoClosed = TRUE;
+								_waitCount = 60;
+								_isGoingToBeAutoClosed = TRUE;
 							}
 							else if (tempStr == "c") // 선택지 손가락 아이콘 보이기이면(즉 <c>가 있으면)
 							{
@@ -202,19 +238,61 @@ void textManager::updateDialog()
 					}
 				}
 			}
+			else if (_character == '[')
+			{
+				_currStr += _character;
+				iSS.get(_character);
+				if (iSS.fail())
+					_isWholeCurrStrShown = TRUE;
+				else
+				{
+					string tempStr = "";
+					while (true)
+					{
+						tempStr += _character;
+						iSS.get(_character);
+						if (iSS.fail())
+						{
+							_isWholeCurrStrShown = TRUE;
+							break;
+						}
+						else if (_character == ']')
+						{
+							_currStr += tempStr + ']';
+							break;
+						}
+					}
+				}
+			}
+			else if (_character == '\\')
+			{
+				_currStr += _character;
+				iSS.get(_character);
+				if (iSS.fail())
+					_isWholeCurrStrShown = TRUE;
+				else
+					_currStr += _character;
+			}
 			else
 				_currStr += _character;
 		}
 		else if (_isWholeCurrStrShown)
 		{
-			if (KEY->down('V') || _shouldBeAutoClosed && _waitCount == 0)
+			if (KEY->down('V') && !_shouldBeAutoClosed || _isGoingToBeAutoClosed && _waitCount == 0)
 			{
 				iSS.clear();
 				iSS.str(string());
 				_isWholeCurrStrShown = FALSE;
+				_isGoingToBeAutoClosed = FALSE;
 				_shouldBeAutoClosed = FALSE;
 				_currStr = "";
 				_dialogLineQ.pop();
+				if (_shouldWindowHaveChoices) _shouldWindowHaveChoices = FALSE;
+			}
+			else if (_shouldWindowHaveChoices)
+			{
+				if (KEY->down(VK_DOWN) && _choiceSelected == 1) _choiceSelected = 2;
+				else if (KEY->down(VK_UP) && _choiceSelected == 2) _choiceSelected = 1;
 			}
 		}
 	}
@@ -228,7 +306,7 @@ void textManager::updateDialog()
 void textManager::updateBattleMsg()
 {
 	// 리마인더: 작성 필요
-
+	// 리마인더: 전투 메시지이면 자동 닫기는 _battleMsgCount에 의존하여야 한다.
 
 
 
@@ -281,7 +359,7 @@ void textManager::renderDialog(HDC hDC, int fontIdx, int colorIdx)
 		}
 
 		// 글 출력 창 DC 비트맵에 창 출력하기
-		IMG->frameRender("텍스트 창 스킨 셋", _hTextWindowDC, 0, 0, 0, _textWindowSkin);
+		IMG->render("대사 출력 창 스킨", _hTextWindowDC, 0, 0);
 
 		// 글 출력 창 DC 비트맵에 대사 출력하기
 		TXT->render(_hTextWindowDC, _currStr, 31, 40, fontIdx, colorIdx);
@@ -292,18 +370,18 @@ void textManager::renderDialog(HDC hDC, int fontIdx, int colorIdx)
 			switch (_choiceSelected)
 			{
 				case 1:
-					_currPosX = 31;
-					_currPosY -= 2 * ((*fontInfo)[32].height + 16);
-					// 리마인더: 작성 필요
-
+					_currPosX = 64;
+					_currPosY -= ((*fontInfo)[32].height + 32);
 					break;
 				case 2:
-					_currPosX = 31;
-					_currPosY -= ((*fontInfo)[32].height + 16);
-					// 리마인더: 작성 필요
-
+					_currPosX = 64;
+					_currPosY -= 16;
 					break;
 			}
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
 		}
 
 		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
@@ -363,18 +441,27 @@ void textManager::render(HDC hDC, string text, int destX, int destY, int fontIdx
 	for (size_t i = 0; i < text.size(); ++i)
 	{
 		char chr = text[i];
-		if (chr == '\n')
+		if (chr == '\n') // \n: 개행
 		{
 			_currPosX = destX;
 			_currPosY += (*fontInfo)[32].height + 16;
 		}
-		else if (chr == '\\' && i < text.size() - 1 && text[i + 1] == 'n')
+		else if (chr == '\t') // \t: 세 칸 띄기
+		{
+			_currPosX += (*fontInfo)[32].width * 3;
+		}
+		else if (chr == '\\' && i < text.size() - 1 && text[i + 1] == 'n') // \\n: raw string literal 개행
 		{
 			_currPosX = destX;
 			_currPosY += (*fontInfo)[32].height + 16;
-			i += 2;
-			if (i < text.size()) chr = text[i];
-			else continue;
+			i += 1;
+			continue;
+		}
+		else if (chr == '\\' && i < text.size() - 1 && text[i + 1] == 't') // \\t: raw string literal 세 칸 띄기
+		{
+			_currPosX += (*fontInfo)[32].width * 3;
+			i += 1;
+			continue;
 		}
 		else if (chr == '[')
 		{
