@@ -76,6 +76,9 @@
     <ClCompile Include="videoPlayer.cpp">
       <Filter>Framework\Video-Related</Filter>
     </ClCompile>
+    <ClCompile Include="imageManager_textWindowSkin.cpp">
+      <Filter>Framework\Image-Related</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">

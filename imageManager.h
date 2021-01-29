@@ -91,6 +91,13 @@ public:
 	// 지정하였던 클리핑 영역을 해제하는 함수
 	void resetClipRgn(HDC hDC);
 
+	// 현재 글 출력 창 스킨 인덱스를 반영하여 글 출력 창 스킨을 등록된 비트맵 특정 위치에 출력하는 함수
+	// 너비 96 픽셀 이상, 높이 96 픽셀 이상이어야 하며 높이 값은 16의 배수여야 한다.
+	void setWindowSkin(string tilesetStrKey, string skinStrKey, int width, int height, int destX = 0, int destY = 0);
+
+	// 현재 글 출력 창 스킨 인덱스를 반영하여 글 출력 창 스킨을 전부 다시 그리는 함수
+	void setAllWindowSkins();
+
 	// zIndex 순서로 함수를 호출할 수 있도록 함수를 등록하는 함수(선언) - image* 사용
 	template<typename...args>
 	void renderZ(LONG zIndex, image* img, args... params);

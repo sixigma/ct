@@ -293,7 +293,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 
 
 
-// 추후 참고용:
+// (참고)
 //if (av_read_frame(_formatContext, &_packet) == 0) // 스트림의 다음 프레임을 읽는 데에 성공한다면
 //{
 //	if (_packet.stream_index == _videoStreamIndex)
@@ -305,11 +305,10 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 //			uint8_t* videoData = _videoFrame->data[0];
 //			//char pictureType = av_get_picture_type_char(_videoFrame->pict_type);
 //			//int frameNum = _videoCodecContext->frame_number;
-//			//int64_t PTS = _videoFrame->pts;
-//			//int64_t DTS = _videoFrame->pkt_dts;
 //			//int keyFrame = _videoFrame->key_frame;
 //			//int codedPictureNum = _videoFrame->coded_picture_number;
 //			//int displayPictureNum = _videoFrame->display_picture_number;
+//			//...
 //		}
 //	}
 //	else if (_packet.stream_index == _audioStreamIndex)
@@ -319,7 +318,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 //		{
 //			// _audioFrame 사용
 //			uint8_t* audioData = _audioFrame->data[0];
-//			
+//			// ...
 //		}
 //	}
 //	av_packet_unref(&_packet); // 패킷 재사용을 하려면 이 함수를 호출하여야 한다.
