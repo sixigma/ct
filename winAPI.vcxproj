@@ -152,12 +152,16 @@
     <ClInclude Include="character.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
+    <ClInclude Include="EquipmentItem.h" />
+    <ClInclude Include="etcItem.h" />
+    <ClInclude Include="ExpendableItem.h" />
     <ClInclude Include="fontParser.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="gameScene.h" />
     <ClInclude Include="dataIOManager.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="keyAnimManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="player.h" />
@@ -183,6 +187,9 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
+    <ClCompile Include="EquipmentItem.cpp" />
+    <ClCompile Include="etcItem.cpp" />
+    <ClCompile Include="ExpendableItem.cpp" />
     <ClCompile Include="fontParser.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="image.cpp" />
@@ -190,6 +197,7 @@
     <ClCompile Include="gameScene.cpp" />
     <ClCompile Include="dataIOManager.cpp" />
     <ClCompile Include="imageManager_textWindowSkin.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="keyAnimManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="player.cpp" />

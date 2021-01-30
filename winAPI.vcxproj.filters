@@ -79,6 +79,18 @@
     <ClCompile Include="imageManager_textWindowSkin.cpp">
       <Filter>Framework\Image-Related</Filter>
     </ClCompile>
+    <ClCompile Include="EquipmentItem.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="etcItem.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpendableItem.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -170,6 +182,18 @@
     </ClInclude>
     <ClInclude Include="videoPlayer.h">
       <Filter>Framework\Video-Related</Filter>
+    </ClInclude>
+    <ClInclude Include="EquipmentItem.h">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="etcItem.h">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpendableItem.h">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Game\GameScene\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

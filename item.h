@@ -1,7 +1,18 @@
 #pragma once
+#include "gameNode.h"
 
-struct itemInit
+enum category
 {
+	Expendable,			//0 소모품
+	Equipment,			//1 장비품
+	Etc,				//2 기타
+	Event				//3 이벤트용
+};
+
+class item : public gameNode
+{
+protected:
+	category itemCategory;
 	string itemName;
 	int attack;			//장비공격력
 	int defense;		//장비 방어력
@@ -20,12 +31,28 @@ struct itemInit
 	int recoveryMp;		//마나회복
 	int maxMp;			//최대마나증가
 	int money;			//가격
-};
+public:
+	virtual HRESULT init(string _name);
+	virtual void release();
+	virtual void update();
+	virtual void render();
+	void itemlist();
 
-enum category
-{
-	expendable,
-	equipment,
-	etc
+
+	string getName() { return itemName; }
+	int getMoney() { return money; }
+	int getPower() { return power; }
+	int getMagic() { return magic; }
+	int getSpeed() { return speed; }
+	int getHit() { return hit; }
+	int getEvasion() { return evasion; }
+	int getStamina() { return stamina; }
+	int getMagicDefense() { return magicDefense; }
+	int getRecoveryHp() { return recoveryHp; }
+	int getMaxHp() { return maxHp; }
+	int getRecoveryMp() { return recoveryMp; }
+	int getMaxMp() { return maxMp; }
+	int getMoney() { return money; }
+	
 };
 
