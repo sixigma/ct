@@ -36,7 +36,7 @@ void startScene::render()
 {
 	if (KEY->press(VK_SPACE))
 	{
-		_shouldFadeOut = TRUE;
+		_isScrBlackingOut = TRUE;
 		SC->changeScene("게임 장면");
 	}
 }

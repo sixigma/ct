@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "gameScene.h"
-//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") // 콘솔 창 열기
 
 int gameScene::_countForReEnablingKeyInput;
 
@@ -29,16 +28,38 @@ void gameScene::release()
 
 void gameScene::update()
 {
-	if (TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
+	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
+		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE)
 	{
 		if (KEY->down('X')) TXT->toggleTextWindowPos();
 	}
 
+	// 리마인더: 시험용 ///
+	if (KEY->down('1'))
+	{
+		_textWindowAlpha = 255;
+		TXT->enqueueL("Hey, what are [3]you[0] doing here?\n\t\tNothing.\n\t\tSomething you don't know.<c>");
+		TXT->enqueueL("Really? I<w30> am<w30> doing <w30>my own\n\tstuff.<acf120>", 1);
+		TXT->enqueueL(R"(Why don't you come here to help \\n\\tme out?)", 1);
+		TXT->enqueueL(_playChrNames[0] + "}", 2); 
+		
+		//TXT->enqueueBM("Heals self", false);
+		//TXT->enqueueC("Heals self}");
+	}
+	if (KEY->down('2'))
+	{
+		TXT->clearLQ();
+		//TXT->enqueueBM("Spin-cut nearby enemies", true);
+
+		//TXT->clearCQ();
+	}
+	///////////////////////
 
 
-
-	if (!_isInBattle) TXT->updateDialog();
-	else TXT->updateBattleMsg();
+	// 출력할 글 갱신
+	if (_isInBattle) TXT->updateBM();
+	else if (_isMenuDisplayed) TXT->updateC();
+	else TXT->updateL();
 }
 
 void gameScene::render()
@@ -53,13 +74,14 @@ void gameScene::render()
 
 
 
-
-
-	if (TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
+	// 글 출력
+	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
+		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		if (!_isInBattle) TXT->renderDialog(getMemDC());
-		else TXT->renderBattleMsg(getMemDC());
+		if (_isInBattle) TXT->renderBM(getMemDC());
+		else TXT->renderL(getMemDC());
 	}
+	else if (_isMenuDisplayed) TXT->renderC(getMemDC(), _menuMsgPos.x, _menuMsgPos.y);
 
 #ifdef _DEBUG
 		{

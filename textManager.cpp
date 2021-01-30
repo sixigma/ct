@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "textManager.h"
 
+void textManager::prepareToUseFonts()
+{
+	_fP->parseFnt(0, "res/fonts/dialogGlyphs.fnt");
+	_fP->parseFnt(1, "res/fonts/monoGlyphs.fnt");
+}
+
 void textManager::setCurrFontImage(int searchValue)
 {
 	switch (searchValue)
@@ -48,19 +54,27 @@ void textManager::setCurrFontImage(int searchValue)
 
 textManager::textManager():
 	_shouldWindowUseTheTopPane(FALSE), _shouldBeAutoClosed(FALSE), _isGoingToBeAutoClosed(FALSE),
-	_shouldWindowHaveChoices(FALSE), _isWholeCurrStrShown(FALSE),
+	_shouldWindowHaveChoices(FALSE),
+	_isWholeCurrStrShown1(FALSE), _isWholeCurrStrShown2(FALSE),
+	_textWindowState1(TEXT_WINDOW_STATE::INVISIBLE), _textWindowState2(TEXT_WINDOW_STATE::INVISIBLE),
 	_windowClipCount(0), _waitCount(0), _fP(new fontParser), _choiceSelected(0)
 {
 	HDC hDC = GetDC(_hWnd);
+
 	_hTextWindowDC = CreateCompatibleDC(hDC);
 	_hTextWindowBitmap = CreateCompatibleBitmap(hDC, WINW, 320);
 	_hOTextWindowBitmap = (HBITMAP)SelectObject(_hTextWindowDC, _hTextWindowBitmap);
+
 	ReleaseDC(_hWnd, hDC);
-	_textWindowState = TEXT_WINDOW_STATE::INVISIBLE;
+
+	_bF.BlendOp = AC_SRC_OVER;
+	_bF.BlendFlags = 0;
+	_bF.SourceConstantAlpha = _textWindowAlpha;
+	_bF.AlphaFormat = 0; // AC_SRC_ALPHA는 32 bpp 소스 비트맵에만 사용할 수 있다.
 }
+
 textManager::~textManager()
 {
-	_textWindowState = TEXT_WINDOW_STATE::INVISIBLE;
 	DeleteObject(SelectObject(_hTextWindowDC, _hOTextWindowBitmap));
 	DeleteObject(_hTextWindowBitmap);
 	DeleteDC(_hTextWindowDC);
@@ -74,72 +88,85 @@ HRESULT textManager::init()
 
 void textManager::release()
 {
-	clearLineQ();
-	clearMsgQ();
+	clearLQ();
+	clearBMQ();
+	clearCQ();
 
 	iSS.clear();
 	iSS.str(string());
 }
 
-void textManager::enqueueLine(string line, int forWhichChoice)
+void textManager::enqueueL(string line, int forWhichChoice)
 {
 	_dialogLineQ.push(make_pair(forWhichChoice, line));
 }
 
-void textManager::enqueueMsg(string line, bool isShownLetterByLetter)
+void textManager::enqueueBM(string msg, bool isShownChrByChr)
 {
-	_battleMsgQ.push(make_pair(isShownLetterByLetter, line));
+	if (isShownChrByChr) _battleMsgQ1.push(make_pair(msg, _battleMsgSpeed * 30 + 30));
+	else _battleMsgQ2.push(make_pair(msg, _battleMsgSpeed * 30 + 30));
 }
 
-void textManager::clearLineQ()
+void textManager::enqueueC(string msg)
+{
+	_chrByChrQ.push(msg);
+}
+
+void textManager::clearLQ()
 {
 	if (!_dialogLineQ.empty()) _dialogLineQ = {};
 }
 
-void textManager::clearMsgQ()
+void textManager::clearBMQ()
 {
-	if (!_battleMsgQ.empty()) _battleMsgQ = {};
+	if (!_battleMsgQ1.empty()) _battleMsgQ1 = {};
+	if (!_battleMsgQ2.empty()) _battleMsgQ2 = {};
 }
 
-void textManager::updateDialog()
+void textManager::clearCQ()
 {
-	if (_textWindowState == TEXT_WINDOW_STATE::INVISIBLE)
+	if (!_chrByChrQ.empty()) _chrByChrQ = {};
+}
+
+void textManager::updateL()
+{
+	if (_textWindowState1 == TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		if (!_dialogLineQ.empty()) // 출력 대기 중인 스트링이 있으면
+		if (!_dialogLineQ.empty()) // 출력 (대기) 중인 스트링이 있으면
 		{
-			_textWindowState = TEXT_WINDOW_STATE::OPENING;
+			_textWindowState1 = TEXT_WINDOW_STATE::OPENING;
 			_windowClipCount = 0;
 			_waitCount = 0;
-			_isWholeCurrStrShown = FALSE;
+			_isWholeCurrStrShown1 = FALSE;
 			_shouldWindowHaveChoices = FALSE;
 			_shouldBeAutoClosed = FALSE;
 			_isGoingToBeAutoClosed = FALSE;
-			if (!_currStr.empty()) _currStr.clear();
+			if (!_currStr1.empty()) _currStr1.clear();
 
 			// istringstream 변수 비우기
 			iSS.clear();
 			iSS.str(string());
 		}
 	}
-	else if (_textWindowState == TEXT_WINDOW_STATE::OPENING)
+	else if (_textWindowState1 == TEXT_WINDOW_STATE::OPENING)
 	{
 		++_windowClipCount;
-		if (_windowClipCount > 10) _textWindowState = TEXT_WINDOW_STATE::VISIBLE;
+		if (_windowClipCount == 11) _textWindowState1 = TEXT_WINDOW_STATE::VISIBLE;
 	}
-	else if (_textWindowState == TEXT_WINDOW_STATE::VISIBLE)
+	else if (_textWindowState1 == TEXT_WINDOW_STATE::VISIBLE)
 	{
-		if (_dialogLineQ.empty()) // 출력 대기 중인 스트링이 없으면
+		if (_dialogLineQ.empty()) // 출력 (대기) 중인 스트링이 없으면
 		{
-			_textWindowState = TEXT_WINDOW_STATE::CLOSING;
-			_windowClipCount = 0;
+			_textWindowState1 = TEXT_WINDOW_STATE::CLOSING;
+			_windowClipCount = 10;
 		}
 		else if (_waitCount > 0)
 		{
 			--_waitCount;
 		}
-		else if (!_isWholeCurrStrShown)
+		else if (!_isWholeCurrStrShown1)
 		{
-			if (iSS.rdbuf()->in_avail() == 0 && _currStr == "")
+			if (iSS.rdbuf()->in_avail() == 0 && _currStr1.empty())
 			{
 				if (_choiceSelected != 0)
 				{
@@ -154,22 +181,22 @@ void textManager::updateDialog()
 			
 			iSS.get(_character);
 			if (iSS.fail())
-				_isWholeCurrStrShown = TRUE;
+				_isWholeCurrStrShown1 = TRUE;
 			else if (_character == '<')
 			{
 				iSS.get(_character);
 				if (iSS.fail())
-					_isWholeCurrStrShown = TRUE;
+					_isWholeCurrStrShown1 = TRUE;
 				else
 				{
-					string tempStr = "";
+					string tempStr{};
 					while (true)
 					{
 						tempStr += _character;
 						iSS.get(_character);
 						if (iSS.fail())
 						{
-							_isWholeCurrStrShown = TRUE;
+							_isWholeCurrStrShown1 = TRUE;
 							break;
 						}
 						else if (_character == '>')
@@ -240,25 +267,25 @@ void textManager::updateDialog()
 			}
 			else if (_character == '[')
 			{
-				_currStr += _character;
+				_currStr1 += _character;
 				iSS.get(_character);
 				if (iSS.fail())
-					_isWholeCurrStrShown = TRUE;
+					_isWholeCurrStrShown1 = TRUE;
 				else
 				{
-					string tempStr = "";
+					string tempStr{};
 					while (true)
 					{
 						tempStr += _character;
 						iSS.get(_character);
 						if (iSS.fail())
 						{
-							_isWholeCurrStrShown = TRUE;
+							_isWholeCurrStrShown1 = TRUE;
 							break;
 						}
 						else if (_character == ']')
 						{
-							_currStr += tempStr + ']';
+							_currStr1 += tempStr + ']';
 							break;
 						}
 					}
@@ -266,26 +293,26 @@ void textManager::updateDialog()
 			}
 			else if (_character == '\\')
 			{
-				_currStr += _character;
+				_currStr1 += _character;
 				iSS.get(_character);
 				if (iSS.fail())
-					_isWholeCurrStrShown = TRUE;
+					_isWholeCurrStrShown1 = TRUE;
 				else
-					_currStr += _character;
+					_currStr1 += _character;
 			}
 			else
-				_currStr += _character;
+				_currStr1 += _character;
 		}
-		else if (_isWholeCurrStrShown)
+		else if (_isWholeCurrStrShown1)
 		{
 			if (KEY->down('V') && !_shouldBeAutoClosed || _isGoingToBeAutoClosed && _waitCount == 0)
 			{
 				iSS.clear();
 				iSS.str(string());
-				_isWholeCurrStrShown = FALSE;
+				_isWholeCurrStrShown1 = FALSE;
 				_isGoingToBeAutoClosed = FALSE;
 				_shouldBeAutoClosed = FALSE;
-				_currStr = "";
+				_currStr1.clear();
 				_dialogLineQ.pop();
 				if (_shouldWindowHaveChoices) _shouldWindowHaveChoices = FALSE;
 			}
@@ -296,137 +323,229 @@ void textManager::updateDialog()
 			}
 		}
 	}
-	else if (_textWindowState == TEXT_WINDOW_STATE::CLOSING)
+	else if (_textWindowState1 == TEXT_WINDOW_STATE::CLOSING)
 	{
-		++_windowClipCount;
-		if (_windowClipCount > 10) _textWindowState = TEXT_WINDOW_STATE::INVISIBLE;
+		--_windowClipCount;
+		if (_windowClipCount == -1) _textWindowState1 = TEXT_WINDOW_STATE::INVISIBLE;
 	}
 }
 
-void textManager::updateBattleMsg()
+void textManager::updateBM()
 {
-	// 리마인더: 작성 필요
-	// 리마인더: 전투 메시지이면 자동 닫기는 _battleMsgCount에 의존하여야 한다.
-
-
-
-	switch (_battleMsgSpeed)
+	// _battleMsgQ1 처리(한 번에 한 글자씩)
+	if (_textWindowState1 == TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		case 0:
+		if (!_battleMsgQ1.empty()) // 출력 (대기) 중인 스트링이 있으면
+		{
+			_textWindowState1 = TEXT_WINDOW_STATE::VISIBLE; // 참고: 전투 메시지 창에 OPENING 상태는 없다.
+			_isWholeCurrStrShown1 = FALSE;
+			if (!_currStr1.empty()) _currStr1.clear();
 
-			break;
-		case 1:
-
-			break;
-		case 2:
-
-			break;
-		case 3:
-
-			break;
-		case 4:
-
-			break;
-		case 5:
-
-			break;
-		case 6:
-
-			break;
-		case 7:
-
-			break;
-		case 8:
-
-			break;
+			// istringstream 변수 비우기
+			iSS.clear();
+			iSS.str(string());
+		}
 	}
-}
-
-void textManager::renderDialog(HDC hDC, int fontIdx, int colorIdx)
-{
-	if (_textWindowState != TEXT_WINDOW_STATE::INVISIBLE)
+	else if (_textWindowState1 == TEXT_WINDOW_STATE::VISIBLE)
 	{
-		PatBlt(_hTextWindowDC, 0, 0, WINW, 320, BLACKNESS);
-
-		// 글 출력 창 DC 비트맵 클리핑 영역 지정하기
-		if (_textWindowState == TEXT_WINDOW_STATE::OPENING)
+		if (_battleMsgQ1.empty()) // 출력 (대기) 중인 스트링이 없으면
+			_textWindowState1 = TEXT_WINDOW_STATE::INVISIBLE; // 참고: 전투 메시지 창에 CLOSING 상태는 없다.
+		else // 출력 (대기) 중인 스트링이 있으면
 		{
-			IMG->setRctClipRgn(_hTextWindowDC, 0, 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount);
-		}
-		else if (_textWindowState == TEXT_WINDOW_STATE::CLOSING)
-		{
-			IMG->setRctClipRgn(_hTextWindowDC, 0, 16 * _windowClipCount, WINW, 32 * (10 - _windowClipCount));
-		}
-
-		// 글 출력 창 DC 비트맵에 창 출력하기
-		IMG->render("대사 출력 창 스킨", _hTextWindowDC, 0, 0);
-
-		// 글 출력 창 DC 비트맵에 대사 출력하기
-		TXT->render(_hTextWindowDC, _currStr, 31, 40, fontIdx, colorIdx);
-
-		// 선택지가 있다면 글 출력 창 DC 비트맵에 선택 손가락 아이콘을 출력하기
-		if (_shouldWindowHaveChoices)
-		{
-			switch (_choiceSelected)
+			if (_battleMsgQ1.size() > 1)
 			{
-				case 1:
-					_currPosX = 64;
-					_currPosY -= ((*fontInfo)[32].height + 32);
-					break;
-				case 2:
-					_currPosX = 64;
-					_currPosY -= 16;
-					break;
+				while (_battleMsgQ1.size() > 1) _battleMsgQ1.pop(); // 출력 대기 중인 스트링이 둘 이상이면 최근 출력 예약 스트링만 남긴다.
+
+				_isWholeCurrStrShown1 = FALSE;
+				_currStr1.clear();
+				iSS.clear();
+				iSS.str(string());
 			}
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
-		}
 
-		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
-		if (_shouldWindowUseTheTopPane)
-		{
-			BitBlt(hDC, 0, 31, WINW, 320, _hTextWindowDC, 0, 0, SRCCOPY);
-			//IMG->resetClipRgn(_hTextWindowDC);
-		}
-		else
-		{
-			BitBlt(hDC, 0, WINH - 51 - 320, WINW, 320, _hTextWindowDC, 0, 0, SRCCOPY);
-			//IMG->resetClipRgn(_hTextWindowDC);
+			if (_isWholeCurrStrShown1 && _battleMsgQ1.front().second > 0)
+			{
+				--_battleMsgQ1.front().second; // 남은 표시 시간 감소
+			}
+			else if (!_isWholeCurrStrShown1)
+			{
+				if (iSS.rdbuf()->in_avail() == 0 && _currStr1.empty())
+				{
+					iSS.str(_battleMsgQ1.front().first);
+				}
+
+				iSS.get(_character);
+				if (iSS.fail())	_isWholeCurrStrShown1 = TRUE;
+				else if (_character == '[')
+				{
+					_currStr1 += _character;
+					iSS.get(_character);
+					if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
+					else
+					{
+						string tempStr{};
+						while (true)
+						{
+							tempStr += _character;
+							iSS.get(_character);
+							if (iSS.fail())
+							{
+								_isWholeCurrStrShown1 = TRUE;
+								break;
+							}
+							else if (_character == ']')
+							{
+								_currStr1 += tempStr + ']';
+								break;
+							}
+						}
+					}
+				}
+				else if (_character == '\\')
+				{
+					_currStr1 += _character;
+					iSS.get(_character);
+					if (iSS.fail())
+						_isWholeCurrStrShown1 = TRUE;
+					else
+						_currStr1 += _character;
+				}
+				else
+					_currStr1 += _character;
+			}
+			else if (_isWholeCurrStrShown1)
+			{
+				if (_battleMsgQ1.front().second == 0)
+				{
+					_isWholeCurrStrShown1 = FALSE;
+					_currStr1.clear();
+					_battleMsgQ1.pop();
+					iSS.clear();
+					iSS.str(string());
+					_textWindowState1 = TEXT_WINDOW_STATE::INVISIBLE;
+				}
+			}
 		}
 	}
-}
 
-void textManager::renderBattleMsg(HDC hDC, int fontIdx, int colorIdx)
-{
-	if (_textWindowState != TEXT_WINDOW_STATE::INVISIBLE)
+	// _battleMsgQ2 처리(한 번에 한 줄 전부) - istringstream 비이용(불필요하므로)
+	if (_textWindowState2 == TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		PatBlt(_hTextWindowDC, 0, 0, WINW, 320, BLACKNESS);
-
-		// 글 출력 창 DC 비트맵에 창 출력하기
-		// 리마인더: 작성 필요: IMG->frameRender("-----------", _hTextWindowDC, 0, 0, 0, _textWindowSkin);
-
-		// 글 출력 창 DC 비트맵에 대사 출력하기
-		TXT->render(_hTextWindowDC, _currStr, 31, 40, fontIdx, colorIdx);
-
-		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
-		if (_shouldWindowUseTheTopPane)
+		if (!_battleMsgQ2.empty()) // 출력 (대기) 중인 스트링이 있으면
 		{
-			// 리마인더: 작성 필요: BitBlt(hDC, 0, 31, WINW, 320, _hTextWindowDC, 0, 0, SRCCOPY);
+			_textWindowState2 = TEXT_WINDOW_STATE::VISIBLE; // 전투 메시지 창에 OPENING 상태는 없다.
+			_isWholeCurrStrShown2 = FALSE;
+			if (!_currStr2.empty()) _currStr2.clear();
 		}
-		else
+	}
+	else if (_textWindowState2 == TEXT_WINDOW_STATE::VISIBLE)
+	{
+		if (_battleMsgQ2.empty()) // 출력 (대기) 중인 스트링이 없으면
+			_textWindowState2 = TEXT_WINDOW_STATE::INVISIBLE; // 전투 메시지 창에 CLOSING 상태는 없다.
+		else // 출력 (대기) 중인 스트링이 있으면
 		{
-			// 리마인더: 작성 필요: BitBlt(hDC, 0, WINH - 51 - 320, WINW, 320, _hTextWindowDC, 0, 0, SRCCOPY);
+			if (_battleMsgQ2.size() > 1)
+			{
+				while (_battleMsgQ2.size() > 1) _battleMsgQ2.pop(); // 출력 대기 중인 스트링이 둘 이상이면 최근 출력 예약 스트링만 남긴다.
+
+				_isWholeCurrStrShown2 = FALSE;
+				_currStr2.clear();
+			}
+
+			if (_isWholeCurrStrShown2 && _battleMsgQ2.front().second > 0)
+			{
+				--_battleMsgQ2.front().second; // 남은 표시 시간 감소
+			}
+			else if (!_isWholeCurrStrShown2)
+			{
+				if (_currStr2.empty())
+				{
+					_currStr2 = _battleMsgQ2.front().first;
+					_isWholeCurrStrShown2 = TRUE;
+				}
+			}
+			else if (_isWholeCurrStrShown2)
+			{
+				if (_battleMsgQ2.front().second == 0 || KEY->down('V') && _isWholeCurrStrShown2)
+				{
+					_isWholeCurrStrShown2 = FALSE;
+					_currStr2.clear();
+					_battleMsgQ2.pop();
+					_textWindowState2 = TEXT_WINDOW_STATE::INVISIBLE;
+				}
+			}
 		}
 	}
 }
 
-void textManager::prepareToUseFonts()
+void textManager::updateC()
 {
-	_fP->parseFnt(0, "res/fonts/dialogGlyphs.fnt");
-	_fP->parseFnt(1, "res/fonts/monoGlyphs.fnt");
+	if (_chrByChrQ.size() > 1)
+	{
+		while (_chrByChrQ.size() > 1) _chrByChrQ.pop(); // 출력 대기 중인 스트링이 둘 이상이면 최근 출력 예약 스트링만 남긴다.
+		_isWholeCurrStrShown1 = FALSE;
+		_currStr1.clear();
+		iSS.clear();
+		iSS.str(string());
+	}
+
+	if (_chrByChrQ.empty())
+	{
+		if (!_currStr1.empty())
+		{
+			_isWholeCurrStrShown1 = FALSE;
+			_currStr1.clear();
+			iSS.clear();
+			iSS.str(string());
+		}
+	}
+	else if (!_isWholeCurrStrShown1)
+	{
+		if (iSS.rdbuf()->in_avail() == 0 && _currStr1.empty())
+		{
+			iSS.str(_chrByChrQ.front());
+		}
+
+		iSS.get(_character);
+		if (iSS.fail())	_isWholeCurrStrShown1 = TRUE;
+		else if (_character == '[')
+		{
+			_currStr1 += _character;
+			iSS.get(_character);
+			if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
+			else
+			{
+				string tempStr{};
+				while (true)
+				{
+					tempStr += _character;
+					iSS.get(_character);
+					if (iSS.fail())
+					{
+						_isWholeCurrStrShown1 = TRUE;
+						break;
+					}
+					else if (_character == ']')
+					{
+						_currStr1 += tempStr + ']';
+						break;
+					}
+				}
+			}
+		}
+		else if (_character == '\\')
+		{
+			_currStr1 += _character;
+			iSS.get(_character);
+			if (iSS.fail())
+				_isWholeCurrStrShown1 = TRUE;
+			else
+				_currStr1 += _character;
+		}
+		else
+			_currStr1 += _character;
+	}
 }
+
 
 void textManager::render(HDC hDC, string text, int destX, int destY, int fontIdx, int colorIdx)
 {
@@ -477,4 +596,145 @@ void textManager::render(HDC hDC, string text, int destX, int destY, int fontIdx
 
 		_currPosX += (*fontInfo)[chr].width;
 	}
+}
+
+void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
+{
+	if (_textWindowState1 != TEXT_WINDOW_STATE::INVISIBLE)
+	{
+		PatBlt(_hTextWindowDC, 0, 0, WINW, 320, BLACKNESS);
+
+		// 글 출력 창 DC 비트맵 클리핑 영역 지정하기
+		if (_textWindowState1 == TEXT_WINDOW_STATE::OPENING || _textWindowState1 == TEXT_WINDOW_STATE::CLOSING)
+		{
+			IMG->setRctClipRgn(_hTextWindowDC, 0, 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount);
+		}
+
+		// 글 출력 창 DC 비트맵에 창 출력하기
+		IMG->render("대사 출력 창 스킨", _hTextWindowDC, 0, 0);
+
+		// 글 출력 창 DC 비트맵에 대사 출력하기
+		TXT->render(_hTextWindowDC, _currStr1, 31, 40, fontIdx, colorIdx);
+
+		// 선택지가 있다면 글 출력 창 DC 비트맵에 선택 손가락 아이콘을 출력하기
+		if (_shouldWindowHaveChoices)
+		{
+			switch (_choiceSelected)
+			{
+				case 1:
+					_currPosX = 64;
+					_currPosY -= ((*fontInfo)[32].height + 32);
+					break;
+				case 2:
+					_currPosX = 64;
+					_currPosY -= 16;
+					break;
+			}
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
+			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
+		}
+
+		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
+		if (_shouldWindowUseTheTopPane)
+		{
+			if (_textWindowState1 == TEXT_WINDOW_STATE::OPENING || _textWindowState1 == TEXT_WINDOW_STATE::CLOSING)
+			{
+				if (_textWindowAlpha == 0xFF) BitBlt(hDC, 0, 31 + 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount, _hTextWindowDC, 0, 16 * (10 - _windowClipCount), SRCCOPY);
+				else
+				{
+					_bF.SourceConstantAlpha = _textWindowAlpha;
+					GdiAlphaBlend(hDC, 0, 31 + 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount, _hTextWindowDC, 0, 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount, _bF);
+				}
+			}
+			else
+			{
+				if (_textWindowAlpha == 0xFF) BitBlt(hDC, 0, 31, WINW, 320, _hTextWindowDC, 0, 0, SRCCOPY);
+				else
+				{
+					_bF.SourceConstantAlpha = _textWindowAlpha;
+					GdiAlphaBlend(hDC, 0, 31, WINW, 320, _hTextWindowDC, 0, 0, WINW, 320, _bF);
+				}
+			}
+		}
+		else
+		{
+			if (_textWindowState1 == TEXT_WINDOW_STATE::OPENING || _textWindowState1 == TEXT_WINDOW_STATE::CLOSING)
+			{
+				if (_textWindowAlpha == 0xFF) BitBlt(hDC, 0, WINH - 51 - 320 + 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount, _hTextWindowDC, 0, 16 * (10 - _windowClipCount), SRCCOPY);
+				else
+				{
+					_bF.SourceConstantAlpha = _textWindowAlpha;
+					GdiAlphaBlend(hDC, 0, WINH - 51 - 320 + 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount, _hTextWindowDC, 0, 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount, _bF);
+				}
+			}
+			else
+			{
+				if (_textWindowAlpha == 0xFF) BitBlt(hDC, 0, WINH - 51 - 320, WINW, 320, _hTextWindowDC, 0, 0, SRCCOPY);
+				else
+				{
+					_bF.SourceConstantAlpha = _textWindowAlpha;
+					GdiAlphaBlend(hDC, 0, WINH - 51 - 320, WINW, 320, _hTextWindowDC, 0, 0, WINW, 320, _bF);
+				}
+			}
+		}
+	}
+}
+
+void textManager::renderBM(HDC hDC, int fontIdx, int colorIdx)
+{
+	if (_textWindowState2 != TEXT_WINDOW_STATE::INVISIBLE)
+	{
+		PatBlt(_hTextWindowDC, 0, 0, WINW, 96, BLACKNESS);
+
+		// 글 출력 창 DC 비트맵에 창 출력하기
+		IMG->render("전투 메시지 창 스킨", _hTextWindowDC, 0, 0);
+
+		// 글 출력 창 DC 비트맵에 대사 출력하기
+		TXT->render(_hTextWindowDC, _currStr2, 31, 24, fontIdx, colorIdx);
+
+		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
+		if (!_shouldWindowUseTheTopPane)
+			BitBlt(hDC, 0, 31, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
+		else
+			BitBlt(hDC, 0, WINH - 63 - 96, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
+	}
+	else if (_textWindowState1 != TEXT_WINDOW_STATE::INVISIBLE) // 이 else는 메시지 표시 우선순위를 적용하려면 있어야 한다.
+	{
+		PatBlt(_hTextWindowDC, 0, 0, WINW, 96, BLACKNESS);
+		GdiTransparentBlt(_hTextWindowDC, 0, 0, WINW, 96,
+						  _hTextWindowDC, 0, 0, WINW, 96, RGB(0, 0, 0));
+
+		// 글 출력 창 DC 비트맵에 창 출력하기
+		IMG->render("전투 메시지 창 스킨", _hTextWindowDC, 0, 0);
+				
+		// 글 출력 창 DC 비트맵에 대사 출력하기
+		TXT->render(_hTextWindowDC, _currStr1, 31, 24, fontIdx, colorIdx);
+
+		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
+		if (!_shouldWindowUseTheTopPane)
+		{
+			if (_textWindowAlpha == 0xFF) BitBlt(hDC, 0, 31, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
+			else
+			{
+				_bF.SourceConstantAlpha = _textWindowAlpha;
+				GdiAlphaBlend(hDC, 0, 31, WINW, 96, _hTextWindowDC, 0, 0, WINW, 96, _bF);
+			}
+		}
+		else
+		{
+			if (_textWindowAlpha == 0xFF) BitBlt(hDC, 0, WINH - 63 - 96, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
+			else
+			{
+				_bF.SourceConstantAlpha = _textWindowAlpha;
+				GdiAlphaBlend(hDC, 0, WINH - 63 - 96, WINW, 96, _hTextWindowDC, 0, 0, WINW, 96, _bF);
+			}
+		}
+	}
+}
+
+void textManager::renderC(HDC hDC, int destX, int destY, int fontIdx, int colorIdx)
+{
+	TXT->render(hDC, _currStr1, destX, destY, fontIdx, colorIdx);
 }

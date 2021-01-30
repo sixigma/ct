@@ -11,6 +11,8 @@ HRESULT image::init(int width, int height)
 	HDC hDC = GetDC(_hWnd);
 
 	_imageInfo = new IMAGE_INFO;
+	_imageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
+	_imageInfo->resID = 0;
 	_imageInfo->hMemDC = CreateCompatibleDC(hDC);
 	_imageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
 	_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
