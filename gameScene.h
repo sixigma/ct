@@ -9,7 +9,8 @@ private:
 	static int _countForReEnablingKeyInput;
 
 public:
-	gameScene();
+	gameScene() = default;
+	gameScene(int anyNum);
 	~gameScene() override;
 
 	HRESULT init() override;

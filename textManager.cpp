@@ -602,6 +602,8 @@ void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
 {
 	if (_textWindowState1 != TEXT_WINDOW_STATE::INVISIBLE)
 	{
+		_prevRenderMode = _shouldRenderUsingWindowCoords;
+		_shouldRenderUsingWindowCoords = TRUE;
 		PatBlt(_hTextWindowDC, 0, 0, WINW, 320, BLACKNESS);
 
 		// 글 출력 창 DC 비트맵 클리핑 영역 지정하기
@@ -679,6 +681,7 @@ void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
 				}
 			}
 		}
+		_shouldRenderUsingWindowCoords = _prevRenderMode;
 	}
 }
 
@@ -686,6 +689,8 @@ void textManager::renderBM(HDC hDC, int fontIdx, int colorIdx)
 {
 	if (_textWindowState2 != TEXT_WINDOW_STATE::INVISIBLE)
 	{
+		_prevRenderMode = _shouldRenderUsingWindowCoords;
+		_shouldRenderUsingWindowCoords = TRUE;
 		PatBlt(_hTextWindowDC, 0, 0, WINW, 96, BLACKNESS);
 
 		// 글 출력 창 DC 비트맵에 창 출력하기
@@ -699,9 +704,12 @@ void textManager::renderBM(HDC hDC, int fontIdx, int colorIdx)
 			BitBlt(hDC, 0, 31, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
 		else
 			BitBlt(hDC, 0, WINH - 63 - 96, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
+		_shouldRenderUsingWindowCoords = _prevRenderMode;
 	}
 	else if (_textWindowState1 != TEXT_WINDOW_STATE::INVISIBLE) // 이 else는 메시지 표시 우선순위를 적용하려면 있어야 한다.
 	{
+		_prevRenderMode = _shouldRenderUsingWindowCoords;
+		_shouldRenderUsingWindowCoords = TRUE;
 		PatBlt(_hTextWindowDC, 0, 0, WINW, 96, BLACKNESS);
 		GdiTransparentBlt(_hTextWindowDC, 0, 0, WINW, 96,
 						  _hTextWindowDC, 0, 0, WINW, 96, RGB(0, 0, 0));
@@ -731,6 +739,7 @@ void textManager::renderBM(HDC hDC, int fontIdx, int colorIdx)
 				GdiAlphaBlend(hDC, 0, WINH - 63 - 96, WINW, 96, _hTextWindowDC, 0, 0, WINW, 96, _bF);
 			}
 		}
+		_shouldRenderUsingWindowCoords = _prevRenderMode;
 	}
 }
 

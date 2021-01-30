@@ -13,6 +13,7 @@ private:
 	HBRUSH _hBrush[4], _hOBrush;
 	HPEN _hPrgPen, _hOPrgPen;
 	HANDLE _hThread;
+	vector<POINT> _needleVertices;
 	float _progressRatio, _progressPieAngle, _relSecondEndPointX, _relSecondEndPointY;
 
 public:
