@@ -24,10 +24,6 @@ public:
 	HRESULT init();
 	void release();
 
-	// 좌표 기준 설정
-	void setRenderMode(BOOL shouldRenderUsingWindowCoords) { _shouldRenderUsingWindowCoords = shouldRenderUsingWindowCoords; }
-	BOOL getRenderMode() { return _shouldRenderUsingWindowCoords; }
-
 	// 이미지 추가
 	image* add(string strKey, int width, int height);
 

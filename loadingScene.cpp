@@ -4,7 +4,7 @@
 #include "startScene.h"
 #include <process.h> // _beginthreadex
 
-loadingScene::loadingScene(): _currentCount(0), _progressPieAngle(0), _relSecondEndPointX(PROGRESS_PIE_OUTER_RADIUS), _relSecondEndPointY(PROGRESS_PIE_OUTER_RADIUS * 2) {}
+loadingScene::loadingScene(): _currentCount(0), _progressPieAngle(0.f), _relSecondEndPointX(PROGRESS_PIE_OUTER_RADIUS), _relSecondEndPointY(PROGRESS_PIE_OUTER_RADIUS * 2) {}
 
 loadingScene::~loadingScene() {}
 
@@ -32,6 +32,8 @@ HRESULT loadingScene::init()
 		return E_FAIL;
 	}
 	ResumeThread(_hThread);
+
+	_needleVertices = { {PROGRESS_PIE_OUTER_RADIUS, 10}, {PROGRESS_PIE_OUTER_RADIUS + 5, PROGRESS_PIE_OUTER_RADIUS}, {PROGRESS_PIE_OUTER_RADIUS, PROGRESS_PIE_OUTER_RADIUS + 5}, {PROGRESS_PIE_OUTER_RADIUS - 5, PROGRESS_PIE_OUTER_RADIUS}};
 
 	return S_OK;
 }
@@ -65,10 +67,12 @@ void loadingScene::render()
 	SetDCBrushColor(_hPrgDC, RGB(71, 71, 71));
 	Ellipse(_hPrgDC, 0, 0, PROGRESS_PIE_OUTER_RADIUS * 2, PROGRESS_PIE_OUTER_RADIUS * 2);
 	SetDCBrushColor(_hPrgDC, RGB(216 - static_cast<int>(_progressRatio * 20.f), 176 + static_cast<int>(_progressRatio * 79.f), 64));
-	Pie(_hPrgDC, 0, 0, PROGRESS_PIE_OUTER_RADIUS * 2, PROGRESS_PIE_OUTER_RADIUS * 2,
+	if (_progressRatio > FLT_MIN) Pie(_hPrgDC, 0, 0, PROGRESS_PIE_OUTER_RADIUS * 2, PROGRESS_PIE_OUTER_RADIUS * 2,
 		static_cast<int>(_relSecondEndPointX), static_cast<int>(_relSecondEndPointY), PROGRESS_PIE_OUTER_RADIUS, 0);
 	SetDCBrushColor(_hPrgDC, RGB(0, 0, 0));
 	Ellipse(_hPrgDC, 10, 10, PROGRESS_PIE_INNER_DIAMETER, PROGRESS_PIE_INNER_DIAMETER);
+	SetDCBrushColor(_hPrgDC, RGB(71, 71, 71));
+	Polygon(_hPrgDC, _needleVertices, *&POINT({PROGRESS_PIE_OUTER_RADIUS, PROGRESS_PIE_OUTER_RADIUS}), -_progressPieAngle);
 	BitBlt(getMemDC(),
 		   WINW - PROGRESS_PIE_OUTER_RADIUS * 2 - 20, WINH - PROGRESS_PIE_OUTER_RADIUS * 2 - 20,
 		   WINW - PROGRESS_PIE_OUTER_RADIUS * 2, WINH - PROGRESS_PIE_OUTER_RADIUS * 2,
@@ -88,7 +92,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 
 	// 장면
 	SC->addScene("시작 화면", new startScene);
-	SC->addScene("게임 장면", new gameScene);
+	SC->addScene("게임 장면", new gameScene(1));
 	++loadingParams->_currentCount;
 	
 	// 시작 화면 그림

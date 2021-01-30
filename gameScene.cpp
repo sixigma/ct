@@ -3,28 +3,22 @@
 
 int gameScene::_countForReEnablingKeyInput;
 
-gameScene::gameScene()
+gameScene::gameScene(int anyNum)
 {
+	UNREFERENCED_PARAMETER(anyNum);
+
+	_currOrg = _newOrg = { 0, 0 };
+
+	_totRegion = { 0, 0, WINW, WINH };
+	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 }
 
 gameScene::~gameScene()
 {
 }
 
-HRESULT gameScene::init()
-{
-	_currOrg = _newOrg = { 0, 0 };
-
-	_totRegion = { 0, 0, 3036, 640 };
-	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.top };
-
-	return S_OK;
-}
-
-void gameScene::release()
-{
-
-}
+HRESULT gameScene::init() {	return S_OK; } // 변경 금지
+void gameScene::release() { } // 변경 금지
 
 void gameScene::update()
 {
@@ -34,26 +28,7 @@ void gameScene::update()
 		if (KEY->down('X')) TXT->toggleTextWindowPos();
 	}
 
-	// 리마인더: 시험용 ///
-	if (KEY->down('1'))
-	{
-		_textWindowAlpha = 255;
-		TXT->enqueueL("Hey, what are [3]you[0] doing here?\n\t\tNothing.\n\t\tSomething you don't know.<c>");
-		TXT->enqueueL("Really? I<w30> am<w30> doing <w30>my own\n\tstuff.<acf120>", 1);
-		TXT->enqueueL(R"(Why don't you come here to help \\n\\tme out?)", 1);
-		TXT->enqueueL(_playChrNames[0] + "}", 2); 
-		
-		//TXT->enqueueBM("Heals self", false);
-		//TXT->enqueueC("Heals self}");
-	}
-	if (KEY->down('2'))
-	{
-		TXT->clearLQ();
-		//TXT->enqueueBM("Spin-cut nearby enemies", true);
 
-		//TXT->clearCQ();
-	}
-	///////////////////////
 
 
 	// 출력할 글 갱신
@@ -70,9 +45,6 @@ void gameScene::render()
 #endif
 
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
-
-
-
 
 	// 글 출력
 	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE

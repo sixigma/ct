@@ -91,12 +91,9 @@ void playground::render()
 
 	if (!_isScrBlackingOut) SC->render();
 
-	if (_blackScreenAlpha > 0x00)
-	{
-		IMG->setRenderMode(TRUE);
-		IMG->alphaRender("검은 화면", getMemDC(), 0, 0, _blackScreenAlpha);
-		IMG->setRenderMode(FALSE);
-	}
+	_prevRenderMode = _shouldRenderUsingWindowCoords;
+	_shouldRenderUsingWindowCoords = TRUE;
+	if (_blackScreenAlpha > 0x00) IMG->alphaRender("검은 화면", getMemDC(), 0, 0, _blackScreenAlpha);
 	
 	if (KEY->isToggledOn(VK_SCROLL))
 	{
@@ -115,6 +112,7 @@ void playground::render()
 #endif
 	}
 
-	_backBuffer->render(getHDC(), _currOrg.x, _currOrg.y, 0, 0, WINW, WINH);
+	_backBuffer->render(getHDC(), 0, 0, 0, 0, WINW, WINH);
+	_shouldRenderUsingWindowCoords = _prevRenderMode;
 }
 
