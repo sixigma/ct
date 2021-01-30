@@ -26,7 +26,7 @@ HRESULT playground::init()
 
 	SC->addScene("로딩 장면", new loadingScene);
 
-	_shouldFadeOut = FALSE;
+	_isScrBlackingOut = FALSE;
 
 	SC->changeScene("로딩 장면");
 
@@ -63,14 +63,14 @@ void playground::update()
 
 	gameNode::update();
 
-	if (_shouldFadeOut)
+	if (_isScrBlackingOut)
 	{
 		// 페이드아웃에 맞게 알파 값을 변경한다.
 		if (_blackScreenAlpha < 0xFF) _blackScreenAlpha += min(0x22, 0xFF - _blackScreenAlpha);
 		if (_blackScreenAlpha == 0xFF) {
 			if (_fadeCount++ == 30)
 			{
-				_shouldFadeOut = FALSE;
+				_isScrBlackingOut = FALSE;
 				_fadeCount = 0;
 			}
 		}
@@ -89,7 +89,7 @@ void playground::render()
 {
 	// PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
 
-	if (!_shouldFadeOut) SC->render();
+	if (!_isScrBlackingOut) SC->render();
 
 	if (_blackScreenAlpha > 0x00)
 	{
