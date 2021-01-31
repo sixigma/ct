@@ -14,7 +14,7 @@ playground::~playground()
 HRESULT playground::init()
 {
 	gameNode::init(true);
-	keysToCheck = { VK_RETURN, VK_SPACE, VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP, 'A', 'S', 'D', 'X', 'C', 'V' }; // 입력을 확인할 키 나열(토글 키 제외)
+	keysToCheck = { VK_RETURN, VK_SPACE, VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP, VK_OEM_3, VK_LSHIFT, 'A', 'S', 'D', 'X', 'C', 'V' }; // 입력을 확인할 키 나열(토글 키 제외)
 
 #ifdef _DEBUG
 	vector<int> debugKeysToCheck = { VK_ADD, VK_SUBTRACT, VK_ESCAPE, VK_LBUTTON, VK_RBUTTON,
@@ -114,5 +114,11 @@ void playground::render()
 
 	_backBuffer->render(getHDC(), 0, 0, 0, 0, WINW, WINH);
 	_shouldRenderUsingWindowCoords = _prevRenderMode;
+
+	if (KEY->down(VK_OEM_3))
+	{
+		if (KEY->press(VK_LSHIFT)) IMG->takeScreenshot(getHDC(), TRUE);
+		else IMG->takeScreenshot(getHDC(), FALSE);
+	}
 }
 

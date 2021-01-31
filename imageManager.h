@@ -156,6 +156,9 @@ public:
 
 	// zIndex 순서로 함수를 호출하는 함수
 	void execZ();
+
+	// hDC에 연결된 비트맵을 클립보드로 복사하거나 그림 파일로 저장하는 함수
+	void takeScreenshot(HDC hDC, BOOL shouldSaveAsImage = FALSE, int x = 0, int y = 0, int width = WINW, int height = WINH);
 };
 
 
