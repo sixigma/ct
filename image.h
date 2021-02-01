@@ -60,21 +60,21 @@ public:
 	void render(HDC hDC, int destX, int destY);
 	void render(HDC hDC, int destX, int destY, int srcX, int srcY, int srcWidth, int srcHeight);
 
-	// ÁÂ¿ì ¹ÝÀü ·»´õ¸µ(ÀÏ¹Ý)
+	// ì¢Œìš° ë°˜ì „ ë Œë”ë§(ì¼ë°˜)
 	void renderH(HDC hDC, int destX = 0, int destY = 0, int srcX = 0, int srcY = 0, int srcWidth = -1, int srcHeight = -1);
-	// »óÇÏ ¹ÝÀü ·»´õ¸µ(ÀÏ¹Ý)
+	// ìƒí•˜ ë°˜ì „ ë Œë”ë§(ì¼ë°˜)
 	void renderV(HDC hDC, int destX = 0, int destY = 0, int srcX = 0, int srcY = 0, int srcWidth = -1, int srcHeight = -1);
-	// »óÇÏÁÂ¿ì ¹ÝÀü ·»´õ¸µ(ÀÏ¹Ý)
+	// ìƒí•˜ì¢Œìš° ë°˜ì „ ë Œë”ë§(ì¼ë°˜)
 	void renderHV(HDC hDC, int destX = 0, int destY = 0, int srcX = 0, int srcY = 0, int srcWidth = -1, int srcHeight = -1);
 
 	void frameRender(HDC hDC, int destX, int destY);
 	void frameRender(HDC hDC, int destX, int destY,	int currentFrameX, int currentFrameY);
 
-	// ÁÂ¿ì ¹ÝÀü ·»´õ¸µ(ÇÁ·¹ÀÓ): currentFrameX, currentFrameY¸¦ -1·Î ÁöÁ¤ÇÏ¸é ÇöÀç ÇÁ·¹ÀÓ ¹øÈ£¸¦ »ç¿ëÇÑ´Ù.
+	// ì¢Œìš° ë°˜ì „ ë Œë”ë§(í”„ë ˆìž„): currentFrameX, currentFrameYë¥¼ -1ë¡œ ì§€ì •í•˜ë©´ í˜„ìž¬ í”„ë ˆìž„ ë²ˆí˜¸ë¥¼ ì‚¬ìš©í•œë‹¤.
 	void frameRenderH(HDC hDC, int destX, int destY, int currentFrameX = -1, int currentFrameY = -1);
-	// »óÇÏ ¹ÝÀü ·»´õ¸µ(ÇÁ·¹ÀÓ): currentFrameX, currentFrameY¸¦ -1·Î ÁöÁ¤ÇÏ¸é ÇöÀç ÇÁ·¹ÀÓ ¹øÈ£¸¦ »ç¿ëÇÑ´Ù.
+	// ìƒí•˜ ë°˜ì „ ë Œë”ë§(í”„ë ˆìž„): currentFrameX, currentFrameYë¥¼ -1ë¡œ ì§€ì •í•˜ë©´ í˜„ìž¬ í”„ë ˆìž„ ë²ˆí˜¸ë¥¼ ì‚¬ìš©í•œë‹¤.
 	void frameRenderV(HDC hDC, int destX, int destY, int currentFrameX = -1, int currentFrameY = -1);
-	// »óÇÏÁÂ¿ì ¹ÝÀü ·»´õ¸µ(ÇÁ·¹ÀÓ): currentFrameX, currentFrameY¸¦ -1·Î ÁöÁ¤ÇÏ¸é ÇöÀç ÇÁ·¹ÀÓ ¹øÈ£¸¦ »ç¿ëÇÑ´Ù.
+	// ìƒí•˜ì¢Œìš° ë°˜ì „ ë Œë”ë§(í”„ë ˆìž„): currentFrameX, currentFrameYë¥¼ -1ë¡œ ì§€ì •í•˜ë©´ í˜„ìž¬ í”„ë ˆìž„ ë²ˆí˜¸ë¥¼ ì‚¬ìš©í•œë‹¤.
 	void frameRenderHV(HDC hDC, int destX, int destY, int currentFrameX = -1, int currentFrameY = -1);
 
 	void adjFrameRender(HDC hDC, int destX, int destY, int currentFrameX, int currentFrameY, int adjWidth, int adjHeight);
@@ -86,19 +86,19 @@ public:
 	void animRender(HDC hDC, int destX, int destY, animation* anim);
 	void animRenderH(HDC hDC, int destX, int destY, animation* anim);
 
-	// ÁöÁ¤ ¿µ¿ªÀÌ Ã¤¿öÁöµµ·Ï ±×¸²À» ¹Ýº¹ Ãâ·Â ÇÏ´Â ÇÔ¼ö
+	// ì§€ì • ì˜ì—­ì´ ì±„ì›Œì§€ë„ë¡ ê·¸ë¦¼ì„ ë°˜ë³µ ì¶œë ¥ í•˜ëŠ” í•¨ìˆ˜
 	void loopRender(HDC hDC, const LPRECT drawArea, int offSetX = 0, int offSetY = 0);
 
-	// ÁöÁ¤ ¿µ¿ª(destArea·Î ÁöÁ¤ÇÑ´Ù.)ÀÌ Ã¤¿öÁöµµ·Ï ±×¸² ÀÏºÎ(srcArea·Î ¿µ¿ªÀ» ÁöÁ¤ÇÑ´Ù.)¸¦ ¹Ýº¹ Ãâ·Â ÇÏ´Â ÇÔ¼ö
+	// ì§€ì • ì˜ì—­(destAreaë¡œ ì§€ì •í•œë‹¤.)ì´ ì±„ì›Œì§€ë„ë¡ ê·¸ë¦¼ ì¼ë¶€(srcAreaë¡œ ì˜ì—­ì„ ì§€ì •í•œë‹¤.)ë¥¼ ë°˜ë³µ ì¶œë ¥ í•˜ëŠ” í•¨ìˆ˜
 	void loopRenderP(HDC hDC, const LPRECT destArea, const LPRECT srcArea, int offSetX = 0, int offSetY = 0);
 
-	// ÀÌ¹ÌÁö Æ¯Á¤ »öÀ» º¯°æÇÏ°í »õ »öÀ» ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö(32 ºñÆ® ºñÆ®¸Ê Àü¿ë)
+	// ì´ë¯¸ì§€ íŠ¹ì • ìƒ‰ì„ ë³€ê²½í•˜ê³  ìƒˆ ìƒ‰ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜(32 ë¹„íŠ¸ ë¹„íŠ¸ë§µ ì „ìš©)
 	COLORREF changeColor(COLORREF originalColor, COLORREF newColor);
 
-	// ÀÌ¹ÌÁö »öÀ» ¿¹¿Ü »öÀ» Á¦¿ÜÇÏ°í ÀüºÎ ´Ù¸¥ Æ¯Á¤ »öÀ¸·Î º¯°æÇÏ´Â ÇÔ¼ö(32 ºñÆ® ºñÆ®¸Ê Àü¿ë)
+	// ì´ë¯¸ì§€ ìƒ‰ì„ ì˜ˆì™¸ ìƒ‰ì„ ì œì™¸í•˜ê³  ì „ë¶€ ë‹¤ë¥¸ íŠ¹ì • ìƒ‰ìœ¼ë¡œ ë³€ê²½í•˜ëŠ” í•¨ìˆ˜(32 ë¹„íŠ¸ ë¹„íŠ¸ë§µ ì „ìš©)
 	COLORREF changeAllColors(COLORREF newColor, COLORREF exceptionalColor = RGB(255, 0, 255));
 
-	// ±âÁ¸ image¸¦ º¹»çÇÏ¿© »õ image¸¦ ¸¸µå´Â ÇÔ¼ö(»ç¿ëÀÌ ³¡³ª¸é release¸¦ È£ÃâÇÏ°í delete¸¦ È£ÃâÇÏ¿©¾ß ÇÑ´Ù.)
+	// ê¸°ì¡´ imageë¥¼ ë³µì‚¬í•˜ì—¬ ìƒˆ imageë¥¼ ë§Œë“œëŠ” í•¨ìˆ˜(ì‚¬ìš©ì´ ëë‚˜ë©´ releaseë¥¼ í˜¸ì¶œí•˜ê³  deleteë¥¼ í˜¸ì¶œí•˜ì—¬ì•¼ í•œë‹¤.)
 	image* copyNew() const;
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }

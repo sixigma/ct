@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "image.h"
 
 image::image(): _fileName(nullptr), _hasTransparentColor(FALSE), _transparentColor(RGB(0, 0, 0)) {}

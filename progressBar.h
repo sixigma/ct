@@ -19,10 +19,10 @@ public:
 	void update() override;
 	void render() override;
 
-	// ÇöÀç °ªÀ» Áï°¢ ¹İ¿µÇÏ¿© °ÔÀÌÁö ±×¸² ³Êºñ¸¦ °»½ÅÇÏ´Â ÇÔ¼ö
+	// í˜„ì¬ ê°’ì„ ì¦‰ê° ë°˜ì˜í•˜ì—¬ ê²Œì´ì§€ ê·¸ë¦¼ ë„ˆë¹„ë¥¼ ê°±ì‹ í•˜ëŠ” í•¨ìˆ˜
 	void setGauge(float currVal, float maxVal);
 
-	// ÇöÀç °ªÀ» ½Ã°£À» µÎ°í ¹İ¿µÇÏ¿© °ÔÀÌÁö ±×¸² ³Êºñ¸¦ °»½ÅÇÏ´Â ÇÔ¼ö
+	// í˜„ì¬ ê°’ì„ ì‹œê°„ì„ ë‘ê³  ë°˜ì˜í•˜ì—¬ ê²Œì´ì§€ ê·¸ë¦¼ ë„ˆë¹„ë¥¼ ê°±ì‹ í•˜ëŠ” í•¨ìˆ˜
 	void updateGauge(float currVal, float maxVal);
 
 	void setX(float x) { _x = x; }

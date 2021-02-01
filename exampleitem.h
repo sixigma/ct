@@ -5,22 +5,22 @@ class exampleitem
 {
 private:
 	string itemName;
-	int attack;			//Àåºñ °ø°İ·Â
-	int defense;		//Àåºñ ¹æ¾î·Â
-	int power;			//¹°¸®°ø°İµ¥¹ÌÁö°ü·Ã	
-	int magic;			//¸¶¹ı°ø°İµ¥¹ÌÁö°ü·Ã	
-	int speed;			//¼ÓµµÅ¸ÀÌ¸Õ°ü·Ã
+	int attack;			//ì¥ë¹„ ê³µê²©ë ¥
+	int defense;		//ì¥ë¹„ ë°©ì–´ë ¥
+	int power;			//ë¬¼ë¦¬ê³µê²©ë°ë¯¸ì§€ê´€ë ¨	
+	int magic;			//ë§ˆë²•ê³µê²©ë°ë¯¸ì§€ê´€ë ¨	
+	int speed;			//ì†ë„íƒ€ì´ë¨¼ê´€ë ¨
 
-	int hit;			//¸íÁß·ü
-	int evasion;		//È¸ÇÇÀ²	
+	int hit;			//ëª…ì¤‘ë¥ 
+	int evasion;		//íšŒí”¼ìœ¨	
 
-	int magicDefense;	//¸¶¹ı¹æ¾î°ü·Ã
+	int magicDefense;	//ë§ˆë²•ë°©ì–´ê´€ë ¨
 
-	int recoveryHp;		//Ã¼·ÂÈ¸º¹
-	int maxHp;			//ÃÖ´ëÃ¼·ÂÁõ°¡
-	int recoveryMp;		//¸¶³ªÈ¸º¹
-	int maxMp;			//ÃÖ´ë¸¶³ªÁõ°¡
-	int money;			//°¡°İ
+	int recoveryHp;		//ì²´ë ¥íšŒë³µ
+	int maxHp;			//ìµœëŒ€ì²´ë ¥ì¦ê°€
+	int recoveryMp;		//ë§ˆë‚˜íšŒë³µ
+	int maxMp;			//ìµœëŒ€ë§ˆë‚˜ì¦ê°€
+	int money;			//ê°€ê²©
 public:
 
 	HRESULT init(string _name);

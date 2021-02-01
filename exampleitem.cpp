@@ -5,21 +5,21 @@
 HRESULT exampleitem::init(string _name)
 {
 	string itemName;
-	int attack			= 0;		//Àåºñ °ø°İ·Â
-	int defense			= 0;		//Àåºñ ¹æ¾î·Â
-	int power			= 0;		//¹°¸®°ø°İµ¥¹ÌÁö°ü·Ã	
-	int magic			= 0;		//¸¶¹ı°ø°İµ¥¹ÌÁö°ü·Ã	
-	int speed			= 0;		//¼ÓµµÅ¸ÀÌ¸Õ°ü·Ã
+	int attack			= 0;		//ì¥ë¹„ ê³µê²©ë ¥
+	int defense			= 0;		//ì¥ë¹„ ë°©ì–´ë ¥
+	int power			= 0;		//ë¬¼ë¦¬ê³µê²©ë°ë¯¸ì§€ê´€ë ¨	
+	int magic			= 0;		//ë§ˆë²•ê³µê²©ë°ë¯¸ì§€ê´€ë ¨	
+	int speed			= 0;		//ì†ë„íƒ€ì´ë¨¼ê´€ë ¨
 
-	int hit				= 0;		//¸íÁß·ü
-	int evasion			= 0;		//È¸ÇÇÀ²	
-	int magicDefense	= 0;		//¸¶¹ı¹æ¾î°ü·Ã
+	int hit				= 0;		//ëª…ì¤‘ë¥ 
+	int evasion			= 0;		//íšŒí”¼ìœ¨	
+	int magicDefense	= 0;		//ë§ˆë²•ë°©ì–´ê´€ë ¨
 
-	int recoveryHp		= 0;		//Ã¼·ÂÈ¸º¹
-	int maxHp			= 0;		//ÃÖ´ëÃ¼·ÂÁõ°¡
-	int recoveryMp		= 0;		//¸¶³ªÈ¸º¹
-	int maxMp			= 0;		//ÃÖ´ë¸¶³ªÁõ°¡
-	int money			= 0;		//°¡°İ
+	int recoveryHp		= 0;		//ì²´ë ¥íšŒë³µ
+	int maxHp			= 0;		//ìµœëŒ€ì²´ë ¥ì¦ê°€
+	int recoveryMp		= 0;		//ë§ˆë‚˜íšŒë³µ
+	int maxMp			= 0;		//ìµœëŒ€ë§ˆë‚˜ì¦ê°€
+	int money			= 0;		//ê°€ê²©
 
 	itemList(_name);
 	return S_OK;

@@ -3,66 +3,66 @@
 #include "character.h"
 struct tagPlImage
 {
-	image* idle;		//º¸Åë
-	image* walk;		//°È±â
-	image* run;			//´Ş¸®±â
-	image* Bready;		//¹èÆ² ÁØºñ
-	image* rush;		//´Ş·Áµé±â
-	image* atk;			//°ø°İ/Å©¸®
-	image* spin;		//½ºÇÉ
-	image* hit;			//ÇÇ°İ
-	image* hit2;		//ÇÇ°İ2		
-	image* win;			//½Â¸®Æ÷Áî
-	image* Bwin;		//¹èÆ² ½Â¸®
-	image* downs;		//¾²·¯Áö±â Á÷Àü
-	image* down;		//¾²·¯Áü
-	image* cantRun;		//´Ş¸®´Ù º®¿¡ ºÎµúÈú ¶§	
-	image* drink;		//¸¶½Ã±â		
-	image* handsUp;		//¼Õ ¿Ã¸®±â	
-	image* ladder;		//»ç´Ù¸®		
-	image* tied;		//¹­ÀÓ		
-	image* what;		//±Ã±İ		
+	image* idle;		//ë³´í†µ
+	image* walk;		//ê±·ê¸°
+	image* run;			//ë‹¬ë¦¬ê¸°
+	image* Bready;		//ë°°í‹€ ì¤€ë¹„
+	image* rush;		//ë‹¬ë ¤ë“¤ê¸°
+	image* atk;			//ê³µê²©/í¬ë¦¬
+	image* spin;		//ìŠ¤í•€
+	image* hit;			//í”¼ê²©
+	image* hit2;		//í”¼ê²©2		
+	image* win;			//ìŠ¹ë¦¬í¬ì¦ˆ
+	image* Bwin;		//ë°°í‹€ ìŠ¹ë¦¬
+	image* downs;		//ì“°ëŸ¬ì§€ê¸° ì§ì „
+	image* down;		//ì“°ëŸ¬ì§
+	image* cantRun;		//ë‹¬ë¦¬ë‹¤ ë²½ì— ë¶€ë”ªí ë•Œ	
+	image* drink;		//ë§ˆì‹œê¸°		
+	image* handsUp;		//ì† ì˜¬ë¦¬ê¸°	
+	image* ladder;		//ì‚¬ë‹¤ë¦¬		
+	image* tied;		//ë¬¶ì„		
+	image* what;		//ê¶ê¸ˆ		
 
 };
 
 struct tagPlAni
 {
-	animation* idle_front, *idle_back, *idle_right;			//¼­ÀÖÀ» ¶§ÀÇ ¾Ö´Ï		front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* walk_front, *walk_back, *walk_right;			//°ÉÀ» ¶§ÀÇ ¾Ö´Ï			front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* run_front, *run_back, *run_right;			//´Ş¸± ¶§ÀÇ ¾Ö´Ï			front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* Bready_front, *Bready_back, *Bready_left;	//¹èÆ² ÁØºñÁßÀÇ ¾Ö´Ï		front : ¾Õ / back : µÚ / left : ¿ŞÂÊ
-	animation* SB_front, *SB_back, *SB_left;				//½ºÅÄ¹ÙÀÌ ÁßÀÇ ¾Ö´Ï		front : ¾Õ / back : µÚ / left : ¿ŞÂÊ
-	animation* rush_front, *rush_back, *rush_right;			//´Ş·Áµé ¶§ÀÇ ¾Ö´Ï		front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* atk_front, *atk_back, *atk_right;			//°ø°İÇÒ ¶§ÀÇ ¾Ö´Ï		front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* cri_front, *cri_back, *cri_right;			//°ø°İ-Å©¸®Æ¼ÄÃ ¶§ÀÇ ¾Ö´Ï	front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* hit_front, *hit_back, *hit_right;			//ÇÇ°İ ¶§ÀÇ ¾Ö´Ï			front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* hit2_front, *hit2_right;						//ÇÇ°İ ¶§ÀÇ ¾Ö´Ï2			front : ¾Õ / back : µÚ
-	animation* spin;										//½ºÇÉ ¶§ÀÇ ¾Ö´Ï
-	animation* downs_front, *downs_back, *downs_right;		//¾²·¯Áö±â Á÷ÀüÀÇ ¾Ö´Ï	front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* down;										//¾²·¯Á³À» ¶§ÀÇ ¾Ö´Ï		
-	animation* Bwin_front, *Bwin_back, *Bwin_left;			//ÀÌ°åÀ» ¶§ÀÇ ¾Ö´Ï		front : ¾Õ / back : µÚ / left : ¿ŞÂÊ
-	animation* win;											//½Â¸®Æ÷Áî¸¸ ÃëÇÒ ¶§
+	animation* idle_front, *idle_back, *idle_right;			//ì„œìˆì„ ë•Œì˜ ì• ë‹ˆ		front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* walk_front, *walk_back, *walk_right;			//ê±¸ì„ ë•Œì˜ ì• ë‹ˆ			front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* run_front, *run_back, *run_right;			//ë‹¬ë¦´ ë•Œì˜ ì• ë‹ˆ			front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* Bready_front, *Bready_back, *Bready_left;	//ë°°í‹€ ì¤€ë¹„ì¤‘ì˜ ì• ë‹ˆ		front : ì• / back : ë’¤ / left : ì™¼ìª½
+	animation* SB_front, *SB_back, *SB_left;				//ìŠ¤íƒ ë°”ì´ ì¤‘ì˜ ì• ë‹ˆ		front : ì• / back : ë’¤ / left : ì™¼ìª½
+	animation* rush_front, *rush_back, *rush_right;			//ë‹¬ë ¤ë“¤ ë•Œì˜ ì• ë‹ˆ		front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* atk_front, *atk_back, *atk_right;			//ê³µê²©í•  ë•Œì˜ ì• ë‹ˆ		front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* cri_front, *cri_back, *cri_right;			//ê³µê²©-í¬ë¦¬í‹°ì»¬ ë•Œì˜ ì• ë‹ˆ	front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* hit_front, *hit_back, *hit_right;			//í”¼ê²© ë•Œì˜ ì• ë‹ˆ			front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* hit2_front, *hit2_right;						//í”¼ê²© ë•Œì˜ ì• ë‹ˆ2			front : ì• / back : ë’¤
+	animation* spin;										//ìŠ¤í•€ ë•Œì˜ ì• ë‹ˆ
+	animation* downs_front, *downs_back, *downs_right;		//ì“°ëŸ¬ì§€ê¸° ì§ì „ì˜ ì• ë‹ˆ	front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* down;										//ì“°ëŸ¬ì¡Œì„ ë•Œì˜ ì• ë‹ˆ		
+	animation* Bwin_front, *Bwin_back, *Bwin_left;			//ì´ê²¼ì„ ë•Œì˜ ì• ë‹ˆ		front : ì• / back : ë’¤ / left : ì™¼ìª½
+	animation* win;											//ìŠ¹ë¦¬í¬ì¦ˆë§Œ ì·¨í•  ë•Œ
 
-	animation* cantRun_front, *cantRun_back, *cantRun_right;//¸ø´Ş¸°´Ù				front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* drink;										//¸¶½Ã±â
-	animation* handsUp_front, *handsUp_back;				//¼Õµé±â					front : ¾Õ / back : µÚ
-	animation* ladder;										//»ç´Ù¸®					
-	animation* tied_front, *tied_back, *tied_right;			//¹­ÀÓ					front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
-	animation* what_front, *what_back, *what_right;			//?						front : ¾Õ / back : µÚ / right : ¿À¸¥ÂÊ
+	animation* cantRun_front, *cantRun_back, *cantRun_right;//ëª»ë‹¬ë¦°ë‹¤				front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* drink;										//ë§ˆì‹œê¸°
+	animation* handsUp_front, *handsUp_back;				//ì†ë“¤ê¸°					front : ì• / back : ë’¤
+	animation* ladder;										//ì‚¬ë‹¤ë¦¬					
+	animation* tied_front, *tied_back, *tied_right;			//ë¬¶ì„					front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
+	animation* what_front, *what_back, *what_right;			//?						front : ì• / back : ë’¤ / right : ì˜¤ë¥¸ìª½
 };
 
 class player : public gameNode
 {
 private:
-	tagStatus _Pst;			//ÇÃ·¹ÀÌ¾î ´É·ÂÄ¡
-	tagChaSet _Pset;		//ÇÃ·¹ÀÌ¾î ¼ÂÆÃ
-	tagItemStatus _PIst;	//ÇÃ·¹ÀÌ¾î ¾ÆÀÌÅÛ ´É·ÂÄ¡
+	tagStatus _Pst;			//í”Œë ˆì´ì–´ ëŠ¥ë ¥ì¹˜
+	tagChaSet _Pset;		//í”Œë ˆì´ì–´ ì…‹íŒ…
+	tagItemStatus _PIst;	//í”Œë ˆì´ì–´ ì•„ì´í…œ ëŠ¥ë ¥ì¹˜
 
 	tagPlImage im;
 	tagPlAni an;
-	bool Cleft, _run;	//ÁÂ¿ì¹İÀü, ´Ş¸®±â
-	int _T;		//¹æÇâÀüÈ¯¿ë int(turn) / 0:front , 1:back , 2:right , 3:left
-	int Cc;		//idle »óÅÂÀÇ ´«±ôºıÀÓ Ä«¿îÆ®
+	bool Cleft, _run;	//ì¢Œìš°ë°˜ì „, ë‹¬ë¦¬ê¸°
+	int _T;		//ë°©í–¥ì „í™˜ìš© int(turn) / 0:front , 1:back , 2:right , 3:left
+	int Cc;		//idle ìƒíƒœì˜ ëˆˆê¹œë¹¡ì„ ì¹´ìš´íŠ¸
 
 public:
 	player() {};
@@ -75,100 +75,100 @@ public:
 
 	void imgSetting();
 	void aniSetting();
-	void imgSwitch();		//ÀÌ¹ÌÁö º¸ÀÌ´Â ¹æ½ÄÀÌ µé¾î°£´Ù
-	void keySetting();	//Å° ÀÔ·Â ¹æ½Ä
-	//void moveSwitch();	//ÀÌµ¿½Ã ½ºÀ§Ä¡(º®ºÎµúÄ¡±â µî)
-	//void battleSwitch();	//¹èÆ²½Ã ½ºÀ§Ä¡(°ø°İ½Ã ·ºÆ® µî)
+	void imgSwitch();		//ì´ë¯¸ì§€ ë³´ì´ëŠ” ë°©ì‹ì´ ë“¤ì–´ê°„ë‹¤
+	void keySetting();	//í‚¤ ì…ë ¥ ë°©ì‹
+	//void moveSwitch();	//ì´ë™ì‹œ ìŠ¤ìœ„ì¹˜(ë²½ë¶€ë”ªì¹˜ê¸° ë“±)
+	//void battleSwitch();	//ë°°í‹€ì‹œ ìŠ¤ìœ„ì¹˜(ê³µê²©ì‹œ ë ‰íŠ¸ ë“±)
 
 	//setter 
 	
-	//ÇÃ·¹ÀÌ¾î Èû +
+	//í”Œë ˆì´ì–´ í˜ +
 	void plusPower(int power) { _Pst.power += power; }
-	void setPower(int power) { _Pst.power = power; }//Èû ¹Ù²Ù±â
-	//ÇÃ·¹ÀÌ¾î ¸¶·Â +
+	void setPower(int power) { _Pst.power = power; }//í˜ ë°”ê¾¸ê¸°
+	//í”Œë ˆì´ì–´ ë§ˆë ¥ +
 	void plusMagic(int magic) { _Pst.magic += magic; }		
-	void setMagic(int magic) { _Pst.magic = magic; }//¸¶·Â ¹Ù²Ù±â
-	//ÇÃ·¹ÀÌ¾î ½ºÇÇµå +
+	void setMagic(int magic) { _Pst.magic = magic; }//ë§ˆë ¥ ë°”ê¾¸ê¸°
+	//í”Œë ˆì´ì–´ ìŠ¤í”¼ë“œ +
 	void plusSpeed(int speed) { _Pst.speed += speed; }		
-	void setSpeed(int speed) { _Pst.speed = speed; }//½ºÇÇµå ¹Ù²Ù±â
-	//ÇÃ·¹ÀÌ¾î Ã¼·Â +
+	void setSpeed(int speed) { _Pst.speed = speed; }//ìŠ¤í”¼ë“œ ë°”ê¾¸ê¸°
+	//í”Œë ˆì´ì–´ ì²´ë ¥ +
 	void plusStamina(int stamina) { _Pst.stamina += stamina; }
-	void setStamina(int stamina) { _Pst.stamina = stamina; }//Ã¼·Â ¹Ù²Ù±â
-	//ÇÃ·¹ÀÌ¾î ¹ÎÃ¸ +
+	void setStamina(int stamina) { _Pst.stamina = stamina; }//ì²´ë ¥ ë°”ê¾¸ê¸°
+	//í”Œë ˆì´ì–´ ë¯¼ì²© +
 	void plusHit(int hit) { _Pst.hit += hit; }				
-	void setHit(int hit) { _Pst.hit = hit; }//¹ÎÃ¸ ¹Ù²Ù±â
-	//ÇÃ·¹ÀÌ¾î È¸ÇÇ +
+	void setHit(int hit) { _Pst.hit = hit; }//ë¯¼ì²© ë°”ê¾¸ê¸°
+	//í”Œë ˆì´ì–´ íšŒí”¼ +
 	void plusEvasion(int evasion) { _Pst.evasion += evasion; }
-	void setEvasion(int evasion) { _Pst.evasion = evasion; }//È¸ÇÇ ¹Ù²Ù±â
+	void setEvasion(int evasion) { _Pst.evasion = evasion; }//íšŒí”¼ ë°”ê¾¸ê¸°
 	
-	//ÄÁµğ¼Ç(´À·ÁÁü µî »óÅÂÀÌ»ó) ¹Ù²Ù±â
+	//ì»¨ë””ì…˜(ëŠë ¤ì§ ë“± ìƒíƒœì´ìƒ) ë°”ê¾¸ê¸°
 	void setCondition(int condition) { _Pst.condition = condition; }
 
-	//µ¥¹ÌÁö(hp) -
+	//ë°ë¯¸ì§€(hp) -
 	void hitDamage(int damage) { _Pst.hp -= damage; }		
-	//ÃÖ´ëhp +
+	//ìµœëŒ€hp +
 	void plusMaxHP(int maxHP) { _Pst.maxHp += maxHP; }		
-	void setMaxHP(int maxHP) { _Pst.maxHp = maxHP; }//ÃÖ´ë hp ¹Ù²Ù±â
-	//ÇÃ·¹ÀÌ¾î ÀÌ¸§ ¹Ù²Ù±â
+	void setMaxHP(int maxHP) { _Pst.maxHp = maxHP; }//ìµœëŒ€ hp ë°”ê¾¸ê¸°
+	//í”Œë ˆì´ì–´ ì´ë¦„ ë°”ê¾¸ê¸°
 	void setName(string name) { _Pset.name = name; }
 
 	//mp -
 	void minusMP(int mp) { _Pst.mp -= mp; }					
-	//ÃÖ´ëmp +
+	//ìµœëŒ€mp +
 	void plusMaxMP(int maxMP) { _Pst.maxMp += maxMP; }		
-	void setMaxMP(int maxMP) { _Pst.maxMp = maxMP; }//ÃÖ´ë mp ¹Ù²Ù±â
+	void setMaxMP(int maxMP) { _Pst.maxMp = maxMP; }//ìµœëŒ€ mp ë°”ê¾¸ê¸°
 
-	//¼ÒÁö±İ +
+	//ì†Œì§€ê¸ˆ +
 	void plusMoney(int money) { _Pst.money += money; }
-	void setMoney(int money) { _Pst.money = money; }//¼ÒÁö±İ ¹Ù²Ù±â
+	void setMoney(int money) { _Pst.money = money; }//ì†Œì§€ê¸ˆ ë°”ê¾¸ê¸°
 
-	//°æÇèÄ¡ +
+	//ê²½í—˜ì¹˜ +
 	void plusExp(int exp) { _Pst.exp += exp; }				
-	//ÃÖ´ë°æÇèÄ¡ ¹Ù²Ù±â
+	//ìµœëŒ€ê²½í—˜ì¹˜ ë°”ê¾¸ê¸°
 	void setMaxExp(int maxExp) { _Pst.maxExp = maxExp; }	
 
-	//ÇÇ°İ µî¿¡ ¼³Á¤½ÃÅ³ STATE setter
+	//í”¼ê²© ë“±ì— ì„¤ì •ì‹œí‚¬ STATE setter
 	void setState(STATE state) { _Pset.state = state; }
 
-	//ÇÃ·¹ÀÌ¾î ÇöÀç Èû
+	//í”Œë ˆì´ì–´ í˜„ì¬ í˜
 	int getPower() { return _Pst.power; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ¸¶·Â
+	//í”Œë ˆì´ì–´ í˜„ì¬ ë§ˆë ¥
 	int getMagic() { return _Pst.magic; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ½ºÇÇµå
+	//í”Œë ˆì´ì–´ í˜„ì¬ ìŠ¤í”¼ë“œ
 	int getSpeed() { return _Pst.speed; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç Ã¼·Â
+	//í”Œë ˆì´ì–´ í˜„ì¬ ì²´ë ¥
 	int getStamina() { return _Pst.stamina; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ¸íÁß
+	//í”Œë ˆì´ì–´ í˜„ì¬ ëª…ì¤‘
 	int getHit() { return _Pst.hit; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç È¸ÇÇ
+	//í”Œë ˆì´ì–´ í˜„ì¬ íšŒí”¼
 	int getEvasion() { return _Pst.evasion; }
 	
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ÄÁµğ¼Ç
+	//í”Œë ˆì´ì–´ í˜„ì¬ ì»¨ë””ì…˜
 	int getCondition() { return _Pst.condition; }
 	
-	//ÇÃ·¹ÀÌ¾î ÇöÀç hp
+	//í”Œë ˆì´ì–´ í˜„ì¬ hp
 	int getHP() { return _Pst.hp; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç maxHP
+	//í”Œë ˆì´ì–´ í˜„ì¬ maxHP
 	int getMaxHP() { return _Pst.maxHp; }
 
-	//ÇÃ·¹ÀÌ¾î ÇöÀç mp
+	//í”Œë ˆì´ì–´ í˜„ì¬ mp
 	int getMP() { return _Pst.mp; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç maxMP
+	//í”Œë ˆì´ì–´ í˜„ì¬ maxMP
 	int getMaxMP() { return _Pst.maxMp; }
 
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ¼ÒÁö±İ
+	//í”Œë ˆì´ì–´ í˜„ì¬ ì†Œì§€ê¸ˆ
 	int getMoney() { return _Pst.money; }
 
-	//ÇÃ·¹ÀÌ¾î ÇöÀç °æÇèÄ¡
+	//í”Œë ˆì´ì–´ í˜„ì¬ ê²½í—˜ì¹˜
 	int getExp() { return _Pst.exp; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ÃÖ´ë°æÇèÄ¡
+	//í”Œë ˆì´ì–´ í˜„ì¬ ìµœëŒ€ê²½í—˜ì¹˜
 	int getMaxExp() { return _Pst.maxExp; }
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ·¹º§
+	//í”Œë ˆì´ì–´ í˜„ì¬ ë ˆë²¨
 	int getLV() { return _Pst.Lv; }
 
-	//ÇÇ°İ µîÀ» È®ÀÎÇÒ STATE getter
+	//í”¼ê²© ë“±ì„ í™•ì¸í•  STATE getter
 	STATE getState() { return _Pset.state; }
 
-	//ÇÃ·¹ÀÌ¾î ÇöÀç ÀÌ¸§
+	//í”Œë ˆì´ì–´ í˜„ì¬ ì´ë¦„
 	string getName() { return _Pset.name; }
 };

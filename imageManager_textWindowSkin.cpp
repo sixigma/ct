@@ -24,16 +24,16 @@ void imageManager::setWindowSkin(string tilesetStrKey, string skinStrKey, int wi
 	}
 	HBITMAP hTempOBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 
-	// ¸í¾ÏÀ» ÁÖ±â Àü¿¡ ÀÓ½Ã DC ºñÆ®¸Ê¿¡ ±Û Ãâ·Â Ã¢ ½ºÅ²À» ±×¸°´Ù.
-	img->loopRenderP(hTempDC, &RECT({32, 32, width, height}), &RECT({128, _textWindowSkin * 128, 256, _textWindowSkin * 128 + 128}), 0, 0); // ¹ÙÅÁ
-	img->loopRenderP(hTempDC, &RECT({32, 0, width, 32}), &RECT({32, _textWindowSkin * 128, 96, _textWindowSkin * 128 + 32}), 0, 0); // »ó´Ü
-	img->loopRenderP(hTempDC, &RECT({32, height - 32, width, height}), &RECT({32, _textWindowSkin * 128 + 96, 96, _textWindowSkin * 128 + 128}), 0, 0); // ÇÏ´Ü
-	img->loopRenderP(hTempDC, &RECT({0, 32, 32, height}), &RECT({0, _textWindowSkin * 128 + 32, 32, _textWindowSkin * 128 + 96}), 0, 0); // ÁÂ´Ü
-	img->loopRenderP(hTempDC, &RECT({width - 32, 32, width, height }), &RECT({96, _textWindowSkin * 128 + 32, 128, _textWindowSkin * 128 + 96}), 0, 0); // ¿ì´Ü
-	img->render(hTempDC, 0, 0, 0, _textWindowSkin * 128, 32, 32);  // ÁÂ»ó´Ü ¸ğ¼­¸®
-	img->render(hTempDC, width - 32, 0, 96, _textWindowSkin * 128, 32, 32); // ¿ì»ó´Ü ¸ğ¼­¸®
-	img->render(hTempDC, 0, height - 32, 0, _textWindowSkin * 128 + 96, 32, 32); // ÁÂÇÏ´Ü ¸ğ¼­¸®
-	img->render(hTempDC, width - 32, height - 32, 96, _textWindowSkin * 128 + 96, 32, 32); // ¿ìÇÏ´Ü ¸ğ¼­¸®
+	// ëª…ì•”ì„ ì£¼ê¸° ì „ì— ì„ì‹œ DC ë¹„íŠ¸ë§µì— ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ì„ ê·¸ë¦°ë‹¤.
+	img->loopRenderP(hTempDC, &RECT({32, 32, width, height}), &RECT({128, _textWindowSkin * 128, 256, _textWindowSkin * 128 + 128}), 0, 0); // ë°”íƒ•
+	img->loopRenderP(hTempDC, &RECT({32, 0, width, 32}), &RECT({32, _textWindowSkin * 128, 96, _textWindowSkin * 128 + 32}), 0, 0); // ìƒë‹¨
+	img->loopRenderP(hTempDC, &RECT({32, height - 32, width, height}), &RECT({32, _textWindowSkin * 128 + 96, 96, _textWindowSkin * 128 + 128}), 0, 0); // í•˜ë‹¨
+	img->loopRenderP(hTempDC, &RECT({0, 32, 32, height}), &RECT({0, _textWindowSkin * 128 + 32, 32, _textWindowSkin * 128 + 96}), 0, 0); // ì¢Œë‹¨
+	img->loopRenderP(hTempDC, &RECT({width - 32, 32, width, height }), &RECT({96, _textWindowSkin * 128 + 32, 128, _textWindowSkin * 128 + 96}), 0, 0); // ìš°ë‹¨
+	img->render(hTempDC, 0, 0, 0, _textWindowSkin * 128, 32, 32);  // ì¢Œìƒë‹¨ ëª¨ì„œë¦¬
+	img->render(hTempDC, width - 32, 0, 96, _textWindowSkin * 128, 32, 32); // ìš°ìƒë‹¨ ëª¨ì„œë¦¬
+	img->render(hTempDC, 0, height - 32, 0, _textWindowSkin * 128 + 96, 32, 32); // ì¢Œí•˜ë‹¨ ëª¨ì„œë¦¬
+	img->render(hTempDC, width - 32, height - 32, 96, _textWindowSkin * 128 + 96, 32, 32); // ìš°í•˜ë‹¨ ëª¨ì„œë¦¬
 
 	size_t sectionHeight = static_cast<size_t>(height / 16);
 	size_t sectionArea = static_cast<size_t>(width) * sectionHeight;
@@ -57,10 +57,10 @@ void imageManager::setWindowSkin(string tilesetStrKey, string skinStrKey, int wi
 
 void imageManager::setAllWindowSkins()
 {
-	IMG->setWindowSkin("±Û Ãâ·Â Ã¢ ½ºÅ² Å¸ÀÏ¼Â", "´ë»ç Ãâ·Â Ã¢ ½ºÅ²", 1024, 320);
-	IMG->setWindowSkin("±Û Ãâ·Â Ã¢ ½ºÅ² Å¸ÀÏ¼Â", "ÀüÅõ ¸Ş½ÃÁö Ã¢ ½ºÅ²", 1024, 96);
-	IMG->setWindowSkin("±Û Ãâ·Â Ã¢ ½ºÅ² Å¸ÀÏ¼Â", "¼³Á¤ ¸Ş½ÃÁö Ã¢ ½ºÅ²", 898, 128);
+	IMG->setWindowSkin("ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ íƒ€ì¼ì…‹", "ëŒ€ì‚¬ ì¶œë ¥ ì°½ ìŠ¤í‚¨", 1024, 320);
+	IMG->setWindowSkin("ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ íƒ€ì¼ì…‹", "ì „íˆ¬ ë©”ì‹œì§€ ì°½ ìŠ¤í‚¨", 1024, 96);
+	IMG->setWindowSkin("ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ íƒ€ì¼ì…‹", "ì„¤ì • ë©”ì‹œì§€ ì°½ ìŠ¤í‚¨", 898, 128);
 
-	// ¸®¸¶ÀÎ´õ: Ãß°¡ ÇÊ¿ä
+	// ë¦¬ë§ˆì¸ë”: ì¶”ê°€ í•„ìš”
 
 }

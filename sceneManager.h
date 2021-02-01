@@ -22,10 +22,10 @@ public:
 	void update();
 	void render();
 
-	//¾ÀÃß°¡ ÇÔ¼ö
+	//ì”¬ì¶”ê°€ í•¨ìˆ˜
 	gameNode* addScene(string sceneName, gameNode* scene);
 
-	//¾À º¯°æ ÇÔ¼ö
+	//ì”¬ ë³€ê²½ í•¨ìˆ˜
 	HRESULT changeScene(string sceneName);
 
 	sceneManager() {};

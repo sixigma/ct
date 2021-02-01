@@ -4,13 +4,13 @@
 
 // FFmpeg
 extern "C" {
-#include "include/libavcodec/avcodec.h" // ÀÎÄÚµù(encoding)/µğÄÚµù(decoding)¿ë
-//#include "include/libavdevice/avdevice.h" // Æ¯¼ö µğ¹ÙÀÌ½º ¸ÖÆ¼ÇÃ·¹½Ì(muxing)/µğ¸ÖÆ¼ÇÃ·º½Ì(demuxing)¿ë
-//#include "include/libavfilter/avfilter.h" // ÇÁ·¹ÀÓ ÆíÁı¿ë
-#include "include/libavformat/avformat.h" // ÀÔÃâ·Â¿ë, ¸ÖÆ¼ÇÃ·¹½Ì(muxing)/µğ¸ÖÆ¼ÇÃ·º½Ì(demuxing)¿ë
-#include "include/libavutil/avutil.h" // °øÅë À¯Æ¿¸®Æ¼
+#include "include/libavcodec/avcodec.h" // ì¸ì½”ë”©(encoding)/ë””ì½”ë”©(decoding)ìš©
+//#include "include/libavdevice/avdevice.h" // íŠ¹ìˆ˜ ë””ë°”ì´ìŠ¤ ë©€í‹°í”Œë ˆì‹±(muxing)/ë””ë©€í‹°í”Œë ‰ì‹±(demuxing)ìš©
+//#include "include/libavfilter/avfilter.h" // í”„ë ˆì„ í¸ì§‘ìš©
+#include "include/libavformat/avformat.h" // ì…ì¶œë ¥ìš©, ë©€í‹°í”Œë ˆì‹±(muxing)/ë””ë©€í‹°í”Œë ‰ì‹±(demuxing)ìš©
+#include "include/libavutil/avutil.h" // ê³µí†µ ìœ í‹¸ë¦¬í‹°
 #include "include/libavutil/imgutils.h" // av_image_get_buffer_size
-#include "include/libswscale/swscale.h" // »ö º¯È¯, È®´ë/Ãà¼Ò¿ë
+#include "include/libswscale/swscale.h" // ìƒ‰ ë³€í™˜, í™•ëŒ€/ì¶•ì†Œìš©
 }
 #pragma comment(lib, "lib/avcodec.lib")
 #pragma comment(lib, "lib/avformat.lib")

@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "gameScene.h"
 
 int gameScene::_countForReEnablingKeyInput;

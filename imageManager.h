@@ -10,7 +10,7 @@ class imageManager : public singleton<imageManager>
 private:
 	typedef map<string, image*>				imageList;
 	typedef map<string, image*>::iterator	imageListIter;
-	HRGN _hClipRgn = nullptr, _hOClipRgn = nullptr; // Å¬¸®ÇÎ ¿µ¿ª ÁöÁ¤¿ë º¯¼ö
+	HRGN _hClipRgn = nullptr, _hOClipRgn = nullptr; // í´ë¦¬í•‘ ì˜ì—­ ì§€ì •ìš© ë³€ìˆ˜
 
 	imageList _imageList;
 	map<string, function<void()>> _availableFuncs;
@@ -24,48 +24,48 @@ public:
 	HRESULT init();
 	void release();
 
-	// ÀÌ¹ÌÁö Ãß°¡
+	// ì´ë¯¸ì§€ ì¶”ê°€
 	image* add(string strKey, int width, int height);
 
-	// ÀÌ¹ÌÁö Ãß°¡
+	// ì´ë¯¸ì§€ ì¶”ê°€
 	image* add(string strKey, const char* fileName, int width, int height, BOOL hasTransparentColor = FALSE, COLORREF transparentColor = RGB(0, 0, 0));
 
-	// ÇÁ·¹ÀÓ ÀÌ¹ÌÁö Ãß°¡
+	// í”„ë ˆì„ ì´ë¯¸ì§€ ì¶”ê°€
 	image* addF(string strKey, const char* fileName, int width, int height, int frameX, int frameY,
 		BOOL hasTransparentColor = FALSE, COLORREF transparentColor = RGB(0, 0, 0));
 
-	// ÇÁ·¹ÀÓ ÀÌ¹ÌÁö Ãß°¡
+	// í”„ë ˆì„ ì´ë¯¸ì§€ ì¶”ê°€
 	image* addF(string strKey, const char* fileName, int x, int y, int width, int height, int frameX, int frameY,
 		BOOL hasTransparentColor = FALSE, COLORREF transparentColor = RGB(0, 0, 0));
 
-	// ÀÌ¹ÌÁö Ã£±â
+	// ì´ë¯¸ì§€ ì°¾ê¸°
 	image* find(string strKey);
 
-	// ÀÌ¹ÌÁö Á¦°Å
+	// ì´ë¯¸ì§€ ì œê±°
 	BOOL del(string strKey);
 
-	// ÀÌ¹ÌÁö ÀüºÎ Á¦°Å
+	// ì´ë¯¸ì§€ ì „ë¶€ ì œê±°
 	BOOL delAll();
 
 	void render(string strKey, HDC hDC);
 	void render(string strKey, HDC hDC, int destX, int destY);
 	void render(string strKey, HDC hDC, int destX, int destY, int sourX, int sourY, int srcWidth, int srcHeight);
 
-	// ÁÂ¿ì ¹İÀü ·»´õ¸µ(ÀÏ¹İ)
+	// ì¢Œìš° ë°˜ì „ ë Œë”ë§(ì¼ë°˜)
 	void renderH(string strKey, HDC hDC, int destX = 0, int destY = 0, int srcX = 0, int srcY = 0, int srcWidth = -1, int srcHeight = -1);
-	// »óÇÏ ¹İÀü ·»´õ¸µ(ÀÏ¹İ)
+	// ìƒí•˜ ë°˜ì „ ë Œë”ë§(ì¼ë°˜)
 	void renderV(string strKey, HDC hDC, int destX = 0, int destY = 0, int srcX = 0, int srcY = 0, int srcWidth = -1, int srcHeight = -1);
-	// »óÇÏÁÂ¿ì ¹İÀü ·»´õ¸µ(ÀÏ¹İ)
+	// ìƒí•˜ì¢Œìš° ë°˜ì „ ë Œë”ë§(ì¼ë°˜)
 	void renderHV(string strKey, HDC hDC, int destX = 0, int destY = 0, int srcX = 0, int srcY = 0, int srcWidth = -1, int srcHeight = -1);
 
 	void frameRender(string strKey, HDC hDC, int destX, int destY);
 	void frameRender(string strKey, HDC hDC, int destX, int destY, int currentFrameX, int currentFrameY);
 
-	// ÁÂ¿ì ¹İÀü ·»´õ¸µ(ÇÁ·¹ÀÓ): currentFrameX, currentFrameY¸¦ -1·Î ÁöÁ¤ÇÏ¸é ÇöÀç ÇÁ·¹ÀÓ ¹øÈ£¸¦ »ç¿ëÇÑ´Ù.
+	// ì¢Œìš° ë°˜ì „ ë Œë”ë§(í”„ë ˆì„): currentFrameX, currentFrameYë¥¼ -1ë¡œ ì§€ì •í•˜ë©´ í˜„ì¬ í”„ë ˆì„ ë²ˆí˜¸ë¥¼ ì‚¬ìš©í•œë‹¤.
 	void frameRenderH(string strKey, HDC hDC, int destX, int destY, int currentFrameX = -1, int currentFrameY = -1);
-	// »óÇÏ ¹İÀü ·»´õ¸µ(ÇÁ·¹ÀÓ): currentFrameX, currentFrameY¸¦ -1·Î ÁöÁ¤ÇÏ¸é ÇöÀç ÇÁ·¹ÀÓ ¹øÈ£¸¦ »ç¿ëÇÑ´Ù.
+	// ìƒí•˜ ë°˜ì „ ë Œë”ë§(í”„ë ˆì„): currentFrameX, currentFrameYë¥¼ -1ë¡œ ì§€ì •í•˜ë©´ í˜„ì¬ í”„ë ˆì„ ë²ˆí˜¸ë¥¼ ì‚¬ìš©í•œë‹¤.
 	void frameRenderV(string strKey, HDC hDC, int destX, int destY, int currentFrameX = -1, int currentFrameY = -1);
-	// »óÇÏÁÂ¿ì ¹İÀü ·»´õ¸µ(ÇÁ·¹ÀÓ): currentFrameX, currentFrameY¸¦ -1·Î ÁöÁ¤ÇÏ¸é ÇöÀç ÇÁ·¹ÀÓ ¹øÈ£¸¦ »ç¿ëÇÑ´Ù.
+	// ìƒí•˜ì¢Œìš° ë°˜ì „ ë Œë”ë§(í”„ë ˆì„): currentFrameX, currentFrameYë¥¼ -1ë¡œ ì§€ì •í•˜ë©´ í˜„ì¬ í”„ë ˆì„ ë²ˆí˜¸ë¥¼ ì‚¬ìš©í•œë‹¤.
 	void frameRenderHV(string strKey, HDC hDC, int destX, int destY, int currentFrameX = -1, int currentFrameY = -1);
 
 	void adjFrameRender(string strKey, HDC hDC, int destX, int destY, int currentFrameX, int currentFrameY, int adjWidth, int adjHeight);
@@ -79,23 +79,23 @@ public:
 
 	void loopRender(string strKey, HDC hDC, const LPRECT drawArea, int offSetX, int offSetY);
 
-	// Å¬¸®ÇÎ ¿µ¿ªÀ» »ç°¢ÇüÀ¸·Î ÁöÁ¤ÇÏ´Â ÇÔ¼ö
+	// í´ë¦¬í•‘ ì˜ì—­ì„ ì‚¬ê°í˜•ìœ¼ë¡œ ì§€ì •í•˜ëŠ” í•¨ìˆ˜
 	void setRctClipRgn(HDC hDC, int x, int y, int width, int height);
 
-	// Å¬¸®ÇÎ ¿µ¿ªÀ» Å¸¿øÀ¸·Î ÁöÁ¤ÇÏ´Â ÇÔ¼ö
+	// í´ë¦¬í•‘ ì˜ì—­ì„ íƒ€ì›ìœ¼ë¡œ ì§€ì •í•˜ëŠ” í•¨ìˆ˜
 	void setEllipticClipRgn(HDC hDC, int x, int y, int width, int height);
 	
-	// ÁöÁ¤ÇÏ¿´´ø Å¬¸®ÇÎ ¿µ¿ªÀ» ÇØÁ¦ÇÏ´Â ÇÔ¼ö
+	// ì§€ì •í•˜ì˜€ë˜ í´ë¦¬í•‘ ì˜ì—­ì„ í•´ì œí•˜ëŠ” í•¨ìˆ˜
 	void resetClipRgn(HDC hDC);
 
-	// ÇöÀç ±Û Ãâ·Â Ã¢ ½ºÅ² ÀÎµ¦½º¸¦ ¹İ¿µÇÏ¿© ±Û Ãâ·Â Ã¢ ½ºÅ²À» µî·ÏµÈ ºñÆ®¸Ê Æ¯Á¤ À§Ä¡¿¡ Ãâ·ÂÇÏ´Â ÇÔ¼ö
-	// ³Êºñ 96 ÇÈ¼¿ ÀÌ»ó, ³ôÀÌ 96 ÇÈ¼¿ ÀÌ»óÀÌ¾î¾ß ÇÏ¸ç ³ôÀÌ °ªÀº 16ÀÇ ¹è¼ö¿©¾ß ÇÑ´Ù.
+	// í˜„ì¬ ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ ì¸ë±ìŠ¤ë¥¼ ë°˜ì˜í•˜ì—¬ ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ì„ ë“±ë¡ëœ ë¹„íŠ¸ë§µ íŠ¹ì • ìœ„ì¹˜ì— ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
+	// ë„ˆë¹„ 96 í”½ì…€ ì´ìƒ, ë†’ì´ 96 í”½ì…€ ì´ìƒì´ì–´ì•¼ í•˜ë©° ë†’ì´ ê°’ì€ 16ì˜ ë°°ìˆ˜ì—¬ì•¼ í•œë‹¤.
 	void setWindowSkin(string tilesetStrKey, string skinStrKey, int width, int height, int destX = 0, int destY = 0);
 
-	// ÇöÀç ±Û Ãâ·Â Ã¢ ½ºÅ² ÀÎµ¦½º¸¦ ¹İ¿µÇÏ¿© ±Û Ãâ·Â Ã¢ ½ºÅ²À» ÀüºÎ ´Ù½Ã ±×¸®´Â ÇÔ¼ö
+	// í˜„ì¬ ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ ì¸ë±ìŠ¤ë¥¼ ë°˜ì˜í•˜ì—¬ ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ì„ ì „ë¶€ ë‹¤ì‹œ ê·¸ë¦¬ëŠ” í•¨ìˆ˜
 	void setAllWindowSkins();
 
-	// zIndex ¼ø¼­·Î ÇÔ¼ö¸¦ È£ÃâÇÒ ¼ö ÀÖµµ·Ï ÇÔ¼ö¸¦ µî·ÏÇÏ´Â ÇÔ¼ö(¼±¾ğ) - image* »ç¿ë
+	// zIndex ìˆœì„œë¡œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ìˆ˜ ìˆë„ë¡ í•¨ìˆ˜ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜(ì„ ì–¸) - image* ì‚¬ìš©
 	template<typename...args>
 	void renderZ(LONG zIndex, image* img, args... params);
 	template<typename...args>
@@ -121,7 +121,7 @@ public:
 	template<typename...args>
 	void loopRenderZ(LONG zIndex, image* img, args... params);
 
-	// zIndex ¼ø¼­·Î ÇÔ¼ö¸¦ È£ÃâÇÒ ¼ö ÀÖµµ·Ï ÇÔ¼ö¸¦ µî·ÏÇÏ´Â ÇÔ¼ö(¼±¾ğ) - strKey »ç¿ë
+	// zIndex ìˆœì„œë¡œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ìˆ˜ ìˆë„ë¡ í•¨ìˆ˜ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜(ì„ ì–¸) - strKey ì‚¬ìš©
 	template<typename...args>
 	void renderZ(LONG zIndex, string strKey, args... params);
 	template<typename...args>
@@ -147,7 +147,7 @@ public:
 	template<typename...args>
 	void loopRenderZ(LONG zIndex, string strKey, args... params);
 
-	// zIndex ¼ø¼­·Î ÇÔ¼ö¸¦ È£ÃâÇÒ ¼ö ÀÖµµ·Ï ÇÔ¼ö¸¦ µî·ÏÇÏ´Â ÇÔ¼ö(¼±¾ğ)
+	// zIndex ìˆœì„œë¡œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ìˆ˜ ìˆë„ë¡ í•¨ìˆ˜ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜(ì„ ì–¸)
 	template<typename...args>
 	void setRctClipRgnZ(LONG zIndex, args... params);
 	template<typename...args>
@@ -155,15 +155,15 @@ public:
 	template<typename...args>
 	void resetClipRgnZ(LONG zIndex, args... params);
 
-	// zIndex ¼ø¼­·Î ÇÔ¼ö¸¦ È£ÃâÇÏ´Â ÇÔ¼ö
+	// zIndex ìˆœì„œë¡œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ëŠ” í•¨ìˆ˜
 	void execZ();
 
-	// hDC¿¡ ¿¬°áµÈ ºñÆ®¸ÊÀ» Å¬¸³º¸µå·Î º¹»çÇÏ°Å³ª ±×¸² ÆÄÀÏ·Î ÀúÀåÇÏ´Â ÇÔ¼ö
+	// hDCì— ì—°ê²°ëœ ë¹„íŠ¸ë§µì„ í´ë¦½ë³´ë“œë¡œ ë³µì‚¬í•˜ê±°ë‚˜ ê·¸ë¦¼ íŒŒì¼ë¡œ ì €ì¥í•˜ëŠ” í•¨ìˆ˜
 	void takeScreenshot(HDC hDC, BOOL shouldSaveAsImage = FALSE, int x = 0, int y = 0, int width = WINW, int height = WINH);
 };
 
 
-// zIndex ¼ø¼­·Î ÇÔ¼ö¸¦ È£ÃâÇÒ ¼ö ÀÖµµ·Ï ÇÔ¼ö¸¦ µî·ÏÇÏ´Â ÇÔ¼ö(Á¤ÀÇ) - image* »ç¿ë
+// zIndex ìˆœì„œë¡œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ìˆ˜ ìˆë„ë¡ í•¨ìˆ˜ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜(ì •ì˜) - image* ì‚¬ìš©
 template<typename ...args>
 inline void imageManager::renderZ(LONG zIndex, image* img, args ...params)
 {
@@ -284,7 +284,7 @@ inline void imageManager::loopRenderZ(LONG zIndex, image* img, args ...params)
 	_funcsToCall.insert(make_pair(zIndex, func));
 }
 
-// zIndex ¼ø¼­·Î ÇÔ¼ö¸¦ È£ÃâÇÒ ¼ö ÀÖµµ·Ï ÇÔ¼ö¸¦ µî·ÏÇÏ´Â ÇÔ¼ö(Á¤ÀÇ) - strKey* »ç¿ë
+// zIndex ìˆœì„œë¡œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ìˆ˜ ìˆë„ë¡ í•¨ìˆ˜ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜(ì •ì˜) - strKey* ì‚¬ìš©
 template<typename ...args>
 inline void imageManager::renderZ(LONG zIndex, string strKey, args ...params)
 {
@@ -405,7 +405,7 @@ inline void imageManager::loopRenderZ(LONG zIndex, string strKey, args ...params
 	_funcsToCall.insert(make_pair(zIndex, func));
 }
 
-// zIndex ¼ø¼­·Î ÇÔ¼ö¸¦ È£ÃâÇÒ ¼ö ÀÖµµ·Ï ÇÔ¼ö¸¦ µî·ÏÇÏ´Â ÇÔ¼ö(Á¤ÀÇ) 
+// zIndex ìˆœì„œë¡œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ìˆ˜ ìˆë„ë¡ í•¨ìˆ˜ë¥¼ ë“±ë¡í•˜ëŠ” í•¨ìˆ˜(ì •ì˜) 
 
 template<typename ...args>
 inline void imageManager::setRctClipRgnZ(LONG zIndex, args ...params)

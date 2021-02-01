@@ -300,7 +300,7 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 		bI.bmiHeader.biBitCount = 32;
 		bI.bmiHeader.biWidth = width;
 		bI.bmiHeader.biHeight = height;
-		bI.bmiHeader.biCompression = BI_RGB; // ¹«¾ĞÃà RGB
+		bI.bmiHeader.biCompression = BI_RGB; // ë¬´ì••ì¶• RGB
 		bI.bmiHeader.biPlanes = 1;
 
 		BYTE* bitmapData = nullptr;
@@ -323,24 +323,24 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 
 		bitmapFileHeader.bfOffBits = static_cast<DWORD>(sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER));
 		bitmapFileHeader.bfSize = static_cast<DWORD>(dIBSize);
-		bitmapFileHeader.bfType = 0x4D42; // 0x4D42´Â 'BM'À» ³ªÅ¸³½´Ù.
+		bitmapFileHeader.bfType = 0x4D42; // 0x4D42ëŠ” 'BM'ì„ ë‚˜íƒ€ë‚¸ë‹¤.
 
 		bitmapInfoHeader.biSize = sizeof(BITMAPINFOHEADER);
 		bitmapInfoHeader.biWidth = width;
 		bitmapInfoHeader.biHeight = height;
 		bitmapInfoHeader.biPlanes = 1;
 		bitmapInfoHeader.biBitCount = 32;
-		bitmapInfoHeader.biCompression = BI_RGB; // ¹«¾ĞÃà RGB
-		bitmapInfoHeader.biSizeImage = 0; // ¹«¾ĞÃà RGB ºñÆ®¸Ê¿¡´Â 0À» ¾´´Ù.
+		bitmapInfoHeader.biCompression = BI_RGB; // ë¬´ì••ì¶• RGB
+		bitmapInfoHeader.biSizeImage = 0; // ë¬´ì••ì¶• RGB ë¹„íŠ¸ë§µì—ëŠ” 0ì„ ì“´ë‹¤.
 		bitmapInfoHeader.biXPelsPerMeter = 0;
 		bitmapInfoHeader.biYPelsPerMeter = 0;
-		bitmapInfoHeader.biClrUsed = 0; // 0À¸·Î ÁöÁ¤ÇÏ¿© '2ÀÇ biBitCount Á¦°ö' »öÀ» »ç¿ëÇÑ´Ù.
-		bitmapInfoHeader.biClrImportant = 0; // ¸ğµç »öÀÌ Áß¿äÇÏ¸é 0À¸·Î ÁöÁ¤ÇÑ´Ù.
+		bitmapInfoHeader.biClrUsed = 0; // 0ìœ¼ë¡œ ì§€ì •í•˜ì—¬ '2ì˜ biBitCount ì œê³±' ìƒ‰ì„ ì‚¬ìš©í•œë‹¤.
+		bitmapInfoHeader.biClrImportant = 0; // ëª¨ë“  ìƒ‰ì´ ì¤‘ìš”í•˜ë©´ 0ìœ¼ë¡œ ì§€ì •í•œë‹¤.
 
-		HGLOBAL hDIB = GlobalAlloc(GMEM_MOVEABLE, dIBSize); // 32 ºñÆ® À©µµÁîºÎÅÍ GlobalAllocÀº HeapAllocÀÇ wrapper functionÀÌ´Ù. GMEM_MOVEABLEÀ» »ç¿ëÇÏ¸é ÀÌµ¿ÀÌ µÉ ¼ö ÀÖ´Â ¸Ş¸ğ¸® °ø°£ÀÌ ÇÒ´çµÈ´Ù.
+		HGLOBAL hDIB = GlobalAlloc(GMEM_MOVEABLE, dIBSize); // 32 ë¹„íŠ¸ ìœˆë„ì¦ˆë¶€í„° GlobalAllocì€ HeapAllocì˜ wrapper functionì´ë‹¤. GMEM_MOVEABLEì„ ì‚¬ìš©í•˜ë©´ ì´ë™ì´ ë  ìˆ˜ ìˆëŠ” ë©”ëª¨ë¦¬ ê³µê°„ì´ í• ë‹¹ëœë‹¤.
 		if (hDIB)
 		{
-			BYTE* dIB = (BYTE*)GlobalLock(hDIB); // ÇÚµéÀ» Æ÷ÀÎÅÍ·Î ¹ø¿ªÇÏ·Á¸é GlobalLockÀ» È£ÃâÇÏ¿©¾ß ÇÑ´Ù.
+			BYTE* dIB = (BYTE*)GlobalLock(hDIB); // í•¸ë“¤ì„ í¬ì¸í„°ë¡œ ë²ˆì—­í•˜ë ¤ë©´ GlobalLockì„ í˜¸ì¶œí•˜ì—¬ì•¼ í•œë‹¤.
 
 			copy_n(reinterpret_cast<BYTE*>(&bitmapFileHeader), sizeof(BITMAPFILEHEADER), dIB);
 			copy_n(reinterpret_cast<BYTE*>(&bitmapInfoHeader), sizeof(BITMAPINFOHEADER), dIB + sizeof(BITMAPFILEHEADER));
@@ -349,15 +349,15 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 			SYSTEMTIME localTime{0};
 			GetLocalTime(&localTime);
 
-			string fileName = "Screenshot " + to_string(localTime.wYear) + "³â " + to_string(localTime.wMonth) + "¿ù " + to_string(localTime.wDay) + "ÀÏ "
-				+ to_string(localTime.wHour) + "½Ã " + to_string(localTime.wMinute) + "ºĞ " + to_string(localTime.wSecond) + "ÃÊ " + to_string(localTime.wMilliseconds) + ".bmp";
+			string fileName = "Screenshot " + to_string(localTime.wYear) + "ë…„ " + to_string(localTime.wMonth) + "ì›” " + to_string(localTime.wDay) + "ì¼ "
+				+ to_string(localTime.wHour) + "ì‹œ " + to_string(localTime.wMinute) + "ë¶„ " + to_string(localTime.wSecond) + "ì´ˆ " + to_string(localTime.wMilliseconds) + ".bmp";
 
 			HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 			WriteFile(hFile, dIB, static_cast<DWORD>(dIBSize), NULL, NULL);
-			CloseHandle(hFile); // ÆÄÀÏ ÀÛ¼ºÀ» ¸¶ÃÆÀ¸¸é CloseHandleÀ» È£ÃâÇÏ¿©¾ß ÇÑ´Ù.
+			CloseHandle(hFile); // íŒŒì¼ ì‘ì„±ì„ ë§ˆì³¤ìœ¼ë©´ CloseHandleì„ í˜¸ì¶œí•˜ì—¬ì•¼ í•œë‹¤.
 
-			GlobalUnlock(hDIB); // GlobalLockÀ» È£ÃâÇÏ¿´À¸¸é GlobalUnlockÀ» È£ÃâÇÏ¿©¾ß ÇÑ´Ù.
-			GlobalFree(hDIB); // GlobalAllocÀ» È£ÃâÇÏ¿´À¸¸é GlobalFree¸¦ È£ÃâÇÏ¿©¾ß ÇÑ´Ù.
+			GlobalUnlock(hDIB); // GlobalLockì„ í˜¸ì¶œí•˜ì˜€ìœ¼ë©´ GlobalUnlockì„ í˜¸ì¶œí•˜ì—¬ì•¼ í•œë‹¤.
+			GlobalFree(hDIB); // GlobalAllocì„ í˜¸ì¶œí•˜ì˜€ìœ¼ë©´ GlobalFreeë¥¼ í˜¸ì¶œí•˜ì—¬ì•¼ í•œë‹¤.
 		}
 
 		DeleteObject(SelectObject(hTempDC, hOTempBitmap));
@@ -367,7 +367,7 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 		HBITMAP hTempBitmap = CreateBitmap(width, height, 1, 32, NULL);
 		HBITMAP hOTempBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 		BitBlt(hTempDC, 0, 0, width, height, hDC, x, y, SRCCOPY);
-		SelectObject(hTempDC, hOTempBitmap); // ÁÖÀÇ: º¹»çÇÒ ºñÆ®¸ÊÀÌ DC¿¡ ¼±ÅÃµÇ¾î ÀÖÀ¸¸é ¾È µÇ¹Ç·Î ÀÌ ÁÙÀÌ ÇÊ¿äÇÏ´Ù.
+		SelectObject(hTempDC, hOTempBitmap); // ì£¼ì˜: ë³µì‚¬í•  ë¹„íŠ¸ë§µì´ DCì— ì„ íƒë˜ì–´ ìˆìœ¼ë©´ ì•ˆ ë˜ë¯€ë¡œ ì´ ì¤„ì´ í•„ìš”í•˜ë‹¤.
 
 		if (OpenClipboard(NULL))
 		{
