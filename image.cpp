@@ -27,10 +27,10 @@ HRESULT image::init(int width, int height)
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, WINW, WINH);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
-	_blendImageInfo->width = WINW;
-	_blendImageInfo->height = WINH;
+	_blendImageInfo->width = width;
+	_blendImageInfo->height = height;
 	
 	if (_imageInfo == nullptr)
 	{
@@ -42,7 +42,7 @@ HRESULT image::init(int width, int height)
 	return S_OK;
 }
 
-HRESULT image::init(const char * fileName, int width, int height, BOOL hasTransparentColor, COLORREF transparentColor)
+HRESULT image::init(const char* fileName, int width, int height, BOOL hasTransparentColor, COLORREF transparentColor)
 {
 	if (_imageInfo != nullptr) release();
 
@@ -73,7 +73,7 @@ HRESULT image::init(const char * fileName, int width, int height, BOOL hasTransp
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
 	_blendImageInfo->width = width;
 	_blendImageInfo->height = height;
@@ -81,17 +81,15 @@ HRESULT image::init(const char * fileName, int width, int height, BOOL hasTransp
 	if (_imageInfo->hBit == nullptr)
 	{
 		release();
-
 		return E_FAIL;
 	}
 
 	ReleaseDC(_hWnd, hDC);
-
 	return S_OK;
 }
 
 
-HRESULT image::init(const char * fileName, int width, int height, int frameX, int frameY, BOOL hasTransparentColor, COLORREF transparentColor)
+HRESULT image::init(const char* fileName, int width, int height, int frameX, int frameY, BOOL hasTransparentColor, COLORREF transparentColor)
 {
 	if (_imageInfo != nullptr) release();
 
@@ -126,7 +124,7 @@ HRESULT image::init(const char * fileName, int width, int height, int frameX, in
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
 	_blendImageInfo->width = width;
 	_blendImageInfo->height = height;
@@ -134,12 +132,10 @@ HRESULT image::init(const char * fileName, int width, int height, int frameX, in
 	if (_imageInfo->hBit == nullptr)
 	{
 		release();
-
 		return E_FAIL;
 	}
 
 	ReleaseDC(_hWnd, hDC);
-
 	return S_OK;
 }
 
@@ -186,7 +182,7 @@ HRESULT image::init(const char* fileName, int x, int y, int width, int height, i
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
 	_blendImageInfo->width = width;
 	_blendImageInfo->height = height;
@@ -856,4 +852,55 @@ COLORREF image::changeAllColors(COLORREF newColor, COLORREF exceptionalColor)
 	DeleteObject(SelectObject(hTempDC, hTempOBitmap));
 	DeleteDC(hTempDC);
 	return newColor;
+}
+
+image* image::copyNew() const
+{
+	image* newImg = new image;
+
+	newImg->_imageInfo = new IMAGE_INFO;
+	newImg->_imageInfo->resID = this->_imageInfo->resID;
+	newImg->_imageInfo->hMemDC = CreateCompatibleDC(this->_imageInfo->hMemDC);
+	newImg->_imageInfo->width = this->_imageInfo->width;
+	newImg->_imageInfo->height = this->_imageInfo->height;
+	newImg->_imageInfo->hBit = CreateCompatibleBitmap(this->_imageInfo->hMemDC, newImg->_imageInfo->width, newImg->_imageInfo->height); // 주의: newImg->_imageInfo->hMemDC를 this->_imageInfo->hMemDC 대신 사용하면 정상 작동을 하지 않는다. newImg->_imageInfo->hMemDC에 선택된 비트맵이 무엇인지 생각하면 이해하기 쉽다.
+	newImg->_imageInfo->hOBit = (HBITMAP)SelectObject(newImg->_imageInfo->hMemDC, newImg->_imageInfo->hBit);
+	if (!BitBlt(newImg->_imageInfo->hMemDC, 0, 0, newImg->_imageInfo->width, newImg->_imageInfo->height, this->_imageInfo->hMemDC, 0, 0, SRCCOPY))
+	{
+		DeleteObject(SelectObject(newImg->_imageInfo->hMemDC, newImg->_imageInfo->hOBit));
+		DeleteDC(newImg->_imageInfo->hMemDC);
+		return nullptr;
+	}
+	newImg->_imageInfo->currentFrameX = this->_imageInfo->currentFrameX;
+	newImg->_imageInfo->currentFrameY = this->_imageInfo->currentFrameY;
+	newImg->_imageInfo->maxFrameX = this->_imageInfo->maxFrameX;
+	newImg->_imageInfo->maxFrameY = this->_imageInfo->maxFrameY;
+	newImg->_imageInfo->frameWidth = this->_imageInfo->frameWidth;
+	newImg->_imageInfo->frameHeight = this->_imageInfo->frameHeight;
+	newImg->_imageInfo->loadType = this->_imageInfo->loadType;
+
+	if (this->_fileName != nullptr)
+	{
+		size_t len = strlen(this->_fileName);
+		newImg->_fileName = new CHAR[len + 1];
+		strcpy_s(newImg->_fileName, len + 1, this->_fileName);
+	}
+
+	newImg->_hasTransparentColor = this->_hasTransparentColor;
+	newImg->_transparentColor = this->_transparentColor;
+
+	newImg->_blendFunc.BlendFlags = 0;
+	newImg->_blendFunc.AlphaFormat = 0;
+	newImg->_blendFunc.BlendOp = AC_SRC_OVER;
+
+	newImg->_blendImageInfo = new IMAGE_INFO;
+	newImg->_blendImageInfo->loadType = this->_blendImageInfo->loadType;
+	newImg->_blendImageInfo->resID = this->_blendImageInfo->resID;
+	newImg->_blendImageInfo->hMemDC = CreateCompatibleDC(this->_imageInfo->hMemDC);
+	newImg->_blendImageInfo->hBit = CreateCompatibleBitmap(newImg->_imageInfo->hMemDC, newImg->_imageInfo->width, newImg->_imageInfo->height);
+	newImg->_blendImageInfo->hOBit = (HBITMAP)SelectObject(newImg->_blendImageInfo->hMemDC, newImg->_blendImageInfo->hBit);
+	newImg->_blendImageInfo->width = newImg->_imageInfo->width;
+	newImg->_blendImageInfo->height = newImg->_imageInfo->height;
+
+ 	return newImg;
 }

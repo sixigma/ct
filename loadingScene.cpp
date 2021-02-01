@@ -90,11 +90,6 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 {
 	loadingScene* loadingParams = (loadingScene*)params;
 
-	// 장면
-	SC->addScene("시작 화면", new startScene);
-	SC->addScene("게임 장면", new gameScene(1));
-	++loadingParams->_currentCount;
-	
 	// 시작 화면 그림
 
 	++loadingParams->_currentCount;
@@ -221,6 +216,11 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 
 	// 글꼴 사용 준비
 	TXT->prepareToUseFonts();
+
+	// 장면
+	SC->addScene("시작 화면", new startScene);
+	SC->addScene("게임 장면", new gameScene(1));
+	++loadingParams->_currentCount;
 
 	while (loadingParams->_currentCount != MAX_SLEEP_CALLS)
 	{
