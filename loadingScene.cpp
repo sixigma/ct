@@ -13,10 +13,10 @@ HRESULT loadingScene::init()
 	_hTempDC = CreateCompatibleDC(getMemDC());
 	_hBitmap = CreateCompatibleBitmap(getMemDC(), WINW, WINH);
 	_hOBitmap = (HBITMAP)SelectObject(_hTempDC, _hBitmap);
-	_hBrush[0] = CreateSolidBrush(RGB(10, 255, 255)); // ÇÏ´Ã»ö
-	_hBrush[1] = CreateSolidBrush(RGB(255, 255, 10)); // ³ë¶õ»ö
-	_hBrush[2] = CreateSolidBrush(RGB(255, 10, 10)); // »¡°£»ö
-	_hBrush[3] = CreateSolidBrush(RGB(132, 255, 148)); // ³ì»ö
+	_hBrush[0] = CreateSolidBrush(RGB(10, 255, 255)); // í•˜ëŠ˜ìƒ‰
+	_hBrush[1] = CreateSolidBrush(RGB(255, 255, 10)); // ë…¸ë€ìƒ‰
+	_hBrush[2] = CreateSolidBrush(RGB(255, 10, 10)); // ë¹¨ê°„ìƒ‰
+	_hBrush[3] = CreateSolidBrush(RGB(132, 255, 148)); // ë…¹ìƒ‰
 	_hOBrush = (HBRUSH)SelectObject(_hTempDC, _hBrush[0]);
 
 	_hPrgDC = CreateCompatibleDC(getMemDC());
@@ -78,11 +78,11 @@ void loadingScene::render()
 		   WINW - PROGRESS_PIE_OUTER_RADIUS * 2, WINH - PROGRESS_PIE_OUTER_RADIUS * 2,
 		   _hPrgDC, 0, 0, SRCCOPY);
 
-	// ·Îµù ¿Ï·á ½Ã
+	// ë¡œë”© ì™„ë£Œ ì‹œ
 	if (_currentCount == MAX_SLEEP_CALLS)
 	{
 		CloseHandle(_hThread);
-		SC->changeScene("½ÃÀÛ È­¸é");
+		SC->changeScene("ì‹œì‘ í™”ë©´");
 	}
 }
 
@@ -90,97 +90,97 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 {
 	loadingScene* loadingParams = (loadingScene*)params;
 
-	// ½ÃÀÛ È­¸é ±×¸²
+	// ì‹œì‘ í™”ë©´ ê·¸ë¦¼
 
 	++loadingParams->_currentCount;
 
-	// ¸Ê ±×¸²
+	// ë§µ ê·¸ë¦¼
 
 	++loadingParams->_currentCount;
 
-	// Ä³¸¯ÅÍ ±×¸²
+	// ìºë¦­í„° ê·¸ë¦¼
 	loadingParams->playerImgs(); ++loadingParams->_currentCount;
 	loadingParams->enemyImgs(); ++loadingParams->_currentCount;
 
-	// È­¸é ¹è°æ ±×¸²
-	IMG->add("°ËÀº È­¸é", "res/images/blackBg.bmp", WINW, WINH);
+	// í™”ë©´ ë°°ê²½ ê·¸ë¦¼
+	IMG->add("ê²€ì€ í™”ë©´", "res/images/blackBg.bmp", WINW, WINH);
 	++loadingParams->_currentCount;
 
-	// ±âÅ¸ ±×¸²
-	IMG->addF("±Û Ãâ·Â Ã¢ ½ºÅ² Å¸ÀÏ¼Â", "res/images/tilesets/skinTileset.bmp", 256, 1024, 8, 32);
-	IMG->add("´ë»ç Ãâ·Â Ã¢ ½ºÅ²", 1024, 320); // ÃÊ±â ºó ºñÆ®¸Ê
-	IMG->add("ÀüÅõ ¸Ş½ÃÁö Ã¢ ½ºÅ²", 1024, 96); // ÃÊ±â ºó ºñÆ®¸Ê
-	IMG->add("¼³Á¤ ¸Ş½ÃÁö Ã¢ ½ºÅ²", 898, 128); // ÃÊ±â ºó ºñÆ®¸Ê
+	// ê¸°íƒ€ ê·¸ë¦¼
+	IMG->addF("ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ íƒ€ì¼ì…‹", "res/images/tilesets/skinTileset.bmp", 256, 1024, 8, 32);
+	IMG->add("ëŒ€ì‚¬ ì¶œë ¥ ì°½ ìŠ¤í‚¨", 1024, 320); // ì´ˆê¸° ë¹ˆ ë¹„íŠ¸ë§µ
+	IMG->add("ì „íˆ¬ ë©”ì‹œì§€ ì°½ ìŠ¤í‚¨", 1024, 96); // ì´ˆê¸° ë¹ˆ ë¹„íŠ¸ë§µ
+	IMG->add("ì„¤ì • ë©”ì‹œì§€ ì°½ ìŠ¤í‚¨", 898, 128); // ì´ˆê¸° ë¹ˆ ë¹„íŠ¸ë§µ
 	IMG->setAllWindowSkins();
-	IMG->addF("Èò»ö Å¸ÀÏ¼Â0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
-	IMG->addF("ºñÈ°¼º Å¸ÀÏ¼Â0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
-	IMG->addF("ÇÏ´Ã»ö Å¸ÀÏ¼Â0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
-	IMG->addF("»¡°£»ö Å¸ÀÏ¼Â0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
-	IMG->addF("³ë¶õ»ö Å¸ÀÏ¼Â0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
-	IMG->addF("³ì»ö Å¸ÀÏ¼Â0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
-	IMG->add("Èò»ö ´ëÈ­ ±Û²Ã", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
-	IMG->add("Èò»ö UI ±Û²Ã", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
-	IMG->add("ºñÈ°¼º ´ëÈ­ ±Û²Ã", "res/fonts/dialogGlyphsInactive.bmp", 456, 240, TRUE, RGB(255, 0, 255));
-	IMG->add("ºñÈ°¼º UI ±Û²Ã", "res/fonts/monoGlyphsInactive.bmp", 512, 160, TRUE, RGB(255, 0, 255));
-	IMG->add("ÇÏ´Ã»ö ´ëÈ­ ±Û²Ã", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
-	IMG->add("ÇÏ´Ã»ö UI ±Û²Ã", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
-	IMG->add("»¡°£»ö ´ëÈ­ ±Û²Ã", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
-	IMG->add("»¡°£»ö UI ±Û²Ã", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
-	IMG->add("³ì»ö ´ëÈ­ ±Û²Ã", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
-	IMG->add("³ì»ö UI ±Û²Ã", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
-	IMG->add("³ë¶õ»ö ´ëÈ­ ±Û²Ã", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
-	IMG->add("³ë¶õ»ö UI ±Û²Ã", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
+	IMG->addF("í°ìƒ‰ íƒ€ì¼ì…‹0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
+	IMG->addF("ë¹„í™œì„± íƒ€ì¼ì…‹0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
+	IMG->addF("í•˜ëŠ˜ìƒ‰ íƒ€ì¼ì…‹0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
+	IMG->addF("ë¹¨ê°„ìƒ‰ íƒ€ì¼ì…‹0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
+	IMG->addF("ë…¸ë€ìƒ‰ íƒ€ì¼ì…‹0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
+	IMG->addF("ë…¹ìƒ‰ íƒ€ì¼ì…‹0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
+	IMG->add("í°ìƒ‰ ëŒ€í™” ê¸€ê¼´", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
+	IMG->add("í°ìƒ‰ UI ê¸€ê¼´", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
+	IMG->add("ë¹„í™œì„± ëŒ€í™” ê¸€ê¼´", "res/fonts/dialogGlyphsInactive.bmp", 456, 240, TRUE, RGB(255, 0, 255));
+	IMG->add("ë¹„í™œì„± UI ê¸€ê¼´", "res/fonts/monoGlyphsInactive.bmp", 512, 160, TRUE, RGB(255, 0, 255));
+	IMG->add("í•˜ëŠ˜ìƒ‰ ëŒ€í™” ê¸€ê¼´", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
+	IMG->add("í•˜ëŠ˜ìƒ‰ UI ê¸€ê¼´", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
+	IMG->add("ë¹¨ê°„ìƒ‰ ëŒ€í™” ê¸€ê¼´", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
+	IMG->add("ë¹¨ê°„ìƒ‰ UI ê¸€ê¼´", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
+	IMG->add("ë…¹ìƒ‰ ëŒ€í™” ê¸€ê¼´", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
+	IMG->add("ë…¹ìƒ‰ UI ê¸€ê¼´", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
+	IMG->add("ë…¸ë€ìƒ‰ ëŒ€í™” ê¸€ê¼´", "res/fonts/dialogGlyphs.bmp", 456, 240, TRUE, RGB(255, 0, 255));
+	IMG->add("ë…¸ë€ìƒ‰ UI ê¸€ê¼´", "res/fonts/monoGlyphs.bmp", 512, 160, TRUE, RGB(255, 0, 255));
 	++loadingParams->_currentCount;
 
-	// ½ÇÁ¦ ±×¸² »ö»ó º¯°æ
-	// ÇÏ´Ã»ö
+	// ì‹¤ì œ ê·¸ë¦¼ ìƒ‰ìƒ ë³€ê²½
+	// í•˜ëŠ˜ìƒ‰
 	PatBlt(loadingParams->_hTempDC, 0, 0, 384, 256, PATCOPY);
-	BitBlt(IMG->find("ÇÏ´Ã»ö Å¸ÀÏ¼Â0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("ÇÏ´Ã»ö Å¸ÀÏ¼Â0")->changeColor(RGB(255, 0, 255) & RGB(10, 255, 255), RGB(255, 0, 255));
+	BitBlt(IMG->find("í•˜ëŠ˜ìƒ‰ íƒ€ì¼ì…‹0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("í•˜ëŠ˜ìƒ‰ íƒ€ì¼ì…‹0")->changeColor(RGB(255, 0, 255) & RGB(10, 255, 255), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 456, 240, PATCOPY);
-	BitBlt(IMG->find("ÇÏ´Ã»ö ´ëÈ­ ±Û²Ã")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("ÇÏ´Ã»ö ´ëÈ­ ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(10, 255, 255), RGB(255, 0, 255));
+	BitBlt(IMG->find("í•˜ëŠ˜ìƒ‰ ëŒ€í™” ê¸€ê¼´")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("í•˜ëŠ˜ìƒ‰ ëŒ€í™” ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(10, 255, 255), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 512, 160, PATCOPY);
-	BitBlt(IMG->find("ÇÏ´Ã»ö UI ±Û²Ã")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("ÇÏ´Ã»ö UI ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(10, 255, 255), RGB(255, 0, 255));
-	// ³ë¶õ»ö
+	BitBlt(IMG->find("í•˜ëŠ˜ìƒ‰ UI ê¸€ê¼´")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("í•˜ëŠ˜ìƒ‰ UI ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(10, 255, 255), RGB(255, 0, 255));
+	// ë…¸ë€ìƒ‰
 	SelectObject(loadingParams->_hTempDC, loadingParams->_hBrush[1]);
 	PatBlt(loadingParams->_hTempDC, 0, 0, 384, 256, PATCOPY);
-	BitBlt(IMG->find("³ë¶õ»ö Å¸ÀÏ¼Â0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("³ë¶õ»ö Å¸ÀÏ¼Â0")->changeColor(RGB(255, 0, 255) & RGB(255, 255, 10), RGB(255, 0, 255));
+	BitBlt(IMG->find("ë…¸ë€ìƒ‰ íƒ€ì¼ì…‹0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë…¸ë€ìƒ‰ íƒ€ì¼ì…‹0")->changeColor(RGB(255, 0, 255) & RGB(255, 255, 10), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 456, 240, PATCOPY);
-	BitBlt(IMG->find("³ë¶õ»ö ´ëÈ­ ±Û²Ã")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("³ë¶õ»ö ´ëÈ­ ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(255, 255, 10), RGB(255, 0, 255));
+	BitBlt(IMG->find("ë…¸ë€ìƒ‰ ëŒ€í™” ê¸€ê¼´")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë…¸ë€ìƒ‰ ëŒ€í™” ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(255, 255, 10), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 512, 160, PATCOPY);
-	BitBlt(IMG->find("³ë¶õ»ö UI ±Û²Ã")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("³ë¶õ»ö UI ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(255, 255, 10), RGB(255, 0, 255));
-	// »¡°£»ö
+	BitBlt(IMG->find("ë…¸ë€ìƒ‰ UI ê¸€ê¼´")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë…¸ë€ìƒ‰ UI ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(255, 255, 10), RGB(255, 0, 255));
+	// ë¹¨ê°„ìƒ‰
 	SelectObject(loadingParams->_hTempDC, loadingParams->_hBrush[2]);
 	PatBlt(loadingParams->_hTempDC, 0, 0, 384, 256, PATCOPY);
-	BitBlt(IMG->find("»¡°£»ö Å¸ÀÏ¼Â0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("»¡°£»ö Å¸ÀÏ¼Â0")->changeColor(RGB(255, 0, 255) & RGB(255, 10, 10), RGB(255, 0, 255));
+	BitBlt(IMG->find("ë¹¨ê°„ìƒ‰ íƒ€ì¼ì…‹0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë¹¨ê°„ìƒ‰ íƒ€ì¼ì…‹0")->changeColor(RGB(255, 0, 255) & RGB(255, 10, 10), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 456, 240, PATCOPY);
-	BitBlt(IMG->find("»¡°£»ö ´ëÈ­ ±Û²Ã")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("»¡°£»ö ´ëÈ­ ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(255, 10, 10), RGB(255, 0, 255));
+	BitBlt(IMG->find("ë¹¨ê°„ìƒ‰ ëŒ€í™” ê¸€ê¼´")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë¹¨ê°„ìƒ‰ ëŒ€í™” ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(255, 10, 10), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 512, 160, PATCOPY);
-	BitBlt(IMG->find("»¡°£»ö UI ±Û²Ã")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("»¡°£»ö UI ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(255, 10, 10), RGB(255, 0, 255));
-	// ³ì»ö
+	BitBlt(IMG->find("ë¹¨ê°„ìƒ‰ UI ê¸€ê¼´")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë¹¨ê°„ìƒ‰ UI ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(255, 10, 10), RGB(255, 0, 255));
+	// ë…¹ìƒ‰
 	SelectObject(loadingParams->_hTempDC, loadingParams->_hBrush[3]);
 	PatBlt(loadingParams->_hTempDC, 0, 0, 384, 256, PATCOPY);
-	BitBlt(IMG->find("³ì»ö Å¸ÀÏ¼Â0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("³ì»ö Å¸ÀÏ¼Â0")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
+	BitBlt(IMG->find("ë…¹ìƒ‰ íƒ€ì¼ì…‹0")->getMemDC(), 0, 0, 384, 256, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë…¹ìƒ‰ íƒ€ì¼ì…‹0")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 456, 240, PATCOPY);
-	BitBlt(IMG->find("³ì»ö ´ëÈ­ ±Û²Ã")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("³ì»ö ´ëÈ­ ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
+	BitBlt(IMG->find("ë…¹ìƒ‰ ëŒ€í™” ê¸€ê¼´")->getMemDC(), 0, 0, 456, 240, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë…¹ìƒ‰ ëŒ€í™” ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
 	PatBlt(loadingParams->_hTempDC, 0, 0, 512, 160, PATCOPY);
-	BitBlt(IMG->find("³ì»ö UI ±Û²Ã")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
-	IMG->find("³ì»ö UI ±Û²Ã")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
+	BitBlt(IMG->find("ë…¹ìƒ‰ UI ê¸€ê¼´")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
+	IMG->find("ë…¹ìƒ‰ UI ê¸€ê¼´")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
 	++loadingParams->_currentCount;
 
 //	ifstream file;
 	string line;
-	// ¹è°æÀ½
+	// ë°°ê²½ìŒ
 	//file.open("res/bgm/fileList.txt");
 	//if (file.is_open())
 	//{
@@ -199,7 +199,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	//file.close();
 	++loadingParams->_currentCount;
 
-	// È¿°úÀ½
+	// íš¨ê³¼ìŒ
 	//file.open("res/sfx/fileList.txt");
 	//if (file.is_open())
 	//{
@@ -211,15 +211,15 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	//file.close();
 	++loadingParams->_currentCount;
 
-	// ¿ÀÇÁ´× ¿µ»ó ¼Ò¸®
-	SND->addSound("¿ÀÇÁ´×", "res/videos/Chrono Trigger Opening.mp3", true, false);
+	// ì˜¤í”„ë‹ ì˜ìƒ ì†Œë¦¬
+	SND->addSound("ì˜¤í”„ë‹", "res/videos/Chrono Trigger Opening.mp3", true, false);
 
-	// ±Û²Ã »ç¿ë ÁØºñ
+	// ê¸€ê¼´ ì‚¬ìš© ì¤€ë¹„
 	TXT->prepareToUseFonts();
 
-	// Àå¸é
-	SC->addScene("½ÃÀÛ È­¸é", new startScene);
-	SC->addScene("°ÔÀÓ Àå¸é", new gameScene(1));
+	// ì¥ë©´
+	SC->addScene("ì‹œì‘ í™”ë©´", new startScene);
+	SC->addScene("ê²Œì„ ì¥ë©´", new gameScene(1));
 	++loadingParams->_currentCount;
 
 	while (loadingParams->_currentCount != MAX_SLEEP_CALLS)
@@ -232,6 +232,15 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 
 void loadingScene::playerImgs()
 {
+	// ì–¼êµ´
+	IMG->add("Crono", "res/images/faces/Crono.bmp", 192, 192);
+	IMG->add("Lucca", "res/images/faces/Lucca.bmp", 192, 192);
+	IMG->add("Marle", "res/images/faces/Marle.bmp", 192, 192);
+	IMG->add("Frog", "res/images/faces/Frog.bmp", 192, 192);
+	IMG->add("Robo", "res/images/faces/Robo.bmp", 192, 192);
+	IMG->add("Ayla", "res/images/faces/Ayla.bmp", 192, 192);
+	IMG->add("Magus", "res/images/faces/Magus.bmp", 192, 192);
+
 
 }
 
