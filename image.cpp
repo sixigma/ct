@@ -684,7 +684,7 @@ void image::animRenderH(HDC hDC, int destX, int destY, animation * anim)
 		anim->getFrameWidth(), anim->getFrameHeight());
 }
 
-void image::loopRender(HDC hDC, const LPRECT drawArea, int offSetX, int offSetY)
+void image::loopRender(HDC hDC, const LPRECT destArea, int offSetX, int offSetY)
 {
 	if (offSetX < 0) offSetX = _imageInfo->width + (offSetX % _imageInfo->width);
 	if (offSetY < 0) offSetY = _imageInfo->height + (offSetY % _imageInfo->height);

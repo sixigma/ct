@@ -52,7 +52,6 @@ public:
 	int getMaxHp() { return maxHp; }
 	int getRecoveryMp() { return recoveryMp; }
 	int getMaxMp() { return maxMp; }
-	int getMoney() { return money; }
 	
 };
 
