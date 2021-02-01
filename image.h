@@ -84,6 +84,7 @@ public:
 	void alphaRender(HDC hDC, int destX, int destY, int srcX, int srcY, int srcWidth, int srcHeight, BYTE alpha);
 
 	void animRender(HDC hDC, int destX, int destY, animation* anim);
+	void animRenderH(HDC hDC, int destX, int destY, animation* anim);
 
 	void loopRender(HDC hDC, const LPRECT drawArea, int offSetX, int offSetY);
 

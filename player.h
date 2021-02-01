@@ -1,12 +1,68 @@
 #pragma once
 #include "gameNode.h"
 #include "character.h"
+struct tagPlImage
+{
+	image* idle;		//보통
+	image* walk;		//걷기
+	image* run;			//달리기
+	image* Bready;		//배틀 준비
+	image* rush;		//달려들기
+	image* atk;			//공격/크리
+	image* spin;		//스핀
+	image* hit;			//피격
+	image* hit2;		//피격2		
+	image* win;			//승리포즈
+	image* Bwin;		//배틀 승리
+	image* downs;		//쓰러지기 직전
+	image* down;		//쓰러짐
+	image* cantRun;		//달리다 벽에 부딪힐 때	
+	image* drink;		//마시기		
+	image* handsUp;		//손 올리기	
+	image* ladder;		//사다리		
+	image* tied;		//묶임		
+	image* what;		//궁금		
+
+};
+
+struct tagPlAni
+{
+	animation* idle_front, *idle_back, *idle_right;			//서있을 때의 애니		front : 앞 / back : 뒤 / right : 오른쪽
+	animation* walk_front, *walk_back, *walk_right;			//걸을 때의 애니			front : 앞 / back : 뒤 / right : 오른쪽
+	animation* run_front, *run_back, *run_right;			//달릴 때의 애니			front : 앞 / back : 뒤 / right : 오른쪽
+	animation* Bready_front, *Bready_back, *Bready_left;	//배틀 준비중의 애니		front : 앞 / back : 뒤 / left : 왼쪽
+	animation* SB_front, *SB_back, *SB_left;				//스탠바이 중의 애니		front : 앞 / back : 뒤 / left : 왼쪽
+	animation* rush_front, *rush_back, *rush_right;			//달려들 때의 애니		front : 앞 / back : 뒤 / right : 오른쪽
+	animation* atk_front, *atk_back, *atk_right;			//공격할 때의 애니		front : 앞 / back : 뒤 / right : 오른쪽
+	animation* cri_front, *cri_back, *cri_right;			//공격-크리티컬 때의 애니	front : 앞 / back : 뒤 / right : 오른쪽
+	animation* hit_front, *hit_back, *hit_right;			//피격 때의 애니			front : 앞 / back : 뒤 / right : 오른쪽
+	animation* hit2_front, *hit2_right;						//피격 때의 애니2			front : 앞 / back : 뒤
+	animation* spin;										//스핀 때의 애니
+	animation* downs_front, *downs_back, *downs_right;		//쓰러지기 직전의 애니	front : 앞 / back : 뒤 / right : 오른쪽
+	animation* down;										//쓰러졌을 때의 애니		
+	animation* Bwin_front, *Bwin_back, *Bwin_left;			//이겼을 때의 애니		front : 앞 / back : 뒤 / left : 왼쪽
+	animation* win;											//승리포즈만 취할 때
+
+	animation* cantRun_front, *cantRun_back, *cantRun_right;//못달린다				front : 앞 / back : 뒤 / right : 오른쪽
+	animation* drink;										//마시기
+	animation* handsUp_front, *handsUp_back;				//손들기					front : 앞 / back : 뒤
+	animation* ladder;										//사다리					
+	animation* tied_front, *tied_back, *tied_right;			//묶임					front : 앞 / back : 뒤 / right : 오른쪽
+	animation* what_front, *what_back, *what_right;			//?						front : 앞 / back : 뒤 / right : 오른쪽
+};
+
 class player : public gameNode
 {
 private:
 	tagStatus _Pst;			//플레이어 능력치
 	tagChaSet _Pset;		//플레이어 셋팅
 	tagItemStatus _PIst;	//플레이어 아이템 능력치
+
+	tagPlImage im;
+	tagPlAni an;
+	bool Cleft, _run;	//좌우반전, 달리기
+	int _T;		//방향전환용 int(turn) / 0:front , 1:back , 2:right , 3:left
+	int Cc;		//idle 상태의 눈깜빡임 카운트
 
 public:
 	player() {};
@@ -17,12 +73,14 @@ public:
 	void update();
 	void render();
 
-	//void imgSwitch();		//이미지 보이는 방식이 들어간다
-	//void keySetting();	//키 입력 방식
+	void imgSetting();
+	void aniSetting();
+	void imgSwitch();		//이미지 보이는 방식이 들어간다
+	void keySetting();	//키 입력 방식
 	//void moveSwitch();	//이동시 스위치(벽부딪치기 등)
 	//void battleSwitch();	//배틀시 스위치(공격시 렉트 등)
 
-	//setter (대부분 +,- 시킨다)
+	//setter 
 	
 	//플레이어 힘 +
 	void plusPower(int power) { _Pst.power += power; }
@@ -69,6 +127,9 @@ public:
 	//최대경험치 바꾸기
 	void setMaxExp(int maxExp) { _Pst.maxExp = maxExp; }	
 
+	//피격 등에 설정시킬 STATE setter
+	void setState(STATE state) { _Pset.state = state; }
+
 	//플레이어 현재 힘
 	int getPower() { return _Pst.power; }
 	//플레이어 현재 마력
@@ -104,6 +165,9 @@ public:
 	int getMaxExp() { return _Pst.maxExp; }
 	//플레이어 현재 레벨
 	int getLV() { return _Pst.Lv; }
+
+	//피격 등을 확인할 STATE getter
+	STATE getState() { return _Pset.state; }
 
 	//플레이어 현재 이름
 	string getName() { return _Pset.name; }

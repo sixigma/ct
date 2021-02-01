@@ -18,12 +18,20 @@ HRESULT gameScene::init()
 
 	_totRegion = { 0, 0, 3036, 640 };
 	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.top };
+	//
+	_p = new player;
+	_p->init();
+	//
 
 	return S_OK;
 }
 
 void gameScene::release()
 {
+	//
+	_p->release();
+	SAFE_DEL(_p);
+	//
 
 }
 
@@ -33,6 +41,10 @@ void gameScene::update()
 	{
 		TXT->toggleTextWindowPos();
 	}
+	//
+	_p->update();
+	//
+
 }
 
 void gameScene::render()
@@ -43,6 +55,9 @@ void gameScene::render()
 #endif
 
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
+	//
+	_p->render();
+	//
 
 	if (TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
 	{

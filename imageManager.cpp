@@ -236,6 +236,12 @@ void imageManager::animRender(string strKey, HDC hDC, int destX, int destY, anim
 	if (img) img->animRender(hDC, destX, destY, anim);
 }
 
+void imageManager::animRenderH(string strKey, HDC hDC, int destX, int destY, animation * anim)
+{
+	image* img = find(strKey);
+	if (img) img->animRenderH(hDC, destX, destY, anim);
+}
+
 void imageManager::loopRender(string strKey, HDC hDC, const LPRECT drawArea, int offSetX, int offSetY)
 {
 	image* img = find(strKey);
