@@ -97,6 +97,9 @@ public:
 	// 이미지 색을 예외 색을 제외하고 전부 다른 특정 색으로 변경하는 함수(32 비트 비트맵 전용)
 	COLORREF changeAllColors(COLORREF newColor, COLORREF exceptionalColor = RGB(255, 0, 255));
 
+	// 기존 image를 복사하여 새 image를 만드는 함수(사용이 끝나면 release를 호출하고 delete를 호출하여야 한다.)
+	image* copyNew() const;
+
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 
 	inline int getWidth() { return _imageInfo->width; }
@@ -130,6 +133,5 @@ public:
 
 	inline int getFrameWidth() { return _imageInfo->frameWidth; }
 	inline int getFrameHeight() { return _imageInfo->frameHeight; }
-
 };
 
