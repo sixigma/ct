@@ -678,7 +678,13 @@ void image::animRender(HDC hDC, int destX, int destY, animation* anim)
 		anim->getFrameWidth(), anim->getFrameHeight());
 }
 
-void image::loopRender(HDC hDC, const LPRECT destArea, int offSetX, int offSetY)
+void image::animRenderH(HDC hDC, int destX, int destY, animation * anim)
+{
+	renderH(hDC, destX, destY, anim->getFramePos().x, anim->getFramePos().y,
+		anim->getFrameWidth(), anim->getFrameHeight());
+}
+
+void image::loopRender(HDC hDC, const LPRECT drawArea, int offSetX, int offSetY)
 {
 	if (offSetX < 0) offSetX = _imageInfo->width + (offSetX % _imageInfo->width);
 	if (offSetY < 0) offSetY = _imageInfo->height + (offSetY % _imageInfo->height);
@@ -863,7 +869,7 @@ image* image::copyNew() const
 	newImg->_imageInfo->hMemDC = CreateCompatibleDC(this->_imageInfo->hMemDC);
 	newImg->_imageInfo->width = this->_imageInfo->width;
 	newImg->_imageInfo->height = this->_imageInfo->height;
-	newImg->_imageInfo->hBit = CreateCompatibleBitmap(this->_imageInfo->hMemDC, newImg->_imageInfo->width, newImg->_imageInfo->height); // ÁÖÀÇ: newImg->_imageInfo->hMemDC¸¦ this->_imageInfo->hMemDC ´ë½Å »ç¿ëÇÏ¸é Á¤»ó ÀÛµ¿À» ÇÏÁö ¾Ê´Â´Ù. newImg->_imageInfo->hMemDC¿¡ ¼±ÅÃµÈ ºñÆ®¸ÊÀÌ ¹«¾ùÀÎÁö »ý°¢ÇÏ¸é ÀÌÇØÇÏ±â ½±´Ù.
+	newImg->_imageInfo->hBit = CreateCompatibleBitmap(this->_imageInfo->hMemDC, newImg->_imageInfo->width, newImg->_imageInfo->height); // ì£¼ì˜: newImg->_imageInfo->hMemDCë¥¼ this->_imageInfo->hMemDC ëŒ€ì‹  ì‚¬ìš©í•˜ë©´ ì •ìƒ ìž‘ë™ì„ í•˜ì§€ ì•ŠëŠ”ë‹¤. newImg->_imageInfo->hMemDCì— ì„ íƒëœ ë¹„íŠ¸ë§µì´ ë¬´ì—‡ì¸ì§€ ìƒê°í•˜ë©´ ì´í•´í•˜ê¸° ì‰½ë‹¤.
 	newImg->_imageInfo->hOBit = (HBITMAP)SelectObject(newImg->_imageInfo->hMemDC, newImg->_imageInfo->hBit);
 	if (!BitBlt(newImg->_imageInfo->hMemDC, 0, 0, newImg->_imageInfo->width, newImg->_imageInfo->height, this->_imageInfo->hMemDC, 0, 0, SRCCOPY))
 	{

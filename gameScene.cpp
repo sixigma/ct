@@ -11,14 +11,19 @@ gameScene::gameScene(int anyNum)
 
 	_totRegion = { 0, 0, WINW, WINH };
 	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+
+	_p = new player;
+	_p->init();
 }
 
 gameScene::~gameScene()
 {
+	_p->release();
+	SAFE_DEL(_p);
 }
 
-HRESULT gameScene::init() {	return S_OK; } // º¯°æ ±ÝÁö
-void gameScene::release() { } // º¯°æ ±ÝÁö
+HRESULT gameScene::init() {	return S_OK; } // ë³€ê²½ ê¸ˆì§€
+void gameScene::release() { } // ë³€ê²½ ê¸ˆì§€
 
 void gameScene::update()
 {
@@ -28,10 +33,13 @@ void gameScene::update()
 		if (KEY->down('X')) TXT->toggleTextWindowPos();
 	}
 
+	_p->update();
 
 
 
-	// Ãâ·ÂÇÒ ±Û °»½Å
+
+
+	// ì¶œë ¥í•  ê¸€ ê°±ì‹ 
 	if (_isInBattle) TXT->updateBM();
 	else if (_isMenuDisplayed) TXT->updateC();
 	else TXT->updateL();
@@ -45,8 +53,11 @@ void gameScene::render()
 #endif
 
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
+	//
+	_p->render();
+	//
 
-	// ±Û Ãâ·Â
+	// ê¸€ ì¶œë ¥
 	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
 		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE)
 	{

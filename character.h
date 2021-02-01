@@ -25,15 +25,18 @@ struct tagStatus	//능력치
 enum STATE			//상태이넘
 {
 	NORMAL_IDLE,	//평상시
-	NORMAL_MOVE,	//걸을 때
+	NORMAL_WALK,	//걸을 때
 	NORMAL_RUN,		//달릴 때
 	NORMAL_TALK,	//대화할 때
 	NORMAL_EVENT,	//이벤트
 	NORMAL_READY,	//배틀 승리 후 주인공에게 모일 때
 	BATTLE_READY,	//준비(배틀 시작시 각자리로 날아갈 때)
 	BATTLE_STANDBY,	//대기
+	BATTLE_MOVE,	//배틀시 일반움직임
+	BATTLE_RUSH,	//배틀시 달려들기
 	BATTLE_ATK,		//근거리와 원거리 구분짓기
 	BATTLE_SKILL,	//스킬
+	BATTLE_RETURN,	//배틀시 공격 후 돌아오기
 	BATTLE_HIT,		//피격
 	BATTLE_HELP,	//배틀 중 hp가 0이 되었을 때 그로기상태
 	BATTLE_WIN,	//승리시(경험치, 골드 등 얻을 때)
@@ -59,16 +62,26 @@ struct tagItemStatus	//아이템 능력치
 struct tagChaSet	//캐릭터 셋팅
 {
 	POINT pt;			//캐릭터 포인트
-	POINT atk;			//캐릭터 공격시 반경 알려주는 포인트
+	POINT atk;			//캐릭터 공격시 공격지점 포인트
+
+	POINT atkS;			//공격시 출발포인트
+	POINT shadow;		//위치 지정용 그림자
+	float Dis;			//자신과 상대 사이의 거리
+	float angle;		//자신과 상대 사이의 각도
+	float Sangle;		//출발지점과 자신 사이 거리
 
 	RECT rc;			//캐릭터 렉트
 	RECT Arc;			//공격 렉트
 
 	image* img;			//이미지
 	animation* ani;		//애니
+	image* Sha;			//그림자 이미지
 
 	image* Bimg;		//슬로우 등에 사용할 뒷배경 이미지
 	animation* Bani;	//슬로우 등에 사용할 뒷배경 애니
+
+	image* Oimg;		//(Other)혼란 등의 상태이상에 사용될 이미지
+	animation* Oani;	//(Other)혼란 등의 상태이상에 사용될 애니
 
 	string weapon;		//캐릭터 현재 무기
 	string head;		//캐릭터 현재 머리방어구
