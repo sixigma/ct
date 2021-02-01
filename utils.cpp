@@ -3,16 +3,6 @@
 
 namespace utils
 {
-	float Distance(float x1, float y1, float x2, float y2)
-	{
-		return sqrtf(pow(x2 - x1, 2) + pow(y1 - y2, 2));
-	}
-
-	float Angle(float x1, float y1, float x2, float y2)
-	{
-		return atan2f(y1 - y2, x2 - x1);
-	}
-
 	void Polygon(HDC hDC, vector<POINT> vertices, POINT& pivot, float angle)
 	{
 		if (vertices.empty()) return;

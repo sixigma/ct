@@ -309,7 +309,13 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 		SIZE_T dIBSize = static_cast<SIZE_T>(sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + bitmapSize);
 
 		HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&bitmapData), 0, 0);
-		HBITMAP hOTempBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
+		HBITMAP hOTempBitmap;
+		if (hTempBitmap != nullptr) hOTempBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
+		else
+		{
+			DeleteDC(hTempDC);
+			return;
+		}
 		BitBlt(hTempDC, 0, 0, width, height, hDC, x, y, SRCCOPY);
 
 		BITMAPFILEHEADER bitmapFileHeader{ 0 };

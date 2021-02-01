@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "gameScene.h"
 
 int gameScene::_countForReEnablingKeyInput;
@@ -14,12 +14,15 @@ gameScene::gameScene(int anyNum)
 
 	_p = new player;
 	_p->init();
+
 }
 
 gameScene::~gameScene()
 {
 	_p->release();
 	SAFE_DEL(_p);
+
+
 }
 
 HRESULT gameScene::init() {	return S_OK; } // 변경 금지
@@ -32,6 +35,7 @@ void gameScene::update()
 	{
 		if (KEY->down('X')) TXT->toggleTextWindowPos();
 	}
+
 
 	_p->update();
 
@@ -53,9 +57,9 @@ void gameScene::render()
 #endif
 
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
-	//
 	_p->render();
-	//
+
+
 
 	// 글 출력
 	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE

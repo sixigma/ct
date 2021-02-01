@@ -1,8 +1,8 @@
 # Visual Studio가 C++ 설정을 사용하여 .editorconfig 파일을 생성했습니다.
 root = true
+charset = utf-8
 
 [*.{c++,cc,cpp,cppm,cxx,h,h++,hh,hpp,hxx,inl,ipp,ixx,tlh,tli}]
-charset = utf-8
 
 # Visual C++ 코드 스타일 설정
 

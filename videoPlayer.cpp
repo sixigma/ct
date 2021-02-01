@@ -165,7 +165,14 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	BYTE* bitmapDataPtr = bitmapData.data();
 
 	HBITMAP hBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&bitmapDataPtr), NULL, 0);
-	HBITMAP hOBitmap = (HBITMAP)SelectObject(hTempDC, hBitmap);
+	HBITMAP hOBitmap;
+	if (hBitmap != nullptr) hOBitmap = (HBITMAP)SelectObject(hTempDC, hBitmap);
+	else
+	{
+		DeleteDC(hTempDC);
+		ReleaseDC(_hWnd, hDC);
+		return -999;
+	}
 
 	bitmapData.reserve(totPixels);
 

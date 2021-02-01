@@ -1,10 +1,10 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "player.h"
 
 HRESULT player::init()
 {
-	imgSetting();//ÀÌ¹ÌÁö
-	_Pset.img = im.idle;//ÀÌ¹ÌÁö´Â ¸ÇÃ³À½ idle·Î
+	imgSetting();//ì´ë¯¸ì§€
+	_Pset.img = im.idle;//ì´ë¯¸ì§€ëŠ” ë§¨ì²˜ìŒ idleë¡œ
 
 	aniSetting();
 	_Pset.ani = an.idle_front;
@@ -12,7 +12,7 @@ HRESULT player::init()
 	Cleft = _run = false;
 	Cc = _T = 0;
 
-	_Pset.pt = { WINW / 2,WINH / 2 };
+	_Pset.pt = { WINW / 2, WINH / 2 };
 
 	_Pset.rc = MakeRct(_Pset.pt.x - ((220) / 2), _Pset.pt.y - 192, (220), (224));
 
@@ -21,27 +21,27 @@ HRESULT player::init()
 
 void player::release()
 {
-	delete an.idle_front, an.idle_back, an.idle_right;			//³ë¸» _ º¸Åë ¾Ö´Ï
-	delete an.walk_front, an.walk_back, an.walk_right;			//³ë¸» / ¹èÆ² _ °È±â ¾Ö´Ï
-	delete an.run_front, an.run_back, an.run_right;				//³ë¸» _ ´Ş¸®±â ¾Ö´Ï
-	delete an.Bready_front, an.Bready_back, an.Bready_left;		//¹èÆ² _ ÁØºñ ¾Ö´Ï
-	delete an.SB_front, an.SB_back, an.SB_left;					//¹èÆ² _ ½ºÅÄ¹ÙÀÌ ¾Ö´Ï
-	delete an.rush_front, an.rush_back, an.rush_right;			//¹èÆ² _ ´Ş·Áµé±â ¾Ö´Ï
-	delete an.atk_front, an.atk_back, an.atk_right;				//¹èÆ² _ °ø°İ ¾Ö´Ï
-	delete an.cri_front, an.cri_back, an.cri_right;				//¹èÆ² _ Å©¸®Æ¼ÄÃ ¾Ö´Ï
-	delete an.spin;												//¹èÆ² _ ½ºÇÉ ¾Ö´Ï
-	delete an.hit_front, an.hit_back, an.hit_right;				//¹èÆ² _ ÇÇ°İ
-	delete an.hit2_front, an.hit2_right;						//¹èÆ² _ ÇÇ°İ2
-	delete an.downs_front, an.downs_back, an.downs_right;		//¹èÆ² _ ¾²·¯Áö±â Á÷Àü
-	delete an.down;												//¹èÆ² _ ¾²·¯Áü
-	delete an.win;												//³ë¸» _ ½Â¸®Æ÷Áî
-	delete an.Bwin_front, an.Bwin_back, an.Bwin_left;			//¹èÆ² _ ½Â¸®
-	delete an.cantRun_front, an.cantRun_back, an.cantRun_right;	//³ë¸» _ ¸ø´Ş¸°´Ù
-	delete an.drink;											//³ë¸» _ ¸¶½Ã±â
-	delete an.handsUp_front, an.handsUp_back;					//³ë¸» _ ¼Õµé±â	
-	delete an.ladder;											//³ë¸» _ »ç´Ù¸®	
-	delete an.tied_front, an.tied_back, an.tied_right;			//³ë¸» _ ¹­ÀÓ	
-	delete an.what_front, an.what_back, an.what_right;			//³ë¸» _ ?
+	SAFE_DEL(an.idle_front); SAFE_DEL(an.idle_back); SAFE_DEL(an.idle_right);			//ë…¸ë§ _ ë³´í†µ ì• ë‹ˆ
+	SAFE_DEL(an.walk_front); SAFE_DEL(an.walk_back); SAFE_DEL(an.walk_right);			//ë…¸ë§ / ë°°í‹€ _ ê±·ê¸° ì• ë‹ˆ
+	SAFE_DEL(an.run_front); SAFE_DEL(an.run_back); SAFE_DEL(an.run_right);				//ë…¸ë§ _ ë‹¬ë¦¬ê¸° ì• ë‹ˆ
+	SAFE_DEL(an.Bready_front); SAFE_DEL(an.Bready_back); SAFE_DEL(an.Bready_left);		//ë°°í‹€ _ ì¤€ë¹„ ì• ë‹ˆ
+	SAFE_DEL(an.SB_front); SAFE_DEL(an.SB_back); SAFE_DEL(an.SB_left);					//ë°°í‹€ _ ìŠ¤íƒ ë°”ì´ ì• ë‹ˆ
+	SAFE_DEL(an.rush_front); SAFE_DEL(an.rush_back); SAFE_DEL(an.rush_right);			//ë°°í‹€ _ ë‹¬ë ¤ë“¤ê¸° ì• ë‹ˆ
+	SAFE_DEL(an.atk_front); SAFE_DEL(an.atk_back); SAFE_DEL(an.atk_right);				//ë°°í‹€ _ ê³µê²© ì• ë‹ˆ
+	SAFE_DEL(an.cri_front); SAFE_DEL(an.cri_back); SAFE_DEL(an.cri_right);				//ë°°í‹€ _ í¬ë¦¬í‹°ì»¬ ì• ë‹ˆ
+	SAFE_DEL(an.spin);												//ë°°í‹€ _ ìŠ¤í•€ ì• ë‹ˆ
+	SAFE_DEL(an.hit_front); SAFE_DEL(an.hit_back); SAFE_DEL(an.hit_right);				//ë°°í‹€ _ í”¼ê²©
+	SAFE_DEL(an.hit2_front); SAFE_DEL(an.hit2_right);						//ë°°í‹€ _ í”¼ê²©2
+	SAFE_DEL(an.downs_front); SAFE_DEL(an.downs_back); SAFE_DEL(an.downs_right);		//ë°°í‹€ _ ì“°ëŸ¬ì§€ê¸° ì§ì „
+	SAFE_DEL(an.down);												//ë°°í‹€ _ ì“°ëŸ¬ì§
+	SAFE_DEL(an.win);												//ë…¸ë§ _ ìŠ¹ë¦¬í¬ì¦ˆ
+	SAFE_DEL(an.Bwin_front); SAFE_DEL(an.Bwin_back); SAFE_DEL(an.Bwin_left);			//ë°°í‹€ _ ìŠ¹ë¦¬
+	SAFE_DEL(an.cantRun_front); SAFE_DEL(an.cantRun_back); SAFE_DEL(an.cantRun_right);	//ë…¸ë§ _ ëª»ë‹¬ë¦°ë‹¤
+	SAFE_DEL(an.drink);											//ë…¸ë§ _ ë§ˆì‹œê¸°
+	SAFE_DEL(an.handsUp_front); SAFE_DEL(an.handsUp_back);					//ë…¸ë§ _ ì†ë“¤ê¸°	
+	SAFE_DEL(an.ladder);											//ë…¸ë§ _ ì‚¬ë‹¤ë¦¬	
+	SAFE_DEL(an.tied_front); SAFE_DEL(an.tied_back); SAFE_DEL(an.tied_right);			//ë…¸ë§ _ ë¬¶ì„	
+	SAFE_DEL(an.what_front); SAFE_DEL(an.what_back); SAFE_DEL(an.what_right);			//ë…¸ë§ _ ?
 }
 
 void player::update()
@@ -74,13 +74,13 @@ void player::update()
 	{
 		_Pset.atk = _mouse;
 		_Pset.atkS = _Pset.pt;
-		_Pset.angle = Angle(_Pset.atk.x, _Pset.atk.y, _Pset.atkS.x, _Pset.atkS.y);
-		_Pset.Dis = Distance(_Pset.atk.x, _Pset.atk.y, _Pset.atkS.x, _Pset.atkS.y);
+		_Pset.angle = Angle(static_cast<float>(_Pset.atk.x), static_cast<float>(_Pset.atk.y), static_cast<float>(_Pset.atkS.x), static_cast<float>(_Pset.atkS.y));
+		_Pset.Dis = Distance(static_cast<float>(_Pset.atk.x), static_cast<float>(_Pset.atk.y), static_cast<float>(_Pset.atkS.x), static_cast<float>(_Pset.atkS.y));
 
-		if (PI * (1 / 4) < _Pset.angle && _Pset.angle <= PI * (3 / 4)) { _T = 1; }//À§ÂÊº¸±â
-		else if (PI * (3 / 4) < _Pset.angle && _Pset.angle <= PI + (PI * (1 / 4))) { _T = 3; }//¿ŞÂÊº¸±â
-		else if (PI + (PI * (1 / 4)) < _Pset.angle && _Pset.angle <= PI + (PI * (3 / 4))) { _T = 0; }//¾Æ·¡ÂÊº¸±â
-		else { _T = 2; }//¿À¸¥ÂÊ º¸±â
+		if (PI * (1 / 4) < _Pset.angle && _Pset.angle <= PI * (3 / 4)) { _T = 1; }//ìœ„ìª½ë³´ê¸°
+		else if (PI * (3 / 4) < _Pset.angle && _Pset.angle <= PI + (PI * (1 / 4))) { _T = 3; }//ì™¼ìª½ë³´ê¸°
+		else if (PI + (PI * (1 / 4)) < _Pset.angle && _Pset.angle <= PI + (PI * (3 / 4))) { _T = 0; }//ì•„ë˜ìª½ë³´ê¸°
+		else { _T = 2; }//ì˜¤ë¥¸ìª½ ë³´ê¸°
 		_Pset.state = BATTLE_RUSH;
 	}
 
@@ -92,15 +92,15 @@ void player::render()
 	{
 		char str[256], sta[256], stt[256], stT[256];
 		sprintf_s(str, "Cc = %d", Cc);
-		TextOut(getMemDC(), WINW / 2, WINH / 4, str, strlen(str));
-		sprintf_s(sta, "Ä³¸¯ÅÍ Æ÷ÀÎÆ® : %d, %d", _Pset.pt.x, _Pset.pt.y);
-		TextOut(getMemDC(), WINW / 2, WINH / 4 + 25, sta, strlen(sta));
-		sprintf_s(stt, "°¢µµ = %f", _Pset.angle);
-		TextOut(getMemDC(), WINW / 2, WINH / 4 + 50, stt, strlen(stt));
-		sprintf_s(stT, "¾îÅÃ Æ÷ÀÎÆ® : %d, %d", _Pset.atk.x, _Pset.atk.y);
-		TextOut(getMemDC(), WINW / 2, WINH / 4 - 25, stT, strlen(stT));
-		sprintf_s(stT, "½ÃÀÛ Æ÷ÀÎÆ® : %d, %d", _Pset.atkS.x, _Pset.atkS.y);
-		TextOut(getMemDC(), WINW / 2, WINH / 4 - 50, stT, strlen(stT));
+		TextOut(getMemDC(), WINW / 2, WINH / 4, str, static_cast<int>(strlen(str)));
+		sprintf_s(sta, "ìºë¦­í„° í¬ì¸íŠ¸ : %d, %d", _Pset.pt.x, _Pset.pt.y);
+		TextOut(getMemDC(), WINW / 2, WINH / 4 + 25, sta, static_cast<int>(strlen(sta)));
+		sprintf_s(stt, "ê°ë„ = %f", _Pset.angle);
+		TextOut(getMemDC(), WINW / 2, WINH / 4 + 50, stt, static_cast<int>(strlen(stt)));
+		sprintf_s(stT, "ì–´íƒ í¬ì¸íŠ¸ : %d, %d", _Pset.atk.x, _Pset.atk.y);
+		TextOut(getMemDC(), WINW / 2, WINH / 4 - 25, stT, static_cast<int>(strlen(stT)));
+		sprintf_s(stT, "ì‹œì‘ í¬ì¸íŠ¸ : %d, %d", _Pset.atkS.x, _Pset.atkS.y);
+		TextOut(getMemDC(), WINW / 2, WINH / 4 - 50, stT, static_cast<int>(strlen(stT)));
 
 		DrawRct(getMemDC(), _Pset.rc);
 		DrawElpC(getMemDC(), _Pset.pt.x, _Pset.pt.y, 32, 32);
@@ -115,30 +115,30 @@ void player::render()
 
 void player::imgSetting()
 {
-	im.idle = IMG->addF("º¸Åë", "res/images/character/chrono/idle.bmp", 660, 672, 3, 3, true, RGB(255, 0, 255));
-	im.walk = IMG->addF("°È±â", "res/images/character/chrono/walk.bmp", 1320, 672, 6, 3, true, RGB(255, 0, 255));
-	im.run = IMG->addF("´Ş¸®±â", "res/images/character/chrono/run.bmp", 1320, 672, 6, 3, true, RGB(255, 0, 255));
-	im.Bready = IMG->addF("¹èÆ²·¹µğ", "res/images/character/chrono/Bready.bmp", 1320, 672, 6, 3, true, RGB(255, 0, 255));
-	im.rush = IMG->addF("´Ş·Áµé±â", "res/images/character/chrono/rush.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
-	im.atk = IMG->addF("°ø°İ", "res/images/character/chrono/atk.bmp", 1100, 672, 5, 3, true, RGB(255, 0, 255));
-	im.Bwin = IMG->addF("¹èÆ²½Â¸®", "res/images/character/chrono/Bwin.bmp", 660, 896, 3, 4, true, RGB(255, 0, 255));
-	im.cantRun = IMG->addF("¸ø´Ş¸²", "res/images/character/chrono/cantRun.bmp", 660, 672, 3, 3, true, RGB(255, 0, 255));
-	im.down = IMG->addF("¾²·¯Áü", "res/images/character/chrono/downs.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
-	im.downs = IMG->addF("¾²·¯Áú¶§", "res/images/character/chrono/down.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
-	im.drink = IMG->addF("¸¶½É", "res/images/character/chrono/drink.bmp", 440, 224, 2, 1, true, RGB(255, 0, 255));
-	im.handsUp = IMG->addF("¼Õµé±â", "res/images/character/chrono/handsUp.bmp", 220, 448, 1, 2, true, RGB(255, 0, 255));
-	im.hit = IMG->addF("ÇÇ°İ", "res/images/character/chrono/hit.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
-	im.hit2 = IMG->addF("ÇÇ°İ2", "res/images/character/chrono/hit2.bmp", 220, 448, 1, 2, true, RGB(255, 0, 255));
-	im.ladder = IMG->addF("»ç´Ù¸®", "res/images/character/chrono/labber.bmp", 880, 224, 4, 1, true, RGB(255, 0, 255));
-	im.spin = IMG->addF("È¸Àü", "res/images/character/chrono/spin.bmp", 880, 224, 4, 1, true, RGB(255, 0, 255));
-	im.tied = IMG->addF("¹­ÀÓ", "res/images/character/chrono/tied.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
-	im.what = IMG->addF("±Ã±İ", "res/images/character/chrono/what.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
-	im.win = IMG->addF("½Â¸®", "res/images/character/chrono/win.bmp", 440, 224, 2, 1, true, RGB(255, 0, 255));
+	im.idle = IMG->addF("ë³´í†µ", "res/images/character/chrono/idle.bmp", 660, 672, 3, 3, true, RGB(255, 0, 255));
+	im.walk = IMG->addF("ê±·ê¸°", "res/images/character/chrono/walk.bmp", 1320, 672, 6, 3, true, RGB(255, 0, 255));
+	im.run = IMG->addF("ë‹¬ë¦¬ê¸°", "res/images/character/chrono/run.bmp", 1320, 672, 6, 3, true, RGB(255, 0, 255));
+	im.Bready = IMG->addF("ë°°í‹€ë ˆë””", "res/images/character/chrono/Bready.bmp", 1320, 672, 6, 3, true, RGB(255, 0, 255));
+	im.rush = IMG->addF("ë‹¬ë ¤ë“¤ê¸°", "res/images/character/chrono/rush.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
+	im.atk = IMG->addF("ê³µê²©", "res/images/character/chrono/atk.bmp", 1100, 672, 5, 3, true, RGB(255, 0, 255));
+	im.Bwin = IMG->addF("ë°°í‹€ìŠ¹ë¦¬", "res/images/character/chrono/Bwin.bmp", 660, 896, 3, 4, true, RGB(255, 0, 255));
+	im.cantRun = IMG->addF("ëª»ë‹¬ë¦¼", "res/images/character/chrono/cantRun.bmp", 660, 672, 3, 3, true, RGB(255, 0, 255));
+	im.down = IMG->addF("ì“°ëŸ¬ì§", "res/images/character/chrono/downs.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
+	im.downs = IMG->addF("ì“°ëŸ¬ì§ˆë•Œ", "res/images/character/chrono/down.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
+	im.drink = IMG->addF("ë§ˆì‹¬", "res/images/character/chrono/drink.bmp", 440, 224, 2, 1, true, RGB(255, 0, 255));
+	im.handsUp = IMG->addF("ì†ë“¤ê¸°", "res/images/character/chrono/handsUp.bmp", 220, 448, 1, 2, true, RGB(255, 0, 255));
+	im.hit = IMG->addF("í”¼ê²©", "res/images/character/chrono/hit.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
+	im.hit2 = IMG->addF("í”¼ê²©2", "res/images/character/chrono/hit2.bmp", 220, 448, 1, 2, true, RGB(255, 0, 255));
+	im.ladder = IMG->addF("ì‚¬ë‹¤ë¦¬", "res/images/character/chrono/labber.bmp", 880, 224, 4, 1, true, RGB(255, 0, 255));
+	im.spin = IMG->addF("íšŒì „", "res/images/character/chrono/spin.bmp", 880, 224, 4, 1, true, RGB(255, 0, 255));
+	im.tied = IMG->addF("ë¬¶ì„", "res/images/character/chrono/tied.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
+	im.what = IMG->addF("ê¶ê¸ˆ", "res/images/character/chrono/what.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
+	im.win = IMG->addF("ìŠ¹ë¦¬", "res/images/character/chrono/win.bmp", 440, 224, 2, 1, true, RGB(255, 0, 255));
 }
 
 void player::aniSetting()
 {
-	//³ë¸» _ º¸Åë ¾Ö´Ï
+	//ë…¸ë§ _ ë³´í†µ ì• ë‹ˆ
 	{
 		an.idle_front = new animation;
 		an.idle_front->init(660, 672, 220, 224);
@@ -158,7 +158,7 @@ void player::aniSetting()
 		an.idle_right->setPlaylist(Id_R_arr, 5, false);
 		an.idle_right->setFPS(1);
 	}
-	//³ë¸» / ¹èÆ² _ °È±â ¾Ö´Ï
+	//ë…¸ë§ / ë°°í‹€ _ ê±·ê¸° ì• ë‹ˆ
 	{
 		an.walk_front = new animation;
 		an.walk_front->init(1320, 672, 220, 224);
@@ -178,7 +178,7 @@ void player::aniSetting()
 		an.walk_right->setPlaylist(Wa_R_arr, 6, true);
 		an.walk_right->setFPS(1);
 	}
-	//³ë¸» _ ´Ş¸®±â ¾Ö´Ï
+	//ë…¸ë§ _ ë‹¬ë¦¬ê¸° ì• ë‹ˆ
 	{
 		an.run_front = new animation;
 		an.run_front->init(1320, 672, 220, 224);
@@ -198,14 +198,14 @@ void player::aniSetting()
 		an.run_right->setPlaylist(Ru_R_arr, 6, true);
 		an.run_right->setFPS(1);
 	}
-	//³ë¸» _ ½Â¸®Æ÷Áî
+	//ë…¸ë§ _ ìŠ¹ë¦¬í¬ì¦ˆ
 	{
 		an.win = new animation;
 		an.win->init(440, 224, 220, 224);
 		an.win->setDefPlaylist();
 		an.win->setFPS(1);
 	}
-	//¹èÆ² _ ÁØºñ ¾Ö´Ï
+	//ë°°í‹€ _ ì¤€ë¹„ ì• ë‹ˆ
 	{
 		an.Bready_front = new animation;
 		an.Bready_front->init(1320, 672, 220, 224);
@@ -225,7 +225,7 @@ void player::aniSetting()
 		an.Bready_left->setPlaylist(Br_R_arr, 6, false);
 		an.Bready_left->setFPS(1);
 	}
-	//¹èÆ² _ ½ºÅÄ¹ÙÀÌ ¾Ö´Ï
+	//ë°°í‹€ _ ìŠ¤íƒ ë°”ì´ ì• ë‹ˆ
 	{
 		an.SB_front = new animation;
 		an.SB_front->init(1320, 672, 220, 224);
@@ -245,7 +245,7 @@ void player::aniSetting()
 		an.SB_left->setPlaylist(Sb_L_arr, 4, true);
 		an.SB_left->setFPS(1);
 	}
-	//¹èÆ² _ ´Ş·Áµé±â ¾Ö´Ï
+	//ë°°í‹€ _ ë‹¬ë ¤ë“¤ê¸° ì• ë‹ˆ
 	{
 		an.rush_front = new animation;
 		an.rush_front->init(220, 672, 220, 224);
@@ -265,7 +265,7 @@ void player::aniSetting()
 		an.rush_right->setPlaylist(Rus_R_arr, 1, false);
 		an.rush_right->setFPS(1);
 	}
-	//¹èÆ² _ °ø°İ ¾Ö´Ï
+	//ë°°í‹€ _ ê³µê²© ì• ë‹ˆ
 	{
 		an.atk_front = new animation;
 		an.atk_front->init(1100, 672, 220, 224);
@@ -285,7 +285,7 @@ void player::aniSetting()
 		an.atk_right->setPlaylist(At_R_arr, 3, false);
 		an.atk_right->setFPS(1);
 	}
-	//¹èÆ² _ Å©¸®Æ¼ÄÃ ¾Ö´Ï
+	//ë°°í‹€ _ í¬ë¦¬í‹°ì»¬ ì• ë‹ˆ
 	{
 		an.cri_front = new animation;
 		an.cri_front->init(1100, 672, 220, 224);
@@ -305,14 +305,14 @@ void player::aniSetting()
 		an.cri_right->setPlaylist(Cr_R_arr, 5, false);
 		an.cri_right->setFPS(1);
 	}
-	//¹èÆ² _ ½ºÇÉ ¾Ö´Ï
+	//ë°°í‹€ _ ìŠ¤í•€ ì• ë‹ˆ
 	{
 		an.spin = new animation;
 		an.spin->init(880, 224, 220, 224);
 		an.spin->setDefPlaylist(false, true);
 		an.spin->setFPS(1);
 	}
-	//¹èÆ² _ ÇÇ°İ
+	//ë°°í‹€ _ í”¼ê²©
 	{
 		an.hit_front = new animation;
 		an.hit_front->init(220, 672, 220, 224);
@@ -332,7 +332,7 @@ void player::aniSetting()
 		an.hit_right->setPlaylist(Hi_R_arr, 1, false);
 		an.hit_right->setFPS(1);
 	}
-	//¹èÆ² _ ÇÇ°İ2
+	//ë°°í‹€ _ í”¼ê²©2
 	{
 		an.hit2_front = new animation;
 		an.hit2_front->init(220, 448, 220, 224);
@@ -346,7 +346,7 @@ void player::aniSetting()
 		an.hit2_right->setPlaylist(Hi2_R_arr, 1, false);
 		an.hit2_right->setFPS(1);
 	}
-	//¹èÆ² _ ¾²·¯Áö±â Á÷Àü
+	//ë°°í‹€ _ ì“°ëŸ¬ì§€ê¸° ì§ì „
 	{
 		an.downs_front = new animation;
 		an.downs_front->init(440, 672, 220, 224);
@@ -366,14 +366,14 @@ void player::aniSetting()
 		an.downs_right->setPlaylist(Dos_R_arr, 2, true);
 		an.downs_right->setFPS(1);
 	}
-	//¹èÆ² _ ¾²·¯Áü
+	//ë°°í‹€ _ ì“°ëŸ¬ì§
 	{
 		an.down = new animation;
 		an.down->init(220, 224, 220, 224);
 		an.down->setDefPlaylist();
 		an.down->setFPS(1);
 	}
-	//¹èÆ² _ ½Â¸®
+	//ë°°í‹€ _ ìŠ¹ë¦¬
 	{
 		an.Bwin_front = new animation;
 		an.Bwin_front->init(660, 896, 220, 224);
@@ -393,7 +393,7 @@ void player::aniSetting()
 		an.Bwin_left->setPlaylist(Bw_L_arr, 5, false);
 		an.Bwin_left->setFPS(1);
 	}
-	//³ë¸» _ ¸ø´Ş¸°´Ù
+	//ë…¸ë§ _ ëª»ë‹¬ë¦°ë‹¤
 	{
 		an.cantRun_front = new animation;
 		an.cantRun_front->init(660, 672, 220, 224);
@@ -413,7 +413,7 @@ void player::aniSetting()
 		an.cantRun_right->setPlaylist(Ca_R_arr, 4, true);
 		an.cantRun_right->setFPS(1);
 	}
-	//³ë¸» _ ¸¶½Ã±â
+	//ë…¸ë§ _ ë§ˆì‹œê¸°
 	{
 		an.drink = new animation;
 		an.drink->init(440, 224, 220, 224);
@@ -421,7 +421,7 @@ void player::aniSetting()
 		an.drink->setPlaylist(Dr_F_arr, 2, true);
 		an.drink->setFPS(1);
 	}
-	//³ë¸» _ ¼Õµé±â	
+	//ë…¸ë§ _ ì†ë“¤ê¸°	
 	{
 		an.handsUp_front = new animation;
 		an.handsUp_front->init(220, 448, 220, 224);
@@ -435,14 +435,14 @@ void player::aniSetting()
 		an.handsUp_back->setPlaylist(Ha_B_arr, 1, false);
 		an.handsUp_back->setFPS(1);
 	}
-	//³ë¸» _ »ç´Ù¸®	
+	//ë…¸ë§ _ ì‚¬ë‹¤ë¦¬	
 	{
 		an.ladder = new animation;
 		an.ladder->init(880, 224, 220, 224);
 		an.ladder->setDefPlaylist();
 		an.ladder->setFPS(1);
 	}
-	//³ë¸» _ ¹­ÀÓ	
+	//ë…¸ë§ _ ë¬¶ì„	
 	{
 		an.tied_front = new animation;
 		an.tied_front->init(440, 672, 220, 224);
@@ -462,7 +462,7 @@ void player::aniSetting()
 		an.tied_right->setPlaylist(Ti_R_arr, 2, true);
 		an.tied_right->setFPS(1);
 	}
-	//³ë¸» _ ?		
+	//ë…¸ë§ _ ?		
 	{
 		an.what_front = new animation;
 		an.what_front->init(220, 672, 220, 224);
@@ -716,10 +716,10 @@ void player::imgSwitch()
 			_Pset.ani = an.rush_right;
 			break;
 		}
-		_Pset.pt.x -= cosf(_Pset.angle) * 8;
-		_Pset.pt.y -= -sinf(_Pset.angle) * 8;
-		//½ºÅ³°ú °ø°İÀ» °áÁ¤Áş´Â ÀÎÆ®º¯¼ö µîÀ» ¼³Á¤ÇØ¾ß ÇÑ´Ù
-		if (Distance(_Pset.pt.x, _Pset.pt.y, _Pset.atk.x, _Pset.atk.y) <= 50) { _Pset.state = BATTLE_ATK; }
+		_Pset.pt.x -= static_cast<int>(cosf(_Pset.angle) * 8);
+		_Pset.pt.y -= -static_cast<int>(sinf(_Pset.angle) * 8);
+		//ìŠ¤í‚¬ê³¼ ê³µê²©ì„ ê²°ì •ì§“ëŠ” ì¸íŠ¸ë³€ìˆ˜ ë“±ì„ ì„¤ì •í•´ì•¼ í•œë‹¤
+		if (Distance(static_cast<float>(_Pset.pt.x), static_cast<float>(_Pset.pt.y), static_cast<float>(_Pset.atk.x), static_cast<float>(_Pset.atk.y)) <= 50) { _Pset.state = BATTLE_ATK; }
 
 		break;
 
@@ -779,9 +779,9 @@ void player::imgSwitch()
 			_Pset.ani = an.rush_right;
 			break;
 		}
-		_Pset.pt.x += cosf(_Pset.angle) * 8;
-		_Pset.pt.y += -sinf(_Pset.angle) * 8;
-		if (50 >= Distance(_Pset.pt.x, _Pset.pt.y, _Pset.atkS.x, _Pset.atkS.y)) { _Pset.state = BATTLE_STANDBY; }
+		_Pset.pt.x += static_cast<int>(cosf(_Pset.angle) * 8);
+		_Pset.pt.y += -static_cast<int>(sinf(_Pset.angle) * 8);
+		if (50 >= Distance(static_cast<float>(_Pset.pt.x), static_cast<float>(_Pset.pt.y), static_cast<float>(_Pset.atkS.x), static_cast<float>(_Pset.atkS.y))) { _Pset.state = BATTLE_STANDBY; }
 		break;
 	case BATTLE_WIN:
 		_Pset.img = im.Bwin;
@@ -805,7 +805,7 @@ void player::imgSwitch()
 			break;
 		}
 		_Pset.ani->frameUpdate(TIME->getElapsedTime() * 4);
-		//³ë¸»_·¹µğ´Â ÀüÅõ ÈÄ Å©·Î³ë(1¹øÂ° ÇÃ·¹ÀÌ¾î)ÂÊÀ¸·Î ¸ğÀÎ´Ù, ÀÓ½Ã·Î idle·Î ¹Ù·Î ¹Ù²î°Ô Çß´Ù
+		//ë…¸ë§_ë ˆë””ëŠ” ì „íˆ¬ í›„ í¬ë¡œë…¸(1ë²ˆì§¸ í”Œë ˆì´ì–´)ìª½ìœ¼ë¡œ ëª¨ì¸ë‹¤, ì„ì‹œë¡œ idleë¡œ ë°”ë¡œ ë°”ë€Œê²Œ í–ˆë‹¤
 		//if (_Pset.ani->getCurrPlaylistIdx() != 0 && _Pset.ani->isPlay() == FALSE)_Pset.state = NORMAL_READY;
 		if (_Pset.ani->getCurrPlaylistIdx() != 0 && _Pset.ani->isPlay() == FALSE)_Pset.state = NORMAL_IDLE;
 		else if (_Pset.ani->getCurrPlaylistIdx() == 0 && _Pset.ani->isPlay() == FALSE)_Pset.ani->start();
