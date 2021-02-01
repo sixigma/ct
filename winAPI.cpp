@@ -3,7 +3,7 @@
 #include <queue>
 #include <list>
 
-// ¸Þ¸ð¸® ´©¼ö °¨Áö¿ë
+// ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ ê°ì§€ìš©
 #ifdef _DEBUG 
 #include <crtdbg.h>
 #endif
@@ -24,15 +24,15 @@ playground _pg;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-// ¸ÞÀÎ ÇÔ¼ö
+// ë©”ì¸ í•¨ìˆ˜
 int APIENTRY WinMain(_In_ HINSTANCE hInstance,
 					 _In_opt_ HINSTANCE hPrevInstance,
 					 _In_ LPSTR    lpCmdLine,
 					 _In_ int       nCmdShow)
 {
 #ifdef _DEBUG 
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // ¸Þ¸ð¸® ´©¼ö¸¦ °¨ÁöÇÑ´Ù.
-	//_CrtSetBreakAlloc(517); // ¸Þ¸ð¸® ´©¼ö ½ÃÀÛ À§Ä¡¿¡¼­ ½ÇÇàÀ» Á¤ÁöÇÑ´Ù.
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ë¥¼ ê°ì§€í•œë‹¤.
+	//_CrtSetBreakAlloc(517); // ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ ì‹œìž‘ ìœ„ì¹˜ì—ì„œ ì‹¤í–‰ì„ ì •ì§€í•œë‹¤.
 #endif
 
 	MSG			message;

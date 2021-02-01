@@ -27,16 +27,16 @@ public:
 
 	HRESULT init();
 	
-	// µ¥ÀÌÅÍ Ãß°¡ ÇÔ¼ö
+	// ë°ì´í„° ì¶”ê°€ í•¨ìˆ˜
 	void addData(const char* subject, const char* title, const char* body);
 
-	// ini ÆÄÀÏ »ı¼º ÇÔ¼ö
+	// ini íŒŒì¼ ìƒì„± í•¨ìˆ˜
 	void iniSave(const char* fileName);
 
-	// µ¥ÀÌÅÍ¸¦ ¹®ÀÚ¿­·Î ·ÎµùÇÏ´Â ÇÔ¼ö
+	// ë°ì´í„°ë¥¼ ë¬¸ìì—´ë¡œ ë¡œë”©í•˜ëŠ” í•¨ìˆ˜
 	string loadDataString(const char* fileName, const char* subject, const char* title);
 
-	// µ¥ÀÌÅÍ¸¦ Á¤¼ö·Î ·ÎµùÇÏ´Â ÇÔ¼ö
+	// ë°ì´í„°ë¥¼ ì •ìˆ˜ë¡œ ë¡œë”©í•˜ëŠ” í•¨ìˆ˜
 	int loadDataInteger(const char* fileName, const char* subject, const char* title);
 
 };

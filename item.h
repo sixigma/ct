@@ -3,10 +3,10 @@
 
 enum category
 {
-	Expendable,			//0 ¼Ò¸ğÇ°
-	Equipment,			//1 ÀåºñÇ°
-	Etc,				//2 ±âÅ¸
-	Event				//3 ÀÌº¥Æ®¿ë
+	Expendable,			//0 ì†Œëª¨í’ˆ
+	Equipment,			//1 ì¥ë¹„í’ˆ
+	Etc,				//2 ê¸°íƒ€
+	Event				//3 ì´ë²¤íŠ¸ìš©
 };
 
 class item : public gameNode
@@ -14,23 +14,23 @@ class item : public gameNode
 protected:
 	category itemCategory;
 	string itemName;
-	int attack;			//Àåºñ°ø°İ·Â
-	int defense;		//Àåºñ ¹æ¾î·Â
-	int power;			//¹°¸®°ø°İµ¥¹ÌÁö°ü·Ã	
-	int magic;			//¸¶¹ı°ø°İµ¥¹ÌÁö°ü·Ã	
-	int speed;			//¼ÓµµÅ¸ÀÌ¸Õ°ü·Ã
+	int attack;			//ì¥ë¹„ê³µê²©ë ¥
+	int defense;		//ì¥ë¹„ ë°©ì–´ë ¥
+	int power;			//ë¬¼ë¦¬ê³µê²©ë°ë¯¸ì§€ê´€ë ¨	
+	int magic;			//ë§ˆë²•ê³µê²©ë°ë¯¸ì§€ê´€ë ¨	
+	int speed;			//ì†ë„íƒ€ì´ë¨¼ê´€ë ¨
 			
-	int hit;			//¸íÁß·ü
-	int evasion;		//È¸ÇÇÀ²	
+	int hit;			//ëª…ì¤‘ë¥ 
+	int evasion;		//íšŒí”¼ìœ¨	
 
-	int stamina;		//¹°¸®¹æ¾î°ü·Ã
-	int magicDefense;	//¸¶¹ı¹æ¾î°ü·Ã
+	int stamina;		//ë¬¼ë¦¬ë°©ì–´ê´€ë ¨
+	int magicDefense;	//ë§ˆë²•ë°©ì–´ê´€ë ¨
 
-	int recoveryHp;		//Ã¼·ÂÈ¸º¹
-	int maxHp;			//ÃÖ´ëÃ¼·ÂÁõ°¡
-	int recoveryMp;		//¸¶³ªÈ¸º¹
-	int maxMp;			//ÃÖ´ë¸¶³ªÁõ°¡
-	int money;			//°¡°İ
+	int recoveryHp;		//ì²´ë ¥íšŒë³µ
+	int maxHp;			//ìµœëŒ€ì²´ë ¥ì¦ê°€
+	int recoveryMp;		//ë§ˆë‚˜íšŒë³µ
+	int maxMp;			//ìµœëŒ€ë§ˆë‚˜ì¦ê°€
+	int money;			//ê°€ê²©
 public:
 	virtual HRESULT init(string _name);
 	virtual void release();

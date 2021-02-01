@@ -5,13 +5,13 @@
 #include "fontParser.h"
 #include <sstream>
 
-// ±Û Ãâ·Â Ã¢ »óÅÂ
+// ê¸€ ì¶œë ¥ ì°½ ìƒíƒœ
 enum class TEXT_WINDOW_STATE
 {
-	INVISIBLE, // È­¸é¿¡ º¸ÀÌÁö ¾Ê´Â »óÅÂ(°»½ÅÇÏÁö ¾Ê´Â´Ù.)
-	OPENING, // ¿­¸®°í ÀÖ´Â »óÅÂ
-	VISIBLE, // È­¸é¿¡ º¸ÀÌ´Â »óÅÂ
-	CLOSING // ´ÝÈ÷°í ÀÖ´Â »óÅÂ
+	INVISIBLE, // í™”ë©´ì— ë³´ì´ì§€ ì•ŠëŠ” ìƒíƒœ(ê°±ì‹ í•˜ì§€ ì•ŠëŠ”ë‹¤.)
+	OPENING, // ì—´ë¦¬ê³  ìžˆëŠ” ìƒíƒœ
+	VISIBLE, // í™”ë©´ì— ë³´ì´ëŠ” ìƒíƒœ
+	CLOSING // ë‹«ížˆê³  ìžˆëŠ” ìƒíƒœ
 };
 
 class textManager : public singleton<textManager>
@@ -22,15 +22,15 @@ private:
 	image* _currFontImage;
 
 	BOOL _shouldWindowUseTheTopPane;
-	BOOL _shouldWindowHaveChoices; // ¼±ÅÃÁö¿ë º¯¼ö
+	BOOL _shouldWindowHaveChoices; // ì„ íƒì§€ìš© ë³€ìˆ˜
 	BOOL _isGoingToBeAutoClosed, _shouldBeAutoClosed;
 	BOOL _isWholeCurrStrShown1, _isWholeCurrStrShown2;
 	string _currStr1, _currStr2;
-	istringstream iSS; // ÇÑ ¹ø¿¡ ÇÑ ±ÛÀÚ¾¿ Ã³¸®ÇÒ ¶§ ¾²´Â º¯¼ö
-	char _character; // ±ÛÀÚ º¯¼ö
-	int _choiceSelected; // ¼±ÅÃÁö¿ë º¯¼ö(1: Ã³À½ ´ä; 2: µÎ ¹øÂ° ´ä)
-	int _currPosX, _currPosY, _waitCount; // ±Û Ãâ·Â¿ë º¯¼ö
-	int _windowClipCount; // Ã¢À» ¿­°í ´ÝÀ» ¶§ ¾²´Â º¯¼ö
+	istringstream iSS; // í•œ ë²ˆì— í•œ ê¸€ìžì”© ì²˜ë¦¬í•  ë•Œ ì“°ëŠ” ë³€ìˆ˜
+	char _character; // ê¸€ìž ë³€ìˆ˜
+	int _choiceSelected; // ì„ íƒì§€ìš© ë³€ìˆ˜(1: ì²˜ìŒ ë‹µ; 2: ë‘ ë²ˆì§¸ ë‹µ)
+	int _currPosX, _currPosY, _waitCount; // ê¸€ ì¶œë ¥ìš© ë³€ìˆ˜
+	int _windowClipCount; // ì°½ì„ ì—´ê³  ë‹«ì„ ë•Œ ì“°ëŠ” ë³€ìˆ˜
 
 	HDC _hTextWindowDC;
 	HBITMAP _hTextWindowBitmap, _hOTextWindowBitmap;
@@ -38,8 +38,8 @@ private:
 
 	TEXT_WINDOW_STATE _textWindowState1, _textWindowState2;
 
-	queue<pair<int, string>> _dialogLineQ; // int º¯¼ö´Â ¼±ÅÃÁö¸¦ ¹Ý¿µÇÏ´Â º¯¼öÀÌ´Ù.
-	queue<pair<string, int>> _battleMsgQ1, _battleMsgQ2; // 1, 2´Â ¸Þ½ÃÁö Á¾·ù(1: ÇÑ ¹ø¿¡ ÇÑ ±ÛÀÚ ´õ; 2: ÇÑ ¹ø¿¡ ÇÑ ÁÙ ÀüºÎ)¸¦ ³ªÅ¸³½´Ù. int º¯¼ö´Â (³²Àº) ¸Þ½ÃÁö Ç¥½Ã ½Ã°£À» ³ªÅ¸³»´Â º¯¼öÀÌ´Ù.
+	queue<pair<int, string>> _dialogLineQ; // int ë³€ìˆ˜ëŠ” ì„ íƒì§€ë¥¼ ë°˜ì˜í•˜ëŠ” ë³€ìˆ˜ì´ë‹¤.
+	queue<pair<string, int>> _battleMsgQ1, _battleMsgQ2; // 1, 2ëŠ” ë©”ì‹œì§€ ì¢…ë¥˜(1: í•œ ë²ˆì— í•œ ê¸€ìž ë”; 2: í•œ ë²ˆì— í•œ ì¤„ ì „ë¶€)ë¥¼ ë‚˜íƒ€ë‚¸ë‹¤. int ë³€ìˆ˜ëŠ” (ë‚¨ì€) ë©”ì‹œì§€ í‘œì‹œ ì‹œê°„ì„ ë‚˜íƒ€ë‚´ëŠ” ë³€ìˆ˜ì´ë‹¤.
 	queue<string> _chrByChrQ;
 
 	void setCurrFontImage(int searchValue);
@@ -53,66 +53,66 @@ public:
 
 	void prepareToUseFonts();
 
-	// Ãâ·ÂÇÒ ´ë»ç ½ºÆ®¸µÀ» ´ë±â¿­¿¡ Ãß°¡ÇÏ´Â ÇÔ¼ö
+	// ì¶œë ¥í•  ëŒ€ì‚¬ ìŠ¤íŠ¸ë§ì„ ëŒ€ê¸°ì—´ì— ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜
 	void enqueueL(string line, int forWhichChoice = 0);
 
-	// Ãâ·ÂÇÒ ÀüÅõ ¸Þ½ÃÁö¸¦ ´ë±â¿­¿¡ Ãß°¡ÇÏ´Â ÇÔ¼ö(isShownChrByChr·Î ÇÑ ¹ø¿¡ ÇÑ ÁÙÀ» ÀüºÎ Ãâ·ÂÇÒÁö ¿©ºÎ¸¦ ÁöÁ¤ÇÑ´Ù.)
-	// ÇÑ ¹ø¿¡ ÇÑ ÁÙÀÌ Ãâ·ÂµÇ´Â ¸Þ½ÃÁö°¡ ÇÑ ¹ø¿¡ ÇÑ ±ÛÀÚ ´õ Ãâ·ÂµÇ´Â ¸Þ½ÃÁöº¸´Ù À§¿¡ Ãâ·ÂµÈ´Ù(°¢ ¸Þ½ÃÁö´Â ´Ù¸¥ Ã¢À» »ç¿ëÇÑ´Ù.).
-	// Ãâ·Â ´ë±â ÁßÀÎ ¸Þ½ÃÁö°¡ ¾øÀ¸¸é ÀÏÁ¤ ½Ã°£(_battleMsgSpeed¿¡ ÀÇÁ¸ÇÑ´Ù.)ÀÌ °æ°úÇÏ¿´À» ¶§ ÀÚµ¿À¸·Î Ã¢ÀÌ ´ÝÈù´Ù.
+	// ì¶œë ¥í•  ì „íˆ¬ ë©”ì‹œì§€ë¥¼ ëŒ€ê¸°ì—´ì— ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜(isShownChrByChrë¡œ í•œ ë²ˆì— í•œ ì¤„ì„ ì „ë¶€ ì¶œë ¥í• ì§€ ì—¬ë¶€ë¥¼ ì§€ì •í•œë‹¤.)
+	// í•œ ë²ˆì— í•œ ì¤„ì´ ì¶œë ¥ë˜ëŠ” ë©”ì‹œì§€ê°€ í•œ ë²ˆì— í•œ ê¸€ìž ë” ì¶œë ¥ë˜ëŠ” ë©”ì‹œì§€ë³´ë‹¤ ìœ„ì— ì¶œë ¥ëœë‹¤(ê° ë©”ì‹œì§€ëŠ” ë‹¤ë¥¸ ì°½ì„ ì‚¬ìš©í•œë‹¤.).
+	// ì¶œë ¥ ëŒ€ê¸° ì¤‘ì¸ ë©”ì‹œì§€ê°€ ì—†ìœ¼ë©´ ì¼ì • ì‹œê°„(_battleMsgSpeedì— ì˜ì¡´í•œë‹¤.)ì´ ê²½ê³¼í•˜ì˜€ì„ ë•Œ ìžë™ìœ¼ë¡œ ì°½ì´ ë‹«ížŒë‹¤.
 	void enqueueBM(string msg, bool isShownChrByChr = false);
 
-	// Ã¢ ¾øÀÌ ±ÛÀÚ ´ÜÀ§·Î Ãâ·ÂÇÒ ½ºÆ®¸µÀ» ´ë±â¿­¿¡ Ãß°¡ÇÏ´Â ÇÔ¼ö(¸Þ´º È­¸é¿ë)
-	// ´ë±â¿­¿¡ ½ºÆ®¸µÀÌ µÑ ÀÌ»ó ÀÖÀ¸¸é Á¦ÀÏ ³ªÁß¿¡ Ãß°¡µÇ´Â ½ºÆ®¸µ ÇÏ³ª¸¸ ³²°Ô µÈ´Ù.
+	// ì°½ ì—†ì´ ê¸€ìž ë‹¨ìœ„ë¡œ ì¶œë ¥í•  ìŠ¤íŠ¸ë§ì„ ëŒ€ê¸°ì—´ì— ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜(ë©”ë‰´ í™”ë©´ìš©)
+	// ëŒ€ê¸°ì—´ì— ìŠ¤íŠ¸ë§ì´ ë‘˜ ì´ìƒ ìžˆìœ¼ë©´ ì œì¼ ë‚˜ì¤‘ì— ì¶”ê°€ë˜ëŠ” ìŠ¤íŠ¸ë§ í•˜ë‚˜ë§Œ ë‚¨ê²Œ ëœë‹¤.
 	void enqueueC(string msg);
 
-	// ´ë»ç ½ºÆ®¸µ ´ë±â¿­À» ºñ¿ì´Â ÇÔ¼ö
+	// ëŒ€ì‚¬ ìŠ¤íŠ¸ë§ ëŒ€ê¸°ì—´ì„ ë¹„ìš°ëŠ” í•¨ìˆ˜
 	void clearLQ();
 
-	// ÀüÅõ ¸Þ½ÃÁö ½ºÆ®¸µ ´ë±â¿­À» ºñ¿ì´Â ÇÔ¼ö
+	// ì „íˆ¬ ë©”ì‹œì§€ ìŠ¤íŠ¸ë§ ëŒ€ê¸°ì—´ì„ ë¹„ìš°ëŠ” í•¨ìˆ˜
 	void clearBMQ();
 
-	// ±ÛÀÚ ´ÜÀ§ Ãâ·Â ½ºÆ®¸µ ´ë±â¿­À» ºñ¿ì´Â ÇÔ¼ö(¸Þ´º È­¸é¿ë)
+	// ê¸€ìž ë‹¨ìœ„ ì¶œë ¥ ìŠ¤íŠ¸ë§ ëŒ€ê¸°ì—´ì„ ë¹„ìš°ëŠ” í•¨ìˆ˜(ë©”ë‰´ í™”ë©´ìš©)
 	void clearCQ();
 
-	// Çö »óÅÂ¿¡ ¸Â°Ô Æ¯Á¤ Ã¢¿¡ Ãâ·ÂÇÒ ´ë»ç ½ºÆ®¸µÀ» ÁØºñÇÏ´Â ÇÔ¼ö(_currStr »ç¿ë)
+	// í˜„ ìƒíƒœì— ë§žê²Œ íŠ¹ì • ì°½ì— ì¶œë ¥í•  ëŒ€ì‚¬ ìŠ¤íŠ¸ë§ì„ ì¤€ë¹„í•˜ëŠ” í•¨ìˆ˜(_currStr ì‚¬ìš©)
 	void updateL();
 
-	// Çö »óÅÂ¿¡ ¸Â°Ô Æ¯Á¤ Ã¢¿¡ Ãâ·ÂÇÒ ÀüÅõ ¸Þ½ÃÁö ½ºÆ®¸µÀ» ÁØºñÇÏ´Â ÇÔ¼ö(_currStr »ç¿ë)
+	// í˜„ ìƒíƒœì— ë§žê²Œ íŠ¹ì • ì°½ì— ì¶œë ¥í•  ì „íˆ¬ ë©”ì‹œì§€ ìŠ¤íŠ¸ë§ì„ ì¤€ë¹„í•˜ëŠ” í•¨ìˆ˜(_currStr ì‚¬ìš©)
 	void updateBM();
 
-	// Çö »óÅÂ¿¡ ¸Â°Ô Ã¢ ¾øÀÌ ±ÛÀÚ ´ÜÀ§·Î Ãâ·ÂÇÒ ½ºÆ®¸µÀ» ÁØºñÇÏ´Â ÇÔ¼ö(_currStr »ç¿ë)(¸Þ´º È­¸é¿ë)
+	// í˜„ ìƒíƒœì— ë§žê²Œ ì°½ ì—†ì´ ê¸€ìž ë‹¨ìœ„ë¡œ ì¶œë ¥í•  ìŠ¤íŠ¸ë§ì„ ì¤€ë¹„í•˜ëŠ” í•¨ìˆ˜(_currStr ì‚¬ìš©)(ë©”ë‰´ í™”ë©´ìš©)
 	void updateC();
 
-	// Ã¢ ¾øÀÌ Æ¯Á¤ ½ºÆ®¸µÀ» Áï½Ã Ãâ·ÂÇÏ´Â ÇÔ¼ö
-	// fontIdx: 0 °¡º¯ Æø, 1 °íÁ¤ Æø(±âº»)
-	// colorIdx: 0 ÇÏ¾ç(±âº»), 1 ÇÏ´Ã, 2 »¡°­, 3 ³ë¶û, 4 ÃÊ·Ï, 5 ºñÈ°¼º »ö
-	// Âü°í(±âº» ±Û²Ã): \n °³Çà, \t ¼¼ Ä­ ¶ç±â, { À½Ç¥, | ÇÏÆ®, } ÁÙÀÓÇ¥, ` ½Öµû¿ÈÇ¥ ¿­±â, ~ ¹«ÇÑ´ë
+	// ì°½ ì—†ì´ íŠ¹ì • ìŠ¤íŠ¸ë§ì„ ì¦‰ì‹œ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
+	// fontIdx: 0 ê°€ë³€ í­, 1 ê³ ì • í­(ê¸°ë³¸)
+	// colorIdx: 0 í•˜ì–‘(ê¸°ë³¸), 1 í•˜ëŠ˜, 2 ë¹¨ê°•, 3 ë…¸ëž‘, 4 ì´ˆë¡, 5 ë¹„í™œì„± ìƒ‰
+	// ì°¸ê³ (ê¸°ë³¸ ê¸€ê¼´): \n ê°œí–‰, \t ì„¸ ì¹¸ ë„ê¸°, { ìŒí‘œ, | í•˜íŠ¸, } ì¤„ìž„í‘œ, ` ìŒë”°ì˜´í‘œ ì—´ê¸°, ~ ë¬´í•œëŒ€
 	void render(HDC hDC, string text, int destX = 0, int destY = 0, int fontIdx = 1, int colorIdx = 0);
 
-	// ±Û Ãâ·Â Ã¢ ½ºÅ²°ú ½ºÆ®¸µÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö(Ã¢ Ç¥½Ã ÈÄ ÀÏÁ¤ °£°Ý¸¶´Ù ±ÛÀÚ ÇÏ³ª ´õ Ãâ·ÂÇÑ´Ù.)
-	// fontIdx: 0 °¡º¯ Æø(±âº»), 1 °íÁ¤ Æø
-	// colorIdx: 0 ÇÏ¾ç(±âº»), 1 ÇÏ´Ã, 2 »¡°­, 3 ³ë¶û, 4 ÃÊ·Ï, 5 ºñÈ°¼º »ö
+	// ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ê³¼ ìŠ¤íŠ¸ë§ì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜(ì°½ í‘œì‹œ í›„ ì¼ì • ê°„ê²©ë§ˆë‹¤ ê¸€ìž í•˜ë‚˜ ë” ì¶œë ¥í•œë‹¤.)
+	// fontIdx: 0 ê°€ë³€ í­(ê¸°ë³¸), 1 ê³ ì • í­
+	// colorIdx: 0 í•˜ì–‘(ê¸°ë³¸), 1 í•˜ëŠ˜, 2 ë¹¨ê°•, 3 ë…¸ëž‘, 4 ì´ˆë¡, 5 ë¹„í™œì„± ìƒ‰
 	void renderL(HDC hDC, int fontIdx = 0, int colorIdx = 0);
 
-	// ±Û Ãâ·Â Ã¢ ½ºÅ²°ú ÀüÅõ ¸Þ½ÃÁö ½ºÆ®¸µÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö(°¢ ¸Þ½ÃÁö Ã¢ÀÌ ´ÝÈ÷´Â ¼Óµµ´Â _battleMsgSpeed¿¡ ÀÇÁ¸ÇÑ´Ù.)
-	// fontIdx: 0 °¡º¯ Æø(±âº»), 1 °íÁ¤ Æø
-	// colorIdx: 0 ÇÏ¾ç(±âº»), 1 ÇÏ´Ã, 2 »¡°­, 3 ³ë¶û, 4 ÃÊ·Ï, 5 ºñÈ°¼º »ö
+	// ê¸€ ì¶œë ¥ ì°½ ìŠ¤í‚¨ê³¼ ì „íˆ¬ ë©”ì‹œì§€ ìŠ¤íŠ¸ë§ì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜(ê° ë©”ì‹œì§€ ì°½ì´ ë‹«ížˆëŠ” ì†ë„ëŠ” _battleMsgSpeedì— ì˜ì¡´í•œë‹¤.)
+	// fontIdx: 0 ê°€ë³€ í­(ê¸°ë³¸), 1 ê³ ì • í­
+	// colorIdx: 0 í•˜ì–‘(ê¸°ë³¸), 1 í•˜ëŠ˜, 2 ë¹¨ê°•, 3 ë…¸ëž‘, 4 ì´ˆë¡, 5 ë¹„í™œì„± ìƒ‰
 	void renderBM(HDC hDC, int fontIdx = 0, int colorIdx = 0);
 
-	// Ã¢ ¾øÀÌ Æ¯Á¤ ½ºÆ®¸µÀ» ±ÛÀÚ ´ÜÀ§·Î Ãâ·ÂÇÏ´Â ÇÔ¼ö(ÇÊ¿ä: enqueue ÇÔ¼ö È£Ãâ ÈÄ update ÇÔ¼ö È£Ãâ)
+	// ì°½ ì—†ì´ íŠ¹ì • ìŠ¤íŠ¸ë§ì„ ê¸€ìž ë‹¨ìœ„ë¡œ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜(í•„ìš”: enqueue í•¨ìˆ˜ í˜¸ì¶œ í›„ update í•¨ìˆ˜ í˜¸ì¶œ)
 	void renderC(HDC hDC, int destX = 0, int destY = 0, int fontIdx = 0, int colorIdx = 0);
 
-	// ÇöÀç ¼±ÅÃÁö º¯¼ö °ªÀ» ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö
+	// í˜„ìž¬ ì„ íƒì§€ ë³€ìˆ˜ ê°’ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 	int getChoiceSelected() { return _choiceSelected; }
 
-	// ¼±ÅÃÁö º¯¼ö¸¦ ÃÊ±âÈ­ÇÏ´Â ÇÔ¼ö
+	// ì„ íƒì§€ ë³€ìˆ˜ë¥¼ ì´ˆê¸°í™”í•˜ëŠ” í•¨ìˆ˜
 	void resetChoiceSelected() { _choiceSelected = 0; }
 
-	// ±Û Ãâ·Â Ã¢ »óÅÂ¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö(0 INVISIBLE, 1 OPENING, 2 VISIBLE, 3 CLOSING)
+	// ê¸€ ì¶œë ¥ ì°½ ìƒíƒœë¥¼ ì„¤ì •í•˜ëŠ” í•¨ìˆ˜(0 INVISIBLE, 1 OPENING, 2 VISIBLE, 3 CLOSING)
 	void setTextWindowState1(int value) { _textWindowState1 = static_cast<TEXT_WINDOW_STATE>(value); }
 	void setTextWindowState2(int value) { _textWindowState2 = static_cast<TEXT_WINDOW_STATE>(value); }
 
-	// ±Û Ãâ·Â Ã¢ »óÅÂ¸¦ ¹ÝÈ¯ÇÏ´Â ÇÔ¼ö
+	// ê¸€ ì¶œë ¥ ì°½ ìƒíƒœë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 	TEXT_WINDOW_STATE getTextWindowState1() { return _textWindowState1; }
 	TEXT_WINDOW_STATE getTextWindowState2() { return _textWindowState2; }
 

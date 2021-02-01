@@ -1,19 +1,19 @@
 #pragma once
 
-// Äİ¹é ÇÔ¼ö
+// ì½œë°± í•¨ìˆ˜
 typedef void(*CALLBACK_FUNCTION)(void);
 
-// ¸Å°³ º¯¼ö°¡ ÀÖ´Â Äİ¹é ÇÔ¼ö
+// ë§¤ê°œ ë³€ìˆ˜ê°€ ìˆëŠ” ì½œë°± í•¨ìˆ˜
 typedef void(*CALLBACK_FUNCTION_PARAMETER)(void*);
 
 class animation
 {
 	public:
-	typedef vector<POINT> frameList;	// ÇÁ·¹ÀÓ ¸ñ·Ï
-	typedef vector<int> playList;		// ÇÃ·¹ÀÌ ¸ñ·Ï
+	typedef vector<POINT> frameList;	// í”„ë ˆì„ ëª©ë¡
+	typedef vector<int> playList;		// í”Œë ˆì´ ëª©ë¡
 
 	private:
-	int			_totFrames;		// ÃÑ ÇÁ·¹ÀÓ ¼ö
+	int			_totFrames;		// ì´ í”„ë ˆì„ ìˆ˜
 	frameList	_frameList;
 	playList	_playlist;
 
@@ -37,17 +37,17 @@ class animation
 	HRESULT init(int totalW, int totalH, int frameW, int frameH);
 	void release();
 
-	// ±âº» Àç»ı ¸ñ·Ï ÁØºñ ÇÔ¼ö
+	// ê¸°ë³¸ ì¬ìƒ ëª©ë¡ ì¤€ë¹„ í•¨ìˆ˜
 	void setDefPlaylist(BOOL reverse = FALSE, BOOL loop = FALSE);
 	void setDefPlaylist(BOOL reverse, BOOL loop, CALLBACK_FUNCTION cbFunction);
 	void setDefPlaylist(BOOL reverse, BOOL loop, CALLBACK_FUNCTION_PARAMETER cbFunction, void* obj);
 
-	// ¹è¿­ Àç»ı ¸ñ·Ï ÁØºñ ÇÔ¼ö
+	// ë°°ì—´ ì¬ìƒ ëª©ë¡ ì¤€ë¹„ í•¨ìˆ˜
 	void setPlaylist(int* playArr, int arrLen, BOOL loop = FALSE);
 	void setPlaylist(int* playArr, int arrLen, BOOL loop, CALLBACK_FUNCTION cbFunction);
 	void setPlaylist(int* playArr, int arrLen, BOOL loop, CALLBACK_FUNCTION_PARAMETER cbFunction, void* obj);
 
-	// ±¸°£ Àç»ı ¸ñ·Ï ÁØºñ ÇÔ¼ö
+	// êµ¬ê°„ ì¬ìƒ ëª©ë¡ ì¤€ë¹„ í•¨ìˆ˜
 	void setPlaylist(int start, int end, BOOL reverse = FALSE, BOOL loop = FALSE);
 	void setPlaylist(int start, int end, BOOL reverse, BOOL loop, CALLBACK_FUNCTION cbFunction);
 	void setPlaylist(int start, int end, BOOL reverse, BOOL loop, CALLBACK_FUNCTION_PARAMETER cbFunction, void* obj);

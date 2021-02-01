@@ -6,7 +6,7 @@
 
 using namespace FMOD;
 
-constexpr size_t SOUNDBUFFER = 60; // ¸®¸¶ÀÎ´õ: Ãß°¡ÇÒ À½¾Ç ÆÄÀÏ °³¼öº¸´Ù Ä¿¾ß ÇÑ´Ù.
+constexpr size_t SOUNDBUFFER = 60; // ë¦¬ë§ˆì¸ë”: ì¶”ê°€í•  ìŒì•… íŒŒì¼ ê°œìˆ˜ë³´ë‹¤ ì»¤ì•¼ í•œë‹¤.
 constexpr size_t EXTRACHANNELBUFFER = 6;
 #define TOTALSOUNDBUFFER SOUNDBUFFER + EXTRACHANNELBUFFER
 
@@ -43,43 +43,43 @@ public:
 
 	Channel* findChannel(string strKey);
 
-	// À½¾Ç ÆÄÀÏ Ãß°¡ ÇÔ¼ö(Å° °ª, ÆÄÀÏ¸í, ¹è°æÀ½ÀÎÁö ¿©ºÎ, ¹Ýº¹ Àç»ý ¿©ºÎ)
+	// ìŒì•… íŒŒì¼ ì¶”ê°€ í•¨ìˆ˜(í‚¤ ê°’, íŒŒì¼ëª…, ë°°ê²½ìŒì¸ì§€ ì—¬ë¶€, ë°˜ë³µ ìž¬ìƒ ì—¬ë¶€)
 	void addSound(string strKey, string soundFileName, bool isBGM, bool isLoop);
 
-	// Ãß°¡µÈ À½¾Ç ÆÄÀÏÀ» Àç»ýÇÏ´Â ÇÔ¼ö (À½·®: 0.0fºÎÅÍ 1.0f±îÁö)
+	// ì¶”ê°€ëœ ìŒì•… íŒŒì¼ì„ ìž¬ìƒí•˜ëŠ” í•¨ìˆ˜ (ìŒëŸ‰: 0.0fë¶€í„° 1.0fê¹Œì§€)
 	void play(string strKey, float volume = 1.0f);
 	
-	// Æ¯Á¤ À½¾Ç Àç»ýÀ» ¿ÏÀüÈ÷ ¸ØÃß´Â ÇÔ¼ö
+	// íŠ¹ì • ìŒì•… ìž¬ìƒì„ ì™„ì „ížˆ ë©ˆì¶”ëŠ” í•¨ìˆ˜
 	void stop(string strKey);
 	
-	// Æ¯Á¤ À½¾Ç Àç»ýÀ» ÀÏ½Ã Á¤Áö ÇÏ´Â ÇÔ¼ö
+	// íŠ¹ì • ìŒì•… ìž¬ìƒì„ ì¼ì‹œ ì •ì§€ í•˜ëŠ” í•¨ìˆ˜
 	void pause(string strKey);
 	
-	// Æ¯Á¤ À½¾Ç Àç»ýÀ» Àç°³ÇÏ´Â ÇÔ¼ö
+	// íŠ¹ì • ìŒì•… ìž¬ìƒì„ ìž¬ê°œí•˜ëŠ” í•¨ìˆ˜
 	void resume(string strKey);
 	
-	// Æ¯Á¤ À½¾ÇÀÌ Àç»ý ÁßÀÎÁö °Ë»çÇÏ´Â ÇÔ¼ö
+	// íŠ¹ì • ìŒì•…ì´ ìž¬ìƒ ì¤‘ì¸ì§€ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
 	bool isPlaying(string strKey);
 	
-	// Æ¯Á¤ À½¾Ç Àç»ýÀÌ ÀÏ½Ã Á¤Áö µÈ »óÅÂÀÎÁö °Ë»çÇÏ´Â ÇÔ¼ö
+	// íŠ¹ì • ìŒì•… ìž¬ìƒì´ ì¼ì‹œ ì •ì§€ ëœ ìƒíƒœì¸ì§€ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜
 	bool isPaused(string strKey);
 
-	// ÇöÀç Àç»ý ÁßÀÎ À½¾ÇÀ» ÀüºÎ ÀÏ½Ã Á¤Áö ÇÏ´Â ÇÔ¼ö
+	// í˜„ìž¬ ìž¬ìƒ ì¤‘ì¸ ìŒì•…ì„ ì „ë¶€ ì¼ì‹œ ì •ì§€ í•˜ëŠ” í•¨ìˆ˜
 	void pauseAll();
 
-	// ÇöÀç ÀÏ½Ã Á¤Áö ÁßÀÎ À½¾ÇÀ» ÀüºÎ Àç»ýÇÏ´Â ÇÔ¼ö
+	// í˜„ìž¬ ì¼ì‹œ ì •ì§€ ì¤‘ì¸ ìŒì•…ì„ ì „ë¶€ ìž¬ìƒí•˜ëŠ” í•¨ìˆ˜
 	void resumeAll();
 
-	// ÇöÀç Àç»ý ÁßÀÎ À½¾ÇÀ» ÀüºÎ Á¤ÁöÇÏ´Â ÇÔ¼ö
+	// í˜„ìž¬ ìž¬ìƒ ì¤‘ì¸ ìŒì•…ì„ ì „ë¶€ ì •ì§€í•˜ëŠ” í•¨ìˆ˜
 	void stopAll();
 
-	// ¸¶½ºÅÍ À½·® º¯°æÀ» Áï½Ã ¹Ý¿µÇÒ ¶§ ¾²´Â ÇÔ¼ö
+	// ë§ˆìŠ¤í„° ìŒëŸ‰ ë³€ê²½ì„ ì¦‰ì‹œ ë°˜ì˜í•  ë•Œ ì“°ëŠ” í•¨ìˆ˜
 	void updateMasterVolume();
 
-	// ¹è°æÀ½ À½·® º¯°æÀ» Áï½Ã ¹Ý¿µÇÒ ¶§ ¾²´Â ÇÔ¼ö
+	// ë°°ê²½ìŒ ìŒëŸ‰ ë³€ê²½ì„ ì¦‰ì‹œ ë°˜ì˜í•  ë•Œ ì“°ëŠ” í•¨ìˆ˜
 	void updateBGMVolume();
 
-	// È¿°úÀ½ À½·® º¯°æÀ» Áï½Ã ¹Ý¿µÇÒ ¶§ ¾²´Â ÇÔ¼ö
+	// íš¨ê³¼ìŒ ìŒëŸ‰ ë³€ê²½ì„ ì¦‰ì‹œ ë°˜ì˜í•  ë•Œ ì“°ëŠ” í•¨ìˆ˜
 	void updateSFXVolume();
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "item.h"
-enum equipCategory // Àåºñ Ä«Å×°í¸® equipCategory
+enum equipCategory // ìž¥ë¹„ ì¹´í…Œê³ ë¦¬ equipCategory
 {
 	head,
 	armor,

@@ -14,21 +14,21 @@ playground::~playground()
 HRESULT playground::init()
 {
 	gameNode::init(true);
-	keysToCheck = { VK_RETURN, VK_SPACE, VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP, VK_OEM_3, VK_LSHIFT, 'A', 'S', 'D', 'X', 'C', 'V' }; // ÀÔ·ÂÀ» È®ÀÎÇÒ Å° ³ª¿­(Åä±Û Å° Á¦¿Ü)
+	keysToCheck = { VK_RETURN, VK_SPACE, VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP, VK_OEM_3, VK_LSHIFT, 'A', 'S', 'D', 'X', 'C', 'V' }; // ì…ë ¥ì„ í™•ì¸í•  í‚¤ ë‚˜ì—´(í† ê¸€ í‚¤ ì œì™¸)
 
 #ifdef _DEBUG
 	vector<int> debugKeysToCheck = { VK_ADD, VK_SUBTRACT, VK_ESCAPE, VK_LBUTTON, VK_RBUTTON,
 		VK_F1, VK_F2, VK_F3, VK_F4, VK_F5, VK_F6, VK_F7, VK_F8, VK_F9, VK_F10, VK_F11, VK_F12,
 		'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 
-		'Q', 'W', 'E' }; // ÀÔ·ÂÀ» È®ÀÎÇÒ Å° ³ª¿­(Åä±Û Å° Á¦¿Ü, µğ¹ö±× Àü¿ë)
+		'Q', 'W', 'E' }; // ì…ë ¥ì„ í™•ì¸í•  í‚¤ ë‚˜ì—´(í† ê¸€ í‚¤ ì œì™¸, ë””ë²„ê·¸ ì „ìš©)
 	keysToCheck.insert(end(keysToCheck), begin(debugKeysToCheck), end(debugKeysToCheck));
 #endif
 
-	SC->addScene("·Îµù Àå¸é", new loadingScene);
+	SC->addScene("ë¡œë”© ì¥ë©´", new loadingScene);
 
 	_isScrBlackingOut = FALSE;
 
-	SC->changeScene("·Îµù Àå¸é");
+	SC->changeScene("ë¡œë”© ì¥ë©´");
 
 	_blackScreenAlpha = 0x00;
 	_fadeCount = 0;
@@ -65,7 +65,7 @@ void playground::update()
 
 	if (_isScrBlackingOut)
 	{
-		// ÆäÀÌµå¾Æ¿ô¿¡ ¸Â°Ô ¾ËÆÄ °ªÀ» º¯°æÇÑ´Ù.
+		// í˜ì´ë“œì•„ì›ƒì— ë§ê²Œ ì•ŒíŒŒ ê°’ì„ ë³€ê²½í•œë‹¤.
 		if (_blackScreenAlpha < 0xFF) _blackScreenAlpha += min(0x22, 0xFF - _blackScreenAlpha);
 		if (_blackScreenAlpha == 0xFF) {
 			if (_fadeCount++ == 30)
@@ -77,7 +77,7 @@ void playground::update()
 	}
 	else if (_blackScreenAlpha != 0x00)
 	{
-		// ÆäÀÌµåÀÎ¿¡ ¸Â°Ô ¾ËÆÄ °ªÀ» º¯°æÇÑ´Ù.
+		// í˜ì´ë“œì¸ì— ë§ê²Œ ì•ŒíŒŒ ê°’ì„ ë³€ê²½í•œë‹¤.
 		if (_blackScreenAlpha > 0x00) _blackScreenAlpha -= min(0x22, _blackScreenAlpha);
 	}
 
@@ -93,7 +93,7 @@ void playground::render()
 
 	_prevRenderMode = _shouldRenderUsingWindowCoords;
 	_shouldRenderUsingWindowCoords = TRUE;
-	if (_blackScreenAlpha > 0x00) IMG->alphaRender("°ËÀº È­¸é", getMemDC(), 0, 0, _blackScreenAlpha);
+	if (_blackScreenAlpha > 0x00) IMG->alphaRender("ê²€ì€ í™”ë©´", getMemDC(), 0, 0, _blackScreenAlpha);
 	
 	if (KEY->isToggledOn(VK_SCROLL))
 	{

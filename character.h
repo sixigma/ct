@@ -1,93 +1,93 @@
 #pragma once
 
-struct tagStatus	//´É·ÂÄ¡
+struct tagStatus	//ëŠ¥ë ¥ì¹˜
 {
-	int power;			//Èû(±ÙÁ¢¹«±â°ø°Ý·Â + )	(ÃÖ´ë 100)
-	int magic;			//¸¶·Â(¸¶¹ý°ø°Ý·Â)(ÃÖ´ë 100)
-	int speed;			//¹èÆ²½Ã °ÔÀÌÁö Â÷Â¡¼Óµµ Áõ°¡(ÃÖ´ë16)(ÇìÀÌ½ºÆ® µî Æ¯Á¤ ½ºÅ³·Î ÀÎÇÑ max 24)
-	int stamina;		//Ã¼·Â(¹æ¾î·Â + / ÃÖ´ë hp +)(ÃÖ´ë 100)
-	int hit;			//¸íÁß(¿ø°Å¸® °ø°Ý·Â)
-	int evasion;		//È¸ÇÇ
+	int power;			//íž˜(ê·¼ì ‘ë¬´ê¸°ê³µê²©ë ¥ + )	(ìµœëŒ€ 100)
+	int magic;			//ë§ˆë ¥(ë§ˆë²•ê³µê²©ë ¥)(ìµœëŒ€ 100)
+	int speed;			//ë°°í‹€ì‹œ ê²Œì´ì§€ ì°¨ì§•ì†ë„ ì¦ê°€(ìµœëŒ€16)(í—¤ì´ìŠ¤íŠ¸ ë“± íŠ¹ì • ìŠ¤í‚¬ë¡œ ì¸í•œ max 24)
+	int stamina;		//ì²´ë ¥(ë°©ì–´ë ¥ + / ìµœëŒ€ hp +)(ìµœëŒ€ 100)
+	int hit;			//ëª…ì¤‘(ì›ê±°ë¦¬ ê³µê²©ë ¥)
+	int evasion;		//íšŒí”¼
 
-	int atk;			//°ø°Ý·Â(Èû + ¹«±â°ø°Ý·Â)
-	int def, Mdef;		//¹æ¾î·Â, ¸¶¹ý¹æ¾î·Â
+	int atk;			//ê³µê²©ë ¥(íž˜ + ë¬´ê¸°ê³µê²©ë ¥)
+	int def, Mdef;		//ë°©ì–´ë ¥, ë§ˆë²•ë°©ì–´ë ¥
 
-	int hp, maxHp;		//Ã¼·Â, ÃÖ´ëÃ¼·Â
-	int mp, maxMp;		//mp, ÃÖ´ëmp
-	int exp, maxExp;	//°æÇèÄ¡
-	int Lv;				//·¹º§
-	int money;			//µ·
+	int hp, maxHp;		//ì²´ë ¥, ìµœëŒ€ì²´ë ¥
+	int mp, maxMp;		//mp, ìµœëŒ€mp
+	int exp, maxExp;	//ê²½í—˜ì¹˜
+	int Lv;				//ë ˆë²¨
+	int money;			//ëˆ
 
-	int element;		//¼Ó¼º
+	int element;		//ì†ì„±
 
-	int condition;		//»óÅÂÀÌ»ó
+	int condition;		//ìƒíƒœì´ìƒ
 };
-enum STATE			//»óÅÂÀÌ³Ñ
+enum STATE			//ìƒíƒœì´ë„˜
 {
-	NORMAL_IDLE,	//Æò»ó½Ã
-	NORMAL_WALK,	//°ÉÀ» ¶§
-	NORMAL_RUN,		//´Þ¸± ¶§
-	NORMAL_TALK,	//´ëÈ­ÇÒ ¶§
-	NORMAL_EVENT,	//ÀÌº¥Æ®
-	NORMAL_READY,	//¹èÆ² ½Â¸® ÈÄ ÁÖÀÎ°ø¿¡°Ô ¸ðÀÏ ¶§
-	BATTLE_READY,	//ÁØºñ(¹èÆ² ½ÃÀÛ½Ã °¢ÀÚ¸®·Î ³¯¾Æ°¥ ¶§)
-	BATTLE_STANDBY,	//´ë±â
-	BATTLE_MOVE,	//¹èÆ²½Ã ÀÏ¹Ý¿òÁ÷ÀÓ
-	BATTLE_RUSH,	//¹èÆ²½Ã ´Þ·Áµé±â
-	BATTLE_ATK,		//±Ù°Å¸®¿Í ¿ø°Å¸® ±¸ºÐÁþ±â
-	BATTLE_SKILL,	//½ºÅ³
-	BATTLE_RETURN,	//¹èÆ²½Ã °ø°Ý ÈÄ µ¹¾Æ¿À±â
-	BATTLE_HIT,		//ÇÇ°Ý
-	BATTLE_HELP,	//¹èÆ² Áß hp°¡ 0ÀÌ µÇ¾úÀ» ¶§ ±×·Î±â»óÅÂ
-	BATTLE_WIN,	//½Â¸®½Ã(°æÇèÄ¡, °ñµå µî ¾òÀ» ¶§)
-	BATTLE_LOSE	//ÆÐ¹è½Ã(ÀüºÎ°¡ hp0ÀÌ µÉ ¶§)
+	NORMAL_IDLE,	//í‰ìƒì‹œ
+	NORMAL_WALK,	//ê±¸ì„ ë•Œ
+	NORMAL_RUN,		//ë‹¬ë¦´ ë•Œ
+	NORMAL_TALK,	//ëŒ€í™”í•  ë•Œ
+	NORMAL_EVENT,	//ì´ë²¤íŠ¸
+	NORMAL_READY,	//ë°°í‹€ ìŠ¹ë¦¬ í›„ ì£¼ì¸ê³µì—ê²Œ ëª¨ì¼ ë•Œ
+	BATTLE_READY,	//ì¤€ë¹„(ë°°í‹€ ì‹œìž‘ì‹œ ê°ìžë¦¬ë¡œ ë‚ ì•„ê°ˆ ë•Œ)
+	BATTLE_STANDBY,	//ëŒ€ê¸°
+	BATTLE_MOVE,	//ë°°í‹€ì‹œ ì¼ë°˜ì›€ì§ìž„
+	BATTLE_RUSH,	//ë°°í‹€ì‹œ ë‹¬ë ¤ë“¤ê¸°
+	BATTLE_ATK,		//ê·¼ê±°ë¦¬ì™€ ì›ê±°ë¦¬ êµ¬ë¶„ì§“ê¸°
+	BATTLE_SKILL,	//ìŠ¤í‚¬
+	BATTLE_RETURN,	//ë°°í‹€ì‹œ ê³µê²© í›„ ëŒì•„ì˜¤ê¸°
+	BATTLE_HIT,		//í”¼ê²©
+	BATTLE_HELP,	//ë°°í‹€ ì¤‘ hpê°€ 0ì´ ë˜ì—ˆì„ ë•Œ ê·¸ë¡œê¸°ìƒíƒœ
+	BATTLE_WIN,	//ìŠ¹ë¦¬ì‹œ(ê²½í—˜ì¹˜, ê³¨ë“œ ë“± ì–»ì„ ë•Œ)
+	BATTLE_LOSE	//íŒ¨ë°°ì‹œ(ì „ë¶€ê°€ hp0ì´ ë  ë•Œ)
 };
-struct tagItemStatus	//¾ÆÀÌÅÛ ´É·ÂÄ¡
+struct tagItemStatus	//ì•„ì´í…œ ëŠ¥ë ¥ì¹˜
 {
-	int weapon;			//¹«±â		°ø°Ý·Â+
-	int weapon2;		//¹«±â2		Æ¯¼ö´É·Â
+	int weapon;			//ë¬´ê¸°		ê³µê²©ë ¥+
+	int weapon2;		//ë¬´ê¸°2		íŠ¹ìˆ˜ëŠ¥ë ¥
 
-	int head;			//¸Ó¸®		¹æ¾î+
-	int head2;			//¸Ó¸®2		Æ¯¼ö´É·Â
+	int head;			//ë¨¸ë¦¬		ë°©ì–´+
+	int head2;			//ë¨¸ë¦¬2		íŠ¹ìˆ˜ëŠ¥ë ¥
 
-	int armor;			//°©¿Ê		¹æ¾î+
-	int armor2;			//°©¿Ê2		Æ¯¼ö´É·Â
+	int armor;			//ê°‘ì˜·		ë°©ì–´+
+	int armor2;			//ê°‘ì˜·2		íŠ¹ìˆ˜ëŠ¥ë ¥
 
-	int acc;			//¾×¼¼¼­¸®	´É·ÂÄ¡+
-	int acc2;			//¾×¼¼¼­¸®2	´É·ÂÄ¡+
+	int acc;			//ì•¡ì„¸ì„œë¦¬	ëŠ¥ë ¥ì¹˜+
+	int acc2;			//ì•¡ì„¸ì„œë¦¬2	ëŠ¥ë ¥ì¹˜+
 
-	int money;			//±¸ÀÔ / ÆÇ¸Å°¡°Ý
+	int money;			//êµ¬ìž… / íŒë§¤ê°€ê²©
 };
 
-struct tagChaSet	//Ä³¸¯ÅÍ ¼ÂÆÃ
+struct tagChaSet	//ìºë¦­í„° ì…‹íŒ…
 {
-	POINT pt;			//Ä³¸¯ÅÍ Æ÷ÀÎÆ®
-	POINT atk;			//Ä³¸¯ÅÍ °ø°Ý½Ã °ø°ÝÁöÁ¡ Æ÷ÀÎÆ®
+	POINT pt;			//ìºë¦­í„° í¬ì¸íŠ¸
+	POINT atk;			//ìºë¦­í„° ê³µê²©ì‹œ ê³µê²©ì§€ì  í¬ì¸íŠ¸
 
-	POINT atkS;			//°ø°Ý½Ã Ãâ¹ßÆ÷ÀÎÆ®
-	POINT shadow;		//À§Ä¡ ÁöÁ¤¿ë ±×¸²ÀÚ
-	float Dis;			//ÀÚ½Å°ú »ó´ë »çÀÌÀÇ °Å¸®
-	float angle;		//ÀÚ½Å°ú »ó´ë »çÀÌÀÇ °¢µµ
-	float Sangle;		//Ãâ¹ßÁöÁ¡°ú ÀÚ½Å »çÀÌ °Å¸®
+	POINT atkS;			//ê³µê²©ì‹œ ì¶œë°œí¬ì¸íŠ¸
+	POINT shadow;		//ìœ„ì¹˜ ì§€ì •ìš© ê·¸ë¦¼ìž
+	float Dis;			//ìžì‹ ê³¼ ìƒëŒ€ ì‚¬ì´ì˜ ê±°ë¦¬
+	float angle;		//ìžì‹ ê³¼ ìƒëŒ€ ì‚¬ì´ì˜ ê°ë„
+	float Sangle;		//ì¶œë°œì§€ì ê³¼ ìžì‹  ì‚¬ì´ ê±°ë¦¬
 
-	RECT rc;			//Ä³¸¯ÅÍ ·ºÆ®
-	RECT Arc;			//°ø°Ý ·ºÆ®
+	RECT rc;			//ìºë¦­í„° ë ‰íŠ¸
+	RECT Arc;			//ê³µê²© ë ‰íŠ¸
 
-	image* img;			//ÀÌ¹ÌÁö
-	animation* ani;		//¾Ö´Ï
-	image* Sha;			//±×¸²ÀÚ ÀÌ¹ÌÁö
+	image* img;			//ì´ë¯¸ì§€
+	animation* ani;		//ì• ë‹ˆ
+	image* Sha;			//ê·¸ë¦¼ìž ì´ë¯¸ì§€
 
-	image* Bimg;		//½½·Î¿ì µî¿¡ »ç¿ëÇÒ µÞ¹è°æ ÀÌ¹ÌÁö
-	animation* Bani;	//½½·Î¿ì µî¿¡ »ç¿ëÇÒ µÞ¹è°æ ¾Ö´Ï
+	image* Bimg;		//ìŠ¬ë¡œìš° ë“±ì— ì‚¬ìš©í•  ë’·ë°°ê²½ ì´ë¯¸ì§€
+	animation* Bani;	//ìŠ¬ë¡œìš° ë“±ì— ì‚¬ìš©í•  ë’·ë°°ê²½ ì• ë‹ˆ
 
-	image* Oimg;		//(Other)È¥¶õ µîÀÇ »óÅÂÀÌ»ó¿¡ »ç¿ëµÉ ÀÌ¹ÌÁö
-	animation* Oani;	//(Other)È¥¶õ µîÀÇ »óÅÂÀÌ»ó¿¡ »ç¿ëµÉ ¾Ö´Ï
+	image* Oimg;		//(Other)í˜¼ëž€ ë“±ì˜ ìƒíƒœì´ìƒì— ì‚¬ìš©ë  ì´ë¯¸ì§€
+	animation* Oani;	//(Other)í˜¼ëž€ ë“±ì˜ ìƒíƒœì´ìƒì— ì‚¬ìš©ë  ì• ë‹ˆ
 
-	string weapon;		//Ä³¸¯ÅÍ ÇöÀç ¹«±â
-	string head;		//Ä³¸¯ÅÍ ÇöÀç ¸Ó¸®¹æ¾î±¸
-	string armor;		//Ä³¸¯ÅÍ ÇöÀç °©¿Ê
-	string acc; 		//Ä³¸¯ÅÍ ÇöÀç ¾×¼¼¼­¸®
-	string name;		//Ä³¸¯ÅÍ ÀÌ¸§
+	string weapon;		//ìºë¦­í„° í˜„ìž¬ ë¬´ê¸°
+	string head;		//ìºë¦­í„° í˜„ìž¬ ë¨¸ë¦¬ë°©ì–´êµ¬
+	string armor;		//ìºë¦­í„° í˜„ìž¬ ê°‘ì˜·
+	string acc; 		//ìºë¦­í„° í˜„ìž¬ ì•¡ì„¸ì„œë¦¬
+	string name;		//ìºë¦­í„° ì´ë¦„
 
-	STATE state;		//½ºÅ×ÀÌÆ® ÀÌ³Ñ
+	STATE state;		//ìŠ¤í…Œì´íŠ¸ ì´ë„˜
 };

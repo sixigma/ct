@@ -37,6 +37,6 @@ void startScene::render()
 	if (KEY->press(VK_SPACE))
 	{
 		_isScrBlackingOut = TRUE;
-		SC->changeScene("°ÔÀÓ Àå¸é");
+		SC->changeScene("ê²Œìž„ ìž¥ë©´");
 	}
 }

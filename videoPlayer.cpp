@@ -65,21 +65,21 @@ void videoPlayer::playOpening()
 	//avcodec_free_context(&_audioCodecContext);
 	//==================================================================//
 
-	// ¼Ò¸® Àç»ıÀ» ÁØºñÇÑ´Ù.
-	SND->play("¿ÀÇÁ´×", _currMasterVolume * _currBGMVolume);
-	SND->pause("¿ÀÇÁ´×");
+	// ì†Œë¦¬ ì¬ìƒì„ ì¤€ë¹„í•œë‹¤.
+	SND->play("ì˜¤í”„ë‹", _currMasterVolume * _currBGMVolume);
+	SND->pause("ì˜¤í”„ë‹");
 
-	//==== ¿µ»ó Àç»ıÀ» ÁØºñÇÑ´Ù. =======================================//
-	if (avformat_open_input(&_formatContext, "res/videos/Chrono Trigger Opening.avi", nullptr, nullptr) < 0) // Æ¯Á¤ ÆÄÀÏÀ» ¿­°í Çì´õ¸¦ ÀĞ´Â´Ù. ½ÇÆĞÇÑ´Ù¸é
+	//==== ì˜ìƒ ì¬ìƒì„ ì¤€ë¹„í•œë‹¤. =======================================//
+	if (avformat_open_input(&_formatContext, "res/videos/Chrono Trigger Opening.avi", nullptr, nullptr) < 0) // íŠ¹ì • íŒŒì¼ì„ ì—´ê³  í—¤ë”ë¥¼ ì½ëŠ”ë‹¤. ì‹¤íŒ¨í•œë‹¤ë©´
 	{
-		av_log(nullptr, AV_LOG_FATAL, "Failed to open file."); // ±â·ÏÀ» ³²±ä´Ù.
-		exit(-100); // Á¾·áÇÑ´Ù.
+		av_log(nullptr, AV_LOG_FATAL, "Failed to open file."); // ê¸°ë¡ì„ ë‚¨ê¸´ë‹¤.
+		exit(-100); // ì¢…ë£Œí•œë‹¤.
 	}
 
-	if (avformat_find_stream_info(_formatContext, nullptr) < 0) // ÆÄÀÏ ÆĞÅ¶À» ÀĞ¾î¼­ ½ºÆ®¸² Á¤º¸¸¦ ¾ò´Â´Ù. ½ÇÆĞÇÑ´Ù¸é
+	if (avformat_find_stream_info(_formatContext, nullptr) < 0) // íŒŒì¼ íŒ¨í‚·ì„ ì½ì–´ì„œ ìŠ¤íŠ¸ë¦¼ ì •ë³´ë¥¼ ì–»ëŠ”ë‹¤. ì‹¤íŒ¨í•œë‹¤ë©´
 	{
-		av_log(nullptr, AV_LOG_ERROR, "Failed to get stream information."); // ±â·ÏÀ» ³²±ä´Ù.
-		exit(-100); // Á¾·áÇÑ´Ù.
+		av_log(nullptr, AV_LOG_ERROR, "Failed to get stream information."); // ê¸°ë¡ì„ ë‚¨ê¸´ë‹¤.
+		exit(-100); // ì¢…ë£Œí•œë‹¤.
 	}
 
 	_videoStreamIndex = av_find_best_stream(_formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, &_videoCodec, NULL);
@@ -88,15 +88,15 @@ void videoPlayer::playOpening()
 	if (_videoStreamIndex < 0)
 	{
 		av_log(nullptr, AV_LOG_ERROR, "Failed to find the best stream.");
-		exit(-100); // Á¾·áÇÑ´Ù.
+		exit(-100); // ì¢…ë£Œí•œë‹¤.
 	}
 
-	// Ã³¸®¿¡ ÇÊ¿äÇÑ °ø°£À» ÇÒ´çÇÏ°í ±× °ø°£¿¡ ±âº»°ªÀ» Ã¤¿î´Ù.
+	// ì²˜ë¦¬ì— í•„ìš”í•œ ê³µê°„ì„ í• ë‹¹í•˜ê³  ê·¸ ê³µê°„ì— ê¸°ë³¸ê°’ì„ ì±„ìš´ë‹¤.
 	//_audioFrame = av_frame_alloc();
 	_videoCodecContext = avcodec_alloc_context3(_videoCodec);
 	//_audioCodecContext = avcodec_alloc_context3(_audioCodec);
 
-	// ½ºÆ®¸² Á¤º¸ ¸Å°³ º¯¼ö °ªÀ» ±â¹İÀ¸·Î ÇÏ¿© codec context¸¦ Ã¤¿î´Ù.
+	// ìŠ¤íŠ¸ë¦¼ ì •ë³´ ë§¤ê°œ ë³€ìˆ˜ ê°’ì„ ê¸°ë°˜ìœ¼ë¡œ í•˜ì—¬ codec contextë¥¼ ì±„ìš´ë‹¤.
 	if (avcodec_parameters_to_context(_videoCodecContext, _formatContext->streams[_videoStreamIndex]->codecpar) < 0)
 	{
 		av_log(nullptr, AV_LOG_ERROR, "Failed to fill the video codec context.");
@@ -108,7 +108,7 @@ void videoPlayer::playOpening()
 	//	exit(-100);
 	//}
 
-	// ÁöÁ¤µÈ ÄÚµ¦À¸·Î ÄÚµ¦ ÄÜÅØ½ºÆ®¸¦ ÃÊ±âÈ­ÇÑ´Ù.
+	// ì§€ì •ëœ ì½”ë±ìœ¼ë¡œ ì½”ë± ì½˜í…ìŠ¤íŠ¸ë¥¼ ì´ˆê¸°í™”í•œë‹¤.
 	if (avcodec_open2(_videoCodecContext, _videoCodec, nullptr) < 0)
 	{
 		av_log(nullptr, AV_LOG_ERROR, "Failed to initialize the video codec context using the given codec.");
@@ -121,7 +121,7 @@ void videoPlayer::playOpening()
 	//}
 	//==================================================================//
 
-	//==== ½º·¹µå·Î ¿µ»óÀ» Àç»ıÇÑ´Ù. ===================================//
+	//==== ìŠ¤ë ˆë“œë¡œ ì˜ìƒì„ ì¬ìƒí•œë‹¤. ===================================//
 	_hThread = (HANDLE)_beginthreadex(NULL, 0, threadForVideo, this, CREATE_SUSPENDED, NULL);
 	if (!_hThread)
 	{
@@ -153,12 +153,12 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bI.bmiHeader.biBitCount = 32;
 	bI.bmiHeader.biWidth = scrWidth;
-	bI.bmiHeader.biHeight = -scrHeight; // À½¼ö·Î ¾´´Ù.
+	bI.bmiHeader.biHeight = -scrHeight; // ìŒìˆ˜ë¡œ ì“´ë‹¤.
 	bI.bmiHeader.biCompression = BI_RGB;
 	bI.bmiHeader.biPlanes = 1;
 
 	HDC hDC = GetDC(_hWnd);
-	HDC hTempDC = CreateCompatibleDC(hDC); // ¼Ò½º(source)·Î »ç¿ëÇÒ DCÀÇ ÇÚµé
+	HDC hTempDC = CreateCompatibleDC(hDC); // ì†ŒìŠ¤(source)ë¡œ ì‚¬ìš©í•  DCì˜ í•¸ë“¤
 
 	vector<BYTE> bitmapData;
 	bitmapData.reserve(totPixels);
@@ -180,7 +180,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	double avgFrameRate = av_q2d(ps->_formatContext->streams[ps->_videoStreamIndex]->avg_frame_rate);
 	chrono::nanoseconds sleepTime = static_cast<chrono::duration<long long, nano>>(static_cast<long long>(pow(10, 9) / avgFrameRate));
 	
-	// ARGB µ¥ÀÌÅÍ ÀúÀå °ø°£
+	// ARGB ë°ì´í„° ì €ì¥ ê³µê°„
 	BYTE* bufBGRA = static_cast<BYTE*>(av_malloc(static_cast<size_t>(av_image_get_buffer_size(AV_PIX_FMT_RGB32,
 									   scrWidth, scrHeight, 1))));
 
@@ -189,22 +189,22 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	ps->_videoFrameBGRA = av_frame_alloc();
 
 	ps->_imageConvContext = sws_getContext(ps->_videoCodecContext->width, ps->_videoCodecContext->height,
-		ps->_videoCodecContext->pix_fmt, // ÇÈ¼¿ Çü½Ä
+		ps->_videoCodecContext->pix_fmt, // í”½ì…€ í˜•ì‹
 		scrWidth, scrHeight,
 		AV_PIX_FMT_RGB32,
 		/*SWS_BICUBIC*/SWS_BILINEAR,
-		nullptr, nullptr, // ÇÊÅÍ Àû¿ëÀ» ÇÏÁö ¾Ê´Â´Ù.
-		nullptr); // SWS_GAUSS³ª SWS_LANCZOS¸¦ »ç¿ëÇÒ ¶§ ÁöÁ¤ÇÑ´Ù.
+		nullptr, nullptr, // í•„í„° ì ìš©ì„ í•˜ì§€ ì•ŠëŠ”ë‹¤.
+		nullptr); // SWS_GAUSSë‚˜ SWS_LANCZOSë¥¼ ì‚¬ìš©í•  ë•Œ ì§€ì •í•œë‹¤.
 
 	
-	// µ¥ÀÌÅÍ Æ÷ÀÎÅÍµé°ú ¶óÀÎ Å©±âµéÀ» ÁöÁ¤µÈ ¸Å°³ º¯¼ö¿¡ ¸ÂÃß¾î ÁØºñÇÑ´Ù.
+	// ë°ì´í„° í¬ì¸í„°ë“¤ê³¼ ë¼ì¸ í¬ê¸°ë“¤ì„ ì§€ì •ëœ ë§¤ê°œ ë³€ìˆ˜ì— ë§ì¶”ì–´ ì¤€ë¹„í•œë‹¤.
 	av_image_fill_arrays(ps->_videoFrameBGRA->data, ps->_videoFrameBGRA->linesize, bufBGRA,
 		AV_PIX_FMT_RGB32, scrWidth, scrHeight, 1);
 
 	ps->_currTime = chrono::high_resolution_clock::now();
 	ps->_elapsedTime = 0ns;
 
-	FMOD::Channel* audioCh = SND->findChannel("¿ÀÇÁ´×");
+	FMOD::Channel* audioCh = SND->findChannel("ì˜¤í”„ë‹");
 
 	int tempInt;
 	while (ps->_isPlayingVideo)
@@ -225,7 +225,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 			av_free(bufBGRA);
 			ps->_isPlayingVideo = FALSE;
 
-			SND->stop("¿ÀÇÁ´×");
+			SND->stop("ì˜¤í”„ë‹");
 
 			return 0;
 		}
@@ -245,12 +245,12 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 				av_image_fill_arrays(ps->_videoFrameBGRA->data, ps->_videoFrameBGRA->linesize, bufBGRA,
 					AV_PIX_FMT_RGB32, scrWidth, scrHeight, 1);
 
-				if (avcodec_send_packet(ps->_videoCodecContext, ps->_packet) == 0)  // È­»ó ÆĞÅ¶ µ¥ÀÌÅÍ¸¦ µğÄÚ´õ¿¡ º¸³½´Ù. ¼º°øÇÑ´Ù¸é
+				if (avcodec_send_packet(ps->_videoCodecContext, ps->_packet) == 0)  // í™”ìƒ íŒ¨í‚· ë°ì´í„°ë¥¼ ë””ì½”ë”ì— ë³´ë‚¸ë‹¤. ì„±ê³µí•œë‹¤ë©´
 				{
 					ps->_elapsedTime -= sleepTime;
 					while (true)
 					{
-						if (avcodec_receive_frame(ps->_videoCodecContext, ps->_videoFrame) == 0) // µğÄÚ´õ°¡ ¹İÈ¯ÇÑ µ¥ÀÌÅÍ¸¦ ¹Ş´Â´Ù. ¼º°øÇÑ´Ù¸é
+						if (avcodec_receive_frame(ps->_videoCodecContext, ps->_videoFrame) == 0) // ë””ì½”ë”ê°€ ë°˜í™˜í•œ ë°ì´í„°ë¥¼ ë°›ëŠ”ë‹¤. ì„±ê³µí•œë‹¤ë©´
 						{
 							sws_scale(ps->_imageConvContext,
 										ps->_videoFrame->data, ps->_videoFrame->linesize,
@@ -258,12 +258,12 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 										ps->_videoFrameBGRA->data, ps->_videoFrameBGRA->linesize);
 
 							copy_n(bufBGRA, totPixels, bitmapDataPtr);
-							// ¶Ç´Â memcpy(bitmapDataPtr, bufBGRA, totPixels);
+							// ë˜ëŠ” memcpy(bitmapDataPtr, bufBGRA, totPixels);
 
 							if (ps->_videoCodecContext->frame_number == 1)
 							{
 								audioCh->setPosition(17, FMOD_TIMEUNIT_MS);
-								SND->resume("¿ÀÇÁ´×");
+								SND->resume("ì˜¤í”„ë‹");
 							}
 							BitBlt(ps->getMemDC(), 0, 0, scrWidth, scrHeight, hTempDC, 0, 0, SRCCOPY);
 						}
@@ -293,22 +293,22 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	ReleaseDC(_hWnd, hDC);
 	ps->_shouldCloseThread = FALSE;
 
-	SND->stop("¿ÀÇÁ´×");
+	SND->stop("ì˜¤í”„ë‹");
 
 	return 0;
 }
 
 
 
-// (Âü°í)
-//if (av_read_frame(_formatContext, &_packet) == 0) // ½ºÆ®¸²ÀÇ ´ÙÀ½ ÇÁ·¹ÀÓÀ» ÀĞ´Â µ¥¿¡ ¼º°øÇÑ´Ù¸é
+// (ì°¸ê³ )
+//if (av_read_frame(_formatContext, &_packet) == 0) // ìŠ¤íŠ¸ë¦¼ì˜ ë‹¤ìŒ í”„ë ˆì„ì„ ì½ëŠ” ë°ì— ì„±ê³µí•œë‹¤ë©´
 //{
 //	if (_packet.stream_index == _videoStreamIndex)
 //	{
-//		avcodec_send_packet(_videoCodecContext, &_packet); // È­»ó ÆĞÅ¶ µ¥ÀÌÅÍ¸¦ µğÄÚ´õ¿¡ º¸³½´Ù.
-//		if (avcodec_receive_frame(_videoCodecContext, _videoFrame) == 0) // µğÄÚ´õ°¡ ¹İÈ¯ÇÑ µ¥ÀÌÅÍ¸¦ ¹Ş´Â´Ù. ¼º°øÇÑ´Ù¸é
+//		avcodec_send_packet(_videoCodecContext, &_packet); // í™”ìƒ íŒ¨í‚· ë°ì´í„°ë¥¼ ë””ì½”ë”ì— ë³´ë‚¸ë‹¤.
+//		if (avcodec_receive_frame(_videoCodecContext, _videoFrame) == 0) // ë””ì½”ë”ê°€ ë°˜í™˜í•œ ë°ì´í„°ë¥¼ ë°›ëŠ”ë‹¤. ì„±ê³µí•œë‹¤ë©´
 //		{
-//			// _videoFrame »ç¿ë
+//			// _videoFrame ì‚¬ìš©
 //			uint8_t* videoData = _videoFrame->data[0];
 //			//char pictureType = av_get_picture_type_char(_videoFrame->pict_type);
 //			//int frameNum = _videoCodecContext->frame_number;
@@ -320,18 +320,18 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 //	}
 //	else if (_packet.stream_index == _audioStreamIndex)
 //	{
-//		avcodec_send_packet(_audioCodecContext, &_packet); // ¼Ò¸® ÆĞÅ¶ µ¥ÀÌÅÍ¸¦ µğÄÚ´õ¿¡ º¸³½´Ù.
-//		if (avcodec_receive_frame(_audioCodecContext, _audioFrame) == 0) // µğÄÚ´õ°¡ ¹İÈ¯ÇÑ µ¥ÀÌÅÍ¸¦ ¹Ş´Â´Ù. ¼º°øÇÑ´Ù¸é
+//		avcodec_send_packet(_audioCodecContext, &_packet); // ì†Œë¦¬ íŒ¨í‚· ë°ì´í„°ë¥¼ ë””ì½”ë”ì— ë³´ë‚¸ë‹¤.
+//		if (avcodec_receive_frame(_audioCodecContext, _audioFrame) == 0) // ë””ì½”ë”ê°€ ë°˜í™˜í•œ ë°ì´í„°ë¥¼ ë°›ëŠ”ë‹¤. ì„±ê³µí•œë‹¤ë©´
 //		{
-//			// _audioFrame »ç¿ë
+//			// _audioFrame ì‚¬ìš©
 //			uint8_t* audioData = _audioFrame->data[0];
 //			// ...
 //		}
 //	}
-//	av_packet_unref(&_packet); // ÆĞÅ¶ Àç»ç¿ëÀ» ÇÏ·Á¸é ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÏ¿©¾ß ÇÑ´Ù.
+//	av_packet_unref(&_packet); // íŒ¨í‚· ì¬ì‚¬ìš©ì„ í•˜ë ¤ë©´ ì´ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•˜ì—¬ì•¼ í•œë‹¤.
 //}
 
-// (Âü°í)
+// (ì°¸ê³ )
 //int videoWidth = _formatContext->streams[_videoStreamIndex]->codecpar->width;
 //int videoHeight = _formatContext->streams[_videoStreamIndex]->codecpar->height;
 //int audioChannels = _formatContext->streams[_audioStreamIndex]->codecpar->channels;
@@ -340,10 +340,10 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 //int videoCodecID = _videoCodec->id;
 //int audioCodecID = _audioCodec->id;
 
-// (Âü°í)
+// (ì°¸ê³ )
 //_videoCodecContext->width = 1024;
 //_videoCodecContext->height = 896;
 //_videoCodecContext->flags2 |= AV_CODEC_FLAG2_FAST;
 
-// (Âü°í)
-// Àç»ı ½Ã°£ °è»ê(double): av_q2d(_formatContext->streams[_videoStreamIndex]->time_base) * _formatContext->streams[_videoStreamIndex]->duration;
+// (ì°¸ê³ )
+// ì¬ìƒ ì‹œê°„ ê³„ì‚°(double): av_q2d(_formatContext->streams[_videoStreamIndex]->time_base) * _formatContext->streams[_videoStreamIndex]->duration;

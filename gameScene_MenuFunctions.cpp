@@ -29,7 +29,7 @@ void gameScene::drawBottomSecondBox()
 
 	if (_shouldShowBottomBoxArrow)
 	{
-		IMG->frameRender("Å¸ÀÏ¼Â", _hBoxDC, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].x + _currOrg.x, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].y + _currOrg.y, 11, 3);
+		IMG->frameRender("íƒ€ì¼ì…‹", _hBoxDC, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].x + _currOrg.x, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].y + _currOrg.y, 11, 3);
 	}
 
 	BitBlt(getMemDC(), WINW - _bottomBoxAdjX, 96 + 640, _bottomBoxAdjX, WINH - 640 - 96, _hBoxDC, 0, 96 + 640, SRCCOPY);
@@ -37,26 +37,26 @@ void gameScene::drawBottomSecondBox()
 
 void gameScene::showBelongingsScr()
 {
-	// ÇÏ´Ü ¿µ¿ª È­»ìÇ¥ Ç¥½Ã
+	// í•˜ë‹¨ ì˜ì—­ í™”ì‚´í‘œ í‘œì‹œ
 	if (_shouldShowBottomBoxArrow && !_bottomBoxArrowPos.empty())
 	{
 		PatBlt(_hBoxDC, 0, 96 + 640, WINW, WINH - 640 - 96, BLACKNESS);
-		IMG->frameRender("Å¸ÀÏ¼Â", _hBoxDC, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].x + _currOrg.x, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].y + _currOrg.y, 11, 3);
+		IMG->frameRender("íƒ€ì¼ì…‹", _hBoxDC, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].x + _currOrg.x, _bottomBoxArrowPos[_bottomBoxArrowPosIdx].y + _currOrg.y, 11, 3);
 		
 		BitBlt(getMemDC(), 0, 96 + 640, WINW, WINH - 640 - 96, _hBoxDC, 0, 96 + 640, SRCCOPY);
 	}
 	if (_bottomBoxCountForBelongings > 1020 && _bottomBoxCountForBelongings < 1041)
 	{
 		PatBlt(_hBoxDC, 0, 96 + 640, WINW, WINH - 640 - 96, BLACKNESS);
-		IMG->frameRender("Å¸ÀÏ¼Â", _hBoxDC, 896 + 32 + _currOrg.x, 844 - 14 + _currOrg.y, 15, 7);
+		IMG->frameRender("íƒ€ì¼ì…‹", _hBoxDC, 896 + 32 + _currOrg.x, 844 - 14 + _currOrg.y, 15, 7);
 		BitBlt(getMemDC(), 0, 96 + 640, WINW, WINH - 640 - 96, _hBoxDC, 0, 96 + 640, SRCCOPY);
 	}
 
-	// ÁÖ È­¸é ¿µ¿ª È­»ìÇ¥ Ç¥½Ã
+	// ì£¼ í™”ë©´ ì˜ì—­ í™”ì‚´í‘œ í‘œì‹œ
 	if (_shouldShowMainBoxArrow && !_mainBoxArrowPos.empty())
 	{
 		PatBlt(_hBoxDC, 0, 96, WINW, 640, BLACKNESS);
-		IMG->frameRender("Å¸ÀÏ¼Â", _hBoxDC, _mainBoxArrowPos[_mainBoxArrowPosIdx].x + _currOrg.x, _mainBoxArrowPos[_mainBoxArrowPosIdx].y + _currOrg.y, 10, 2);
+		IMG->frameRender("íƒ€ì¼ì…‹", _hBoxDC, _mainBoxArrowPos[_mainBoxArrowPosIdx].x + _currOrg.x, _mainBoxArrowPos[_mainBoxArrowPosIdx].y + _currOrg.y, 10, 2);
 		BitBlt(getMemDC(), 0, 96, WINW, 640, _hBoxDC, 0, 96, SRCPAINT);
 	}
 
@@ -89,7 +89,7 @@ void gameScene::showVolumeScr()
 	if (_shouldShowMainBoxArrow)
 	{
 		PatBlt(_hBoxDC, 0, 0, WINW, WINH, BLACKNESS);
-		IMG->frameRender("Å¸ÀÏ¼Â", _hBoxDC, _mainBoxArrowPos[_mainBoxArrowPosIdx].x + _currOrg.x, _mainBoxArrowPos[_mainBoxArrowPosIdx].y + _currOrg.y, 11, 3);
+		IMG->frameRender("íƒ€ì¼ì…‹", _hBoxDC, _mainBoxArrowPos[_mainBoxArrowPosIdx].x + _currOrg.x, _mainBoxArrowPos[_mainBoxArrowPosIdx].y + _currOrg.y, 11, 3);
 		BitBlt(getMemDC(), 0, 0, WINW, WINH, _hBoxDC, 0, 0, SRCPAINT);
 	}
 }
@@ -155,7 +155,7 @@ void gameScene::showHelpScr()
 		DrawText(_hBoxDC, "displays all of your current", -1, &_itemNameTextArea[7], DT_LEFT | DT_TOP);
 		DrawText(_hBoxDC, "strength levels.", -1, &_itemNameTextArea[8], DT_LEFT | DT_TOP);
 		
-		if (_bottomBoxCountForHelp > 20 && _bottomBoxCountForHelp < 40) IMG->frameRender("Å¸ÀÏ¼Â", _hBoxDC, _itemNameTextArea[9].left + _currOrg.x, _itemNameTextArea[9].top + _currOrg.y, 15, 7);
+		if (_bottomBoxCountForHelp > 20 && _bottomBoxCountForHelp < 40) IMG->frameRender("íƒ€ì¼ì…‹", _hBoxDC, _itemNameTextArea[9].left + _currOrg.x, _itemNameTextArea[9].top + _currOrg.y, 15, 7);
 		BitBlt(getMemDC(), 0, 0, WINW, WINH, _hBoxDC, 0, 0, SRCPAINT);
 	}
 	else if (_bottomBoxCountForHelp > 120)
@@ -179,7 +179,7 @@ void gameScene::updateMenuScr(BYTE idx)
 	{
 		case 0: // Belongings
 			{
-				// Ã¢ ²ô±â
+				// ì°½ ë„ê¸°
 				if (KEY->down('J') && _bottomBoxCountForBelongings < 1000 || (KEY->down('K') && _bottomBoxArrowPosIdx == 1))
 				{
 					_itemNameTextArea.clear();
@@ -188,7 +188,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					return;
 				}
 
-				// ¾ÆÀÌÅÛ »ç¿ëÇÏ±â
+				// ì•„ì´í…œ ì‚¬ìš©í•˜ê¸°
 				if (KEY->down('K') && _shouldShowMainBoxArrow && _bottomBoxArrowPosIdx == 0 && !_itemPtrList.empty())
 				{
 					if (_bottomBoxCountForBelongings < 1000) _bottomBoxCountForBelongings = 1000;
@@ -223,7 +223,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					_bottomBoxCountForBelongings = 1100;
 				}
 
-				// ¾ÆÀÌÅÛ ¹ö¸®±â
+				// ì•„ì´í…œ ë²„ë¦¬ê¸°
 				if (KEY->down('K') && _shouldShowMainBoxArrow && _bottomBoxArrowPosIdx == 2 && !_itemPtrList.empty())
 				{
 					item* tempItem = _p->getVItem()[_mainBoxArrowPosIdx];
@@ -233,7 +233,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					_bottomBoxCountForBelongings = 1100;
 				}
 
-				// Ã¢ ³»¿ë Ç¥½ÃÇÏ±â ÁØºñ
+				// ì°½ ë‚´ìš© í‘œì‹œí•˜ê¸° ì¤€ë¹„
 				_itemPtrList = _p->getVItem();
 				_itemList.clear();
 				if (_itemPtrList.empty())
@@ -265,7 +265,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					}
 					L->CreateLine({ _itemNameTextArea[0].left, _itemNameTextArea[0].top }, tempStr, "itemList", false);
 					
-					// ÇÃ·¹ÀÌ¾î Ä³¸¯ÅÍ ÀÌ¸§ ¹× Ã¼·Â Ç¥½Ã ÁØºñ
+					// í”Œë ˆì´ì–´ ìºë¦­í„° ì´ë¦„ ë° ì²´ë ¥ í‘œì‹œ ì¤€ë¹„
 					_hPString = "";
 					size_t hPBarsToDraw = static_cast<size_t>(_p->currentHP() + 7) / 8llu;
 					for (size_t i = 0; i < (hPBarsToDraw >> 1); ++i)
@@ -327,7 +327,7 @@ void gameScene::updateMenuScr(BYTE idx)
 			break;
 		case 1: // Volume
 			{
-				// Ã¢ ²ô±â
+				// ì°½ ë„ê¸°
 				if (KEY->down('J'))
 				{
 					removeMenuScr(1);
@@ -337,7 +337,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					return;
 				}
 
-				// Ã¢ ³»¿ë Ç¥½ÃÇÏ±â ÁØºñ
+				// ì°½ ë‚´ìš© í‘œì‹œí•˜ê¸° ì¤€ë¹„
 				if (_bottomBoxCountForVolume == 0)
 				{
 					_mainBoxArrowPos.clear();
@@ -408,7 +408,7 @@ void gameScene::updateMenuScr(BYTE idx)
 			break;
 		case 2: // Levels
 			{
-				// Ã¢ ²ô±â
+				// ì°½ ë„ê¸°
 				if (KEY->down('J'))
 				{
 					removeMenuScr(2);
@@ -432,7 +432,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					return;
 				}
 
-				// Ã¢ ³»¿ë Ç¥½ÃÇÏ±â ÁØºñ
+				// ì°½ ë‚´ìš© í‘œì‹œí•˜ê¸° ì¤€ë¹„
 				if (_bottomBoxCountForLevels == 0)
 				{
 					_prevYPosForLevels = _yPosForLevels;
@@ -455,8 +455,8 @@ void gameScene::updateMenuScr(BYTE idx)
 				{
 					L->CreateLine(MakePt(65, 768), "Select message speed & level.", "n", false);
 					L->update();
-					L->CreateLine(MakePt(384 + 32, 255 + 64), "¢º", "È­»ìÇ¥1", false);
-					L->CreateLine(MakePt(94 + 32, 640), "¢º", "È­»ìÇ¥2", false);
+					L->CreateLine(MakePt(384 + 32, 255 + 64), "â–¶", "í™”ì‚´í‘œ1", false);
+					L->CreateLine(MakePt(94 + 32, 640), "â–¶", "í™”ì‚´í‘œ2", false);
 					++_bottomBoxCountForLevels;
 				}
 				else if (_bottomBoxCountForLevels > 20)
@@ -478,12 +478,12 @@ void gameScene::updateMenuScr(BYTE idx)
 						++_xPosForLevels;
 					}
 
-					if (_yPosForLevels == 0) L->setPosLine("È­»ìÇ¥1", MakePt(384 + 32, 255));
-					else if (_yPosForLevels == 1) L->setPosLine("È­»ìÇ¥1", MakePt(384 + 32, 255 + 64));
-					else if (_yPosForLevels == 2) L->setPosLine("È­»ìÇ¥1", MakePt(384 + 32, 255 + 128));
+					if (_yPosForLevels == 0) L->setPosLine("í™”ì‚´í‘œ1", MakePt(384 + 32, 255));
+					else if (_yPosForLevels == 1) L->setPosLine("í™”ì‚´í‘œ1", MakePt(384 + 32, 255 + 64));
+					else if (_yPosForLevels == 2) L->setPosLine("í™”ì‚´í‘œ1", MakePt(384 + 32, 255 + 128));
 
-					if (_xPosForLevels == 0) L->setPosLine("È­»ìÇ¥2", MakePt(94 + 32, 640));
-					else if (_xPosForLevels == 1) L->setPosLine("È­»ìÇ¥2", MakePt(94 + 449 + 32, 640));
+					if (_xPosForLevels == 0) L->setPosLine("í™”ì‚´í‘œ2", MakePt(94 + 32, 640));
+					else if (_xPosForLevels == 1) L->setPosLine("í™”ì‚´í‘œ2", MakePt(94 + 449 + 32, 640));
 
 					L->update();
 				}
@@ -512,7 +512,7 @@ void gameScene::updateMenuScr(BYTE idx)
 			break;
 		case 3: // Status
 			{
-				// Ã¢ ²ô±â
+				// ì°½ ë„ê¸°
 				if (KEY->down('J') || KEY->down(VK_RETURN))
 				{
 					removeMenuScr(3);
@@ -521,7 +521,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					return;
 				}
 
-				// Ã¢ ³»¿ë Ç¥½ÃÇÏ±â ÁØºñ
+				// ì°½ ë‚´ìš© í‘œì‹œí•˜ê¸° ì¤€ë¹„
 				if (_bottomBoxCountForStatus == 0)
 				{
 					_itemNameTextArea.clear();
@@ -546,7 +546,7 @@ void gameScene::updateMenuScr(BYTE idx)
 			break;
 		case 4: // Help
 			{
-				// Ã¢ ²ô±â
+				// ì°½ ë„ê¸°
 				if (KEY->down('J') || KEY->down(VK_RETURN) || _bottomBoxCountForHelp > 120 && (KEY->down('K')))
 				{
 					removeMenuScr(4);
@@ -555,7 +555,7 @@ void gameScene::updateMenuScr(BYTE idx)
 					return;
 				}
 
-				// Ã¢ ³»¿ë Ç¥½ÃÇÏ±â ÁØºñ
+				// ì°½ ë‚´ìš© í‘œì‹œí•˜ê¸° ì¤€ë¹„
 				if (_bottomBoxCountForHelp == 0)
 				{
 					_itemNameTextArea.clear();

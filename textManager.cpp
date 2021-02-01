@@ -12,40 +12,40 @@ void textManager::setCurrFontImage(int searchValue)
 	switch (searchValue)
 	{
 		case 0:
-			_currFontImage = IMG->find("Èò»ö ´ëÈ­ ±Û²Ã");
+			_currFontImage = IMG->find("í°ìƒ‰ ëŒ€í™” ê¸€ê¼´");
 			break;
 		case 1:
-			_currFontImage = IMG->find("ÇÏ´Ã»ö ´ëÈ­ ±Û²Ã");
+			_currFontImage = IMG->find("í•˜ëŠ˜ìƒ‰ ëŒ€í™” ê¸€ê¼´");
 			break;
 		case 2:
-			_currFontImage = IMG->find("»¡°£»ö ´ëÈ­ ±Û²Ã");
+			_currFontImage = IMG->find("ë¹¨ê°„ìƒ‰ ëŒ€í™” ê¸€ê¼´");
 			break;
 		case 3:
-			_currFontImage = IMG->find("³ë¶õ»ö ´ëÈ­ ±Û²Ã");
+			_currFontImage = IMG->find("ë…¸ë€ìƒ‰ ëŒ€í™” ê¸€ê¼´");
 			break;
 		case 4:
-			_currFontImage = IMG->find("³ì»ö ´ëÈ­ ±Û²Ã");
+			_currFontImage = IMG->find("ë…¹ìƒ‰ ëŒ€í™” ê¸€ê¼´");
 			break;
 		case 5:
-			_currFontImage = IMG->find("ºñÈ°¼º ´ëÈ­ ±Û²Ã");
+			_currFontImage = IMG->find("ë¹„í™œì„± ëŒ€í™” ê¸€ê¼´");
 			break;
 		case 100:
-			_currFontImage = IMG->find("Èò»ö UI ±Û²Ã");
+			_currFontImage = IMG->find("í°ìƒ‰ UI ê¸€ê¼´");
 			break;
 		case 101:
-			_currFontImage = IMG->find("ÇÏ´Ã»ö UI ±Û²Ã");
+			_currFontImage = IMG->find("í•˜ëŠ˜ìƒ‰ UI ê¸€ê¼´");
 			break;
 		case 102:
-			_currFontImage = IMG->find("»¡°£»ö UI ±Û²Ã");
+			_currFontImage = IMG->find("ë¹¨ê°„ìƒ‰ UI ê¸€ê¼´");
 			break;
 		case 103:
-			_currFontImage = IMG->find("³ë¶õ»ö UI ±Û²Ã");
+			_currFontImage = IMG->find("ë…¸ë€ìƒ‰ UI ê¸€ê¼´");
 			break;
 		case 104:
-			_currFontImage = IMG->find("³ì»ö UI ±Û²Ã");
+			_currFontImage = IMG->find("ë…¹ìƒ‰ UI ê¸€ê¼´");
 			break;
 		case 105:
-			_currFontImage = IMG->find("ºñÈ°¼º UI ±Û²Ã");
+			_currFontImage = IMG->find("ë¹„í™œì„± UI ê¸€ê¼´");
 			break;
 		default:
 			return;
@@ -70,7 +70,7 @@ textManager::textManager():
 	_bF.BlendOp = AC_SRC_OVER;
 	_bF.BlendFlags = 0;
 	_bF.SourceConstantAlpha = _textWindowAlpha;
-	_bF.AlphaFormat = 0; // AC_SRC_ALPHA´Â 32 bpp ¼Ò½º ºñÆ®¸Ê¿¡¸¸ »ç¿ëÇÒ ¼ö ÀÖ´Ù.
+	_bF.AlphaFormat = 0; // AC_SRC_ALPHAëŠ” 32 bpp ì†ŒìŠ¤ ë¹„íŠ¸ë§µì—ë§Œ ì‚¬ìš©í•  ìˆ˜ ìˆë‹¤.
 }
 
 textManager::~textManager()
@@ -132,7 +132,7 @@ void textManager::updateL()
 {
 	if (_textWindowState1 == TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		if (!_dialogLineQ.empty()) // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ÀÖÀ¸¸é
+		if (!_dialogLineQ.empty()) // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ìˆìœ¼ë©´
 		{
 			_textWindowState1 = TEXT_WINDOW_STATE::OPENING;
 			_windowClipCount = 0;
@@ -143,7 +143,7 @@ void textManager::updateL()
 			_isGoingToBeAutoClosed = FALSE;
 			if (!_currStr1.empty()) _currStr1.clear();
 
-			// istringstream º¯¼ö ºñ¿ì±â
+			// istringstream ë³€ìˆ˜ ë¹„ìš°ê¸°
 			iSS.clear();
 			iSS.str(string());
 		}
@@ -155,7 +155,7 @@ void textManager::updateL()
 	}
 	else if (_textWindowState1 == TEXT_WINDOW_STATE::VISIBLE)
 	{
-		if (_dialogLineQ.empty()) // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ¾øÀ¸¸é
+		if (_dialogLineQ.empty()) // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ì—†ìœ¼ë©´
 		{
 			_textWindowState1 = TEXT_WINDOW_STATE::CLOSING;
 			_windowClipCount = 10;
@@ -201,7 +201,7 @@ void textManager::updateL()
 						}
 						else if (_character == '>')
 						{
-							if (tempStr[0] == 'w') // ±â´Ù¸®±âÀÌ¸é(Áï <wÀÚ¿¬¼ö>°¡ ÀÖÀ¸¸é)
+							if (tempStr[0] == 'w') // ê¸°ë‹¤ë¦¬ê¸°ì´ë©´(ì¦‰ <wìì—°ìˆ˜>ê°€ ìˆìœ¼ë©´)
 							{
 								try
 								{
@@ -213,13 +213,13 @@ void textManager::updateL()
 									UNREFERENCED_PARAMETER(e);
 								}
 							}
-							else if (tempStr == "acf") // °­Á¦ ÀÚµ¿ ´İ±â(½Ã°£ÀÌ Áö³ª¾ß¸¸ ´İ´Â´Ù.)ÀÌ¸é(Áï <acf>°¡ ÀÖÀ¸¸é)
+							else if (tempStr == "acf") // ê°•ì œ ìë™ ë‹«ê¸°(ì‹œê°„ì´ ì§€ë‚˜ì•¼ë§Œ ë‹«ëŠ”ë‹¤.)ì´ë©´(ì¦‰ <acf>ê°€ ìˆìœ¼ë©´)
 							{
 								_waitCount = 60;
 								_isGoingToBeAutoClosed = TRUE;
 								_shouldBeAutoClosed = TRUE;
 							}
-							else if (tempStr.substr(0, 3) == "acf") // °­Á¦ ÀÚµ¿ ´İ±â(½Ã°£ÀÌ Áö³ª¾ß¸¸ ´İ´Â´Ù.)ÀÌ¸é(Áï <acfÀÚ¿¬¼ö>°¡ ÀÖÀ¸¸é)
+							else if (tempStr.substr(0, 3) == "acf") // ê°•ì œ ìë™ ë‹«ê¸°(ì‹œê°„ì´ ì§€ë‚˜ì•¼ë§Œ ë‹«ëŠ”ë‹¤.)ì´ë©´(ì¦‰ <acfìì—°ìˆ˜>ê°€ ìˆìœ¼ë©´)
 							{
 								try
 								{
@@ -233,7 +233,7 @@ void textManager::updateL()
 									UNREFERENCED_PARAMETER(e);
 								}
 							}
-							else if (tempStr.substr(0,2) == "ac") // ÀÚµ¿ ´İ±âÀÌ¸é(Áï <acÀÚ¿¬¼ö>°¡ ÀÖÀ¸¸é)
+							else if (tempStr.substr(0,2) == "ac") // ìë™ ë‹«ê¸°ì´ë©´(ì¦‰ <acìì—°ìˆ˜>ê°€ ìˆìœ¼ë©´)
 							{
 								try
 								{
@@ -246,17 +246,17 @@ void textManager::updateL()
 									UNREFERENCED_PARAMETER(e);
 								}
 							}
-							else if (tempStr == "ac") // ÀÚµ¿ ´İ±âÀÌ¸é(Áï <ac>°¡ ÀÖÀ¸¸é)
+							else if (tempStr == "ac") // ìë™ ë‹«ê¸°ì´ë©´(ì¦‰ <ac>ê°€ ìˆìœ¼ë©´)
 							{
 								_waitCount = 60;
 								_isGoingToBeAutoClosed = TRUE;
 							}
-							else if (tempStr == "c") // ¼±ÅÃÁö ¼Õ°¡¶ô ¾ÆÀÌÄÜ º¸ÀÌ±âÀÌ¸é(Áï <c>°¡ ÀÖÀ¸¸é)
+							else if (tempStr == "c") // ì„ íƒì§€ ì†ê°€ë½ ì•„ì´ì½˜ ë³´ì´ê¸°ì´ë©´(ì¦‰ <c>ê°€ ìˆìœ¼ë©´)
 							{
 								_shouldWindowHaveChoices = TRUE;
-								_choiceSelected = 1; // ±âº»À¸·Î Ã³À½ °ÍÀÌ ¼±ÅÃµÈ »óÅÂ°¡ µÇ°Ô ÇÑ´Ù.
+								_choiceSelected = 1; // ê¸°ë³¸ìœ¼ë¡œ ì²˜ìŒ ê²ƒì´ ì„ íƒëœ ìƒíƒœê°€ ë˜ê²Œ í•œë‹¤.
 							}
-							else if (tempStr == "zc") // ¼±ÅÃ ÃÊ±âÈ­ÀÌ¸é
+							else if (tempStr == "zc") // ì„ íƒ ì´ˆê¸°í™”ì´ë©´
 							{
 								_choiceSelected = 0;
 							}
@@ -332,29 +332,29 @@ void textManager::updateL()
 
 void textManager::updateBM()
 {
-	// _battleMsgQ1 Ã³¸®(ÇÑ ¹ø¿¡ ÇÑ ±ÛÀÚ¾¿)
+	// _battleMsgQ1 ì²˜ë¦¬(í•œ ë²ˆì— í•œ ê¸€ìì”©)
 	if (_textWindowState1 == TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		if (!_battleMsgQ1.empty()) // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ÀÖÀ¸¸é
+		if (!_battleMsgQ1.empty()) // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ìˆìœ¼ë©´
 		{
-			_textWindowState1 = TEXT_WINDOW_STATE::VISIBLE; // Âü°í: ÀüÅõ ¸Ş½ÃÁö Ã¢¿¡ OPENING »óÅÂ´Â ¾ø´Ù.
+			_textWindowState1 = TEXT_WINDOW_STATE::VISIBLE; // ì°¸ê³ : ì „íˆ¬ ë©”ì‹œì§€ ì°½ì— OPENING ìƒíƒœëŠ” ì—†ë‹¤.
 			_isWholeCurrStrShown1 = FALSE;
 			if (!_currStr1.empty()) _currStr1.clear();
 
-			// istringstream º¯¼ö ºñ¿ì±â
+			// istringstream ë³€ìˆ˜ ë¹„ìš°ê¸°
 			iSS.clear();
 			iSS.str(string());
 		}
 	}
 	else if (_textWindowState1 == TEXT_WINDOW_STATE::VISIBLE)
 	{
-		if (_battleMsgQ1.empty()) // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ¾øÀ¸¸é
-			_textWindowState1 = TEXT_WINDOW_STATE::INVISIBLE; // Âü°í: ÀüÅõ ¸Ş½ÃÁö Ã¢¿¡ CLOSING »óÅÂ´Â ¾ø´Ù.
-		else // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ÀÖÀ¸¸é
+		if (_battleMsgQ1.empty()) // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ì—†ìœ¼ë©´
+			_textWindowState1 = TEXT_WINDOW_STATE::INVISIBLE; // ì°¸ê³ : ì „íˆ¬ ë©”ì‹œì§€ ì°½ì— CLOSING ìƒíƒœëŠ” ì—†ë‹¤.
+		else // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ìˆìœ¼ë©´
 		{
 			if (_battleMsgQ1.size() > 1)
 			{
-				while (_battleMsgQ1.size() > 1) _battleMsgQ1.pop(); // Ãâ·Â ´ë±â ÁßÀÎ ½ºÆ®¸µÀÌ µÑ ÀÌ»óÀÌ¸é ÃÖ±Ù Ãâ·Â ¿¹¾à ½ºÆ®¸µ¸¸ ³²±ä´Ù.
+				while (_battleMsgQ1.size() > 1) _battleMsgQ1.pop(); // ì¶œë ¥ ëŒ€ê¸° ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ë‘˜ ì´ìƒì´ë©´ ìµœê·¼ ì¶œë ¥ ì˜ˆì•½ ìŠ¤íŠ¸ë§ë§Œ ë‚¨ê¸´ë‹¤.
 
 				_isWholeCurrStrShown1 = FALSE;
 				_currStr1.clear();
@@ -364,7 +364,7 @@ void textManager::updateBM()
 
 			if (_isWholeCurrStrShown1 && _battleMsgQ1.front().second > 0)
 			{
-				--_battleMsgQ1.front().second; // ³²Àº Ç¥½Ã ½Ã°£ °¨¼Ò
+				--_battleMsgQ1.front().second; // ë‚¨ì€ í‘œì‹œ ì‹œê°„ ê°ì†Œ
 			}
 			else if (!_isWholeCurrStrShown1)
 			{
@@ -427,25 +427,25 @@ void textManager::updateBM()
 		}
 	}
 
-	// _battleMsgQ2 Ã³¸®(ÇÑ ¹ø¿¡ ÇÑ ÁÙ ÀüºÎ) - istringstream ºñÀÌ¿ë(ºÒÇÊ¿äÇÏ¹Ç·Î)
+	// _battleMsgQ2 ì²˜ë¦¬(í•œ ë²ˆì— í•œ ì¤„ ì „ë¶€) - istringstream ë¹„ì´ìš©(ë¶ˆí•„ìš”í•˜ë¯€ë¡œ)
 	if (_textWindowState2 == TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		if (!_battleMsgQ2.empty()) // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ÀÖÀ¸¸é
+		if (!_battleMsgQ2.empty()) // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ìˆìœ¼ë©´
 		{
-			_textWindowState2 = TEXT_WINDOW_STATE::VISIBLE; // ÀüÅõ ¸Ş½ÃÁö Ã¢¿¡ OPENING »óÅÂ´Â ¾ø´Ù.
+			_textWindowState2 = TEXT_WINDOW_STATE::VISIBLE; // ì „íˆ¬ ë©”ì‹œì§€ ì°½ì— OPENING ìƒíƒœëŠ” ì—†ë‹¤.
 			_isWholeCurrStrShown2 = FALSE;
 			if (!_currStr2.empty()) _currStr2.clear();
 		}
 	}
 	else if (_textWindowState2 == TEXT_WINDOW_STATE::VISIBLE)
 	{
-		if (_battleMsgQ2.empty()) // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ¾øÀ¸¸é
-			_textWindowState2 = TEXT_WINDOW_STATE::INVISIBLE; // ÀüÅõ ¸Ş½ÃÁö Ã¢¿¡ CLOSING »óÅÂ´Â ¾ø´Ù.
-		else // Ãâ·Â (´ë±â) ÁßÀÎ ½ºÆ®¸µÀÌ ÀÖÀ¸¸é
+		if (_battleMsgQ2.empty()) // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ì—†ìœ¼ë©´
+			_textWindowState2 = TEXT_WINDOW_STATE::INVISIBLE; // ì „íˆ¬ ë©”ì‹œì§€ ì°½ì— CLOSING ìƒíƒœëŠ” ì—†ë‹¤.
+		else // ì¶œë ¥ (ëŒ€ê¸°) ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ìˆìœ¼ë©´
 		{
 			if (_battleMsgQ2.size() > 1)
 			{
-				while (_battleMsgQ2.size() > 1) _battleMsgQ2.pop(); // Ãâ·Â ´ë±â ÁßÀÎ ½ºÆ®¸µÀÌ µÑ ÀÌ»óÀÌ¸é ÃÖ±Ù Ãâ·Â ¿¹¾à ½ºÆ®¸µ¸¸ ³²±ä´Ù.
+				while (_battleMsgQ2.size() > 1) _battleMsgQ2.pop(); // ì¶œë ¥ ëŒ€ê¸° ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ë‘˜ ì´ìƒì´ë©´ ìµœê·¼ ì¶œë ¥ ì˜ˆì•½ ìŠ¤íŠ¸ë§ë§Œ ë‚¨ê¸´ë‹¤.
 
 				_isWholeCurrStrShown2 = FALSE;
 				_currStr2.clear();
@@ -453,7 +453,7 @@ void textManager::updateBM()
 
 			if (_isWholeCurrStrShown2 && _battleMsgQ2.front().second > 0)
 			{
-				--_battleMsgQ2.front().second; // ³²Àº Ç¥½Ã ½Ã°£ °¨¼Ò
+				--_battleMsgQ2.front().second; // ë‚¨ì€ í‘œì‹œ ì‹œê°„ ê°ì†Œ
 			}
 			else if (!_isWholeCurrStrShown2)
 			{
@@ -481,7 +481,7 @@ void textManager::updateC()
 {
 	if (_chrByChrQ.size() > 1)
 	{
-		while (_chrByChrQ.size() > 1) _chrByChrQ.pop(); // Ãâ·Â ´ë±â ÁßÀÎ ½ºÆ®¸µÀÌ µÑ ÀÌ»óÀÌ¸é ÃÖ±Ù Ãâ·Â ¿¹¾à ½ºÆ®¸µ¸¸ ³²±ä´Ù.
+		while (_chrByChrQ.size() > 1) _chrByChrQ.pop(); // ì¶œë ¥ ëŒ€ê¸° ì¤‘ì¸ ìŠ¤íŠ¸ë§ì´ ë‘˜ ì´ìƒì´ë©´ ìµœê·¼ ì¶œë ¥ ì˜ˆì•½ ìŠ¤íŠ¸ë§ë§Œ ë‚¨ê¸´ë‹¤.
 		_isWholeCurrStrShown1 = FALSE;
 		_currStr1.clear();
 		iSS.clear();
@@ -560,23 +560,23 @@ void textManager::render(HDC hDC, string text, int destX, int destY, int fontIdx
 	for (size_t i = 0; i < text.size(); ++i)
 	{
 		char chr = text[i];
-		if (chr == '\n') // \n: °³Çà
+		if (chr == '\n') // \n: ê°œí–‰
 		{
 			_currPosX = destX;
 			_currPosY += (*fontInfo)[32].height + 16;
 		}
-		else if (chr == '\t') // \t: ¼¼ Ä­ ¶ç±â
+		else if (chr == '\t') // \t: ì„¸ ì¹¸ ë„ê¸°
 		{
 			_currPosX += (*fontInfo)[32].width * 3;
 		}
-		else if (chr == '\\' && i < text.size() - 1 && text[i + 1] == 'n') // \\n: raw string literal °³Çà
+		else if (chr == '\\' && i < text.size() - 1 && text[i + 1] == 'n') // \\n: raw string literal ê°œí–‰
 		{
 			_currPosX = destX;
 			_currPosY += (*fontInfo)[32].height + 16;
 			i += 1;
 			continue;
 		}
-		else if (chr == '\\' && i < text.size() - 1 && text[i + 1] == 't') // \\t: raw string literal ¼¼ Ä­ ¶ç±â
+		else if (chr == '\\' && i < text.size() - 1 && text[i + 1] == 't') // \\t: raw string literal ì„¸ ì¹¸ ë„ê¸°
 		{
 			_currPosX += (*fontInfo)[32].width * 3;
 			i += 1;
@@ -606,19 +606,19 @@ void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
 		_shouldRenderUsingWindowCoords = TRUE;
 		PatBlt(_hTextWindowDC, 0, 0, WINW, 320, BLACKNESS);
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê Å¬¸®ÇÎ ¿µ¿ª ÁöÁ¤ÇÏ±â
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µ í´ë¦¬í•‘ ì˜ì—­ ì§€ì •í•˜ê¸°
 		if (_textWindowState1 == TEXT_WINDOW_STATE::OPENING || _textWindowState1 == TEXT_WINDOW_STATE::CLOSING)
 		{
 			IMG->setRctClipRgn(_hTextWindowDC, 0, 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount);
 		}
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ Ã¢ Ãâ·ÂÇÏ±â
-		IMG->render("´ë»ç Ãâ·Â Ã¢ ½ºÅ²", _hTextWindowDC, 0, 0);
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ì°½ ì¶œë ¥í•˜ê¸°
+		IMG->render("ëŒ€ì‚¬ ì¶œë ¥ ì°½ ìŠ¤í‚¨", _hTextWindowDC, 0, 0);
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ ´ë»ç Ãâ·ÂÇÏ±â
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ëŒ€ì‚¬ ì¶œë ¥í•˜ê¸°
 		TXT->render(_hTextWindowDC, _currStr1, 31, 40, fontIdx, colorIdx);
 
-		// ¼±ÅÃÁö°¡ ÀÖ´Ù¸é ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ ¼±ÅÃ ¼Õ°¡¶ô ¾ÆÀÌÄÜÀ» Ãâ·ÂÇÏ±â
+		// ì„ íƒì§€ê°€ ìˆë‹¤ë©´ ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ì„ íƒ ì†ê°€ë½ ì•„ì´ì½˜ì„ ì¶œë ¥í•˜ê¸°
 		if (_shouldWindowHaveChoices)
 		{
 			switch (_choiceSelected)
@@ -632,13 +632,13 @@ void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
 					_currPosY -= 16;
 					break;
 			}
-			IMG->frameRender("Èò»ö Å¸ÀÏ¼Â0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
-			IMG->frameRender("Èò»ö Å¸ÀÏ¼Â0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
-			IMG->frameRender("Èò»ö Å¸ÀÏ¼Â0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
-			IMG->frameRender("Èò»ö Å¸ÀÏ¼Â0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
+			IMG->frameRender("í°ìƒ‰ íƒ€ì¼ì…‹0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
+			IMG->frameRender("í°ìƒ‰ íƒ€ì¼ì…‹0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
+			IMG->frameRender("í°ìƒ‰ íƒ€ì¼ì…‹0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
+			IMG->frameRender("í°ìƒ‰ íƒ€ì¼ì…‹0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
 		}
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ ÀÖ´Â Ã¢°ú ´ë»ç¸¦ hDC ºñÆ®¸Ê¿¡ Ãâ·ÂÇÏ±â
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ìˆëŠ” ì°½ê³¼ ëŒ€ì‚¬ë¥¼ hDC ë¹„íŠ¸ë§µì— ì¶œë ¥í•˜ê¸°
 		if (_shouldWindowUseTheTopPane)
 		{
 			if (_textWindowState1 == TEXT_WINDOW_STATE::OPENING || _textWindowState1 == TEXT_WINDOW_STATE::CLOSING)
@@ -693,20 +693,20 @@ void textManager::renderBM(HDC hDC, int fontIdx, int colorIdx)
 		_shouldRenderUsingWindowCoords = TRUE;
 		PatBlt(_hTextWindowDC, 0, 0, WINW, 96, BLACKNESS);
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ Ã¢ Ãâ·ÂÇÏ±â
-		IMG->render("ÀüÅõ ¸Ş½ÃÁö Ã¢ ½ºÅ²", _hTextWindowDC, 0, 0);
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ì°½ ì¶œë ¥í•˜ê¸°
+		IMG->render("ì „íˆ¬ ë©”ì‹œì§€ ì°½ ìŠ¤í‚¨", _hTextWindowDC, 0, 0);
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ ´ë»ç Ãâ·ÂÇÏ±â
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ëŒ€ì‚¬ ì¶œë ¥í•˜ê¸°
 		TXT->render(_hTextWindowDC, _currStr2, 31, 24, fontIdx, colorIdx);
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ ÀÖ´Â Ã¢°ú ´ë»ç¸¦ hDC ºñÆ®¸Ê¿¡ Ãâ·ÂÇÏ±â
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ìˆëŠ” ì°½ê³¼ ëŒ€ì‚¬ë¥¼ hDC ë¹„íŠ¸ë§µì— ì¶œë ¥í•˜ê¸°
 		if (!_shouldWindowUseTheTopPane)
 			BitBlt(hDC, 0, 31, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
 		else
 			BitBlt(hDC, 0, WINH - 63 - 96, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);
 		_shouldRenderUsingWindowCoords = _prevRenderMode;
 	}
-	else if (_textWindowState1 != TEXT_WINDOW_STATE::INVISIBLE) // ÀÌ else´Â ¸Ş½ÃÁö Ç¥½Ã ¿ì¼±¼øÀ§¸¦ Àû¿ëÇÏ·Á¸é ÀÖ¾î¾ß ÇÑ´Ù.
+	else if (_textWindowState1 != TEXT_WINDOW_STATE::INVISIBLE) // ì´ elseëŠ” ë©”ì‹œì§€ í‘œì‹œ ìš°ì„ ìˆœìœ„ë¥¼ ì ìš©í•˜ë ¤ë©´ ìˆì–´ì•¼ í•œë‹¤.
 	{
 		_prevRenderMode = _shouldRenderUsingWindowCoords;
 		_shouldRenderUsingWindowCoords = TRUE;
@@ -714,13 +714,13 @@ void textManager::renderBM(HDC hDC, int fontIdx, int colorIdx)
 		GdiTransparentBlt(_hTextWindowDC, 0, 0, WINW, 96,
 						  _hTextWindowDC, 0, 0, WINW, 96, RGB(0, 0, 0));
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ Ã¢ Ãâ·ÂÇÏ±â
-		IMG->render("ÀüÅõ ¸Ş½ÃÁö Ã¢ ½ºÅ²", _hTextWindowDC, 0, 0);
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ì°½ ì¶œë ¥í•˜ê¸°
+		IMG->render("ì „íˆ¬ ë©”ì‹œì§€ ì°½ ìŠ¤í‚¨", _hTextWindowDC, 0, 0);
 				
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ ´ë»ç Ãâ·ÂÇÏ±â
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ëŒ€ì‚¬ ì¶œë ¥í•˜ê¸°
 		TXT->render(_hTextWindowDC, _currStr1, 31, 24, fontIdx, colorIdx);
 
-		// ±Û Ãâ·Â Ã¢ DC ºñÆ®¸Ê¿¡ ÀÖ´Â Ã¢°ú ´ë»ç¸¦ hDC ºñÆ®¸Ê¿¡ Ãâ·ÂÇÏ±â
+		// ê¸€ ì¶œë ¥ ì°½ DC ë¹„íŠ¸ë§µì— ìˆëŠ” ì°½ê³¼ ëŒ€ì‚¬ë¥¼ hDC ë¹„íŠ¸ë§µì— ì¶œë ¥í•˜ê¸°
 		if (!_shouldWindowUseTheTopPane)
 		{
 			if (_textWindowAlpha == 0xFF) BitBlt(hDC, 0, 31, WINW, 96, _hTextWindowDC, 0, 0, SRCCOPY);

@@ -1,14 +1,14 @@
 #pragma once
 
-// fnt ¹ÙÀÌ³Ê¸® ÆÄÀÏ ºĞ¼®¿ë ±¸Á¶Ã¼
-// (DWORD, WORD, WORD, WORD, WORD, short, short, short, BYTE, BYTE°¡ ÇÑ ´ÜÀ§ÀÌ´Ù.)
-// (ÇÑ ´ÜÀ§¿¡¼­ °¢ °ªÀº id, x, y, width, height, xOffset, yOffset, xAdvance, page, chnlÀ» ÀÇ¹ÌÇÑ´Ù.)
+// fnt ë°”ì´ë„ˆë¦¬ íŒŒì¼ ë¶„ì„ìš© êµ¬ì¡°ì²´
+// (DWORD, WORD, WORD, WORD, WORD, short, short, short, BYTE, BYTEê°€ í•œ ë‹¨ìœ„ì´ë‹¤.)
+// (í•œ ë‹¨ìœ„ì—ì„œ ê° ê°’ì€ id, x, y, width, height, xOffset, yOffset, xAdvance, page, chnlì„ ì˜ë¯¸í•œë‹¤.)
 typedef struct tagCharacterDescriptor
 {
-	int x, y; // ¹®ÀÚ ±×¸² ÁÂ»ó´Ü À§Ä¡
-	int width, height; // ¹®ÀÚ ±×¸² ³Êºñ, ³ôÀÌ
+	int x, y; // ë¬¸ì ê·¸ë¦¼ ì¢Œìƒë‹¨ ìœ„ì¹˜
+	int width, height; // ë¬¸ì ê·¸ë¦¼ ë„ˆë¹„, ë†’ì´
 
-	// »ı¼ºÀÚ(ctor) Á¤ÀÇ
+	// ìƒì„±ì(ctor) ì •ì˜
 	tagCharacterDescriptor(): x(0), y(0), width(0), height(0) {}
 } CD;
 
