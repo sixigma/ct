@@ -86,13 +86,20 @@ public:
 	void animRender(HDC hDC, int destX, int destY, animation* anim);
 	void animRenderH(HDC hDC, int destX, int destY, animation* anim);
 
-	void loopRender(HDC hDC, const LPRECT drawArea, int offSetX, int offSetY);
+	// 지정 영역이 채워지도록 그림을 반복 출력 하는 함수
+	void loopRender(HDC hDC, const LPRECT drawArea, int offSetX = 0, int offSetY = 0);
+
+	// 지정 영역(destArea로 지정한다.)이 채워지도록 그림 일부(srcArea로 영역을 지정한다.)를 반복 출력 하는 함수
+	void loopRenderP(HDC hDC, const LPRECT destArea, const LPRECT srcArea, int offSetX = 0, int offSetY = 0);
 
 	// 이미지 특정 색을 변경하고 새 색을 반환하는 함수(32 비트 비트맵 전용)
 	COLORREF changeColor(COLORREF originalColor, COLORREF newColor);
 
 	// 이미지 색을 예외 색을 제외하고 전부 다른 특정 색으로 변경하는 함수(32 비트 비트맵 전용)
 	COLORREF changeAllColors(COLORREF newColor, COLORREF exceptionalColor = RGB(255, 0, 255));
+
+	// 기존 image를 복사하여 새 image를 만드는 함수(사용이 끝나면 release를 호출하고 delete를 호출하여야 한다.)
+	image* copyNew() const;
 
 	inline HDC getMemDC() { return _imageInfo->hMemDC; }
 
@@ -127,6 +134,5 @@ public:
 
 	inline int getFrameWidth() { return _imageInfo->frameWidth; }
 	inline int getFrameHeight() { return _imageInfo->frameHeight; }
-
 };
 

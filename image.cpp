@@ -11,6 +11,8 @@ HRESULT image::init(int width, int height)
 	HDC hDC = GetDC(_hWnd);
 
 	_imageInfo = new IMAGE_INFO;
+	_imageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
+	_imageInfo->resID = 0;
 	_imageInfo->hMemDC = CreateCompatibleDC(hDC);
 	_imageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
 	_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
@@ -25,10 +27,10 @@ HRESULT image::init(int width, int height)
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, WINW, WINH);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
-	_blendImageInfo->width = WINW;
-	_blendImageInfo->height = WINH;
+	_blendImageInfo->width = width;
+	_blendImageInfo->height = height;
 	
 	if (_imageInfo == nullptr)
 	{
@@ -40,7 +42,7 @@ HRESULT image::init(int width, int height)
 	return S_OK;
 }
 
-HRESULT image::init(const char * fileName, int width, int height, BOOL hasTransparentColor, COLORREF transparentColor)
+HRESULT image::init(const char* fileName, int width, int height, BOOL hasTransparentColor, COLORREF transparentColor)
 {
 	if (_imageInfo != nullptr) release();
 
@@ -71,7 +73,7 @@ HRESULT image::init(const char * fileName, int width, int height, BOOL hasTransp
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
 	_blendImageInfo->width = width;
 	_blendImageInfo->height = height;
@@ -79,17 +81,15 @@ HRESULT image::init(const char * fileName, int width, int height, BOOL hasTransp
 	if (_imageInfo->hBit == nullptr)
 	{
 		release();
-
 		return E_FAIL;
 	}
 
 	ReleaseDC(_hWnd, hDC);
-
 	return S_OK;
 }
 
 
-HRESULT image::init(const char * fileName, int width, int height, int frameX, int frameY, BOOL hasTransparentColor, COLORREF transparentColor)
+HRESULT image::init(const char* fileName, int width, int height, int frameX, int frameY, BOOL hasTransparentColor, COLORREF transparentColor)
 {
 	if (_imageInfo != nullptr) release();
 
@@ -124,7 +124,7 @@ HRESULT image::init(const char * fileName, int width, int height, int frameX, in
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
 	_blendImageInfo->width = width;
 	_blendImageInfo->height = height;
@@ -132,12 +132,10 @@ HRESULT image::init(const char * fileName, int width, int height, int frameX, in
 	if (_imageInfo->hBit == nullptr)
 	{
 		release();
-
 		return E_FAIL;
 	}
 
 	ReleaseDC(_hWnd, hDC);
-
 	return S_OK;
 }
 
@@ -184,7 +182,7 @@ HRESULT image::init(const char* fileName, int x, int y, int width, int height, i
 	_blendImageInfo->loadType = IMAGE_LOAD_TYPE::LOAD_EMPTY;
 	_blendImageInfo->resID = 0;
 	_blendImageInfo->hMemDC = CreateCompatibleDC(hDC);
-	_blendImageInfo->hBit = (HBITMAP)CreateCompatibleBitmap(hDC, width, height);
+	_blendImageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
 	_blendImageInfo->hOBit = (HBITMAP)SelectObject(_blendImageInfo->hMemDC, _blendImageInfo->hBit);
 	_blendImageInfo->width = width;
 	_blendImageInfo->height = height;
@@ -691,50 +689,95 @@ void image::loopRender(HDC hDC, const LPRECT drawArea, int offSetX, int offSetY)
 	if (offSetX < 0) offSetX = _imageInfo->width + (offSetX % _imageInfo->width);
 	if (offSetY < 0) offSetY = _imageInfo->height + (offSetY % _imageInfo->height);
 
-	int srcWidth{}, srcHeight{};
-	RECT rctDest{}, rctSrc{};
+	int tempSrcW{}, tempSrcH{};
+	RECT tempDestRct{}, tempSrcRct{};
 
-	int drawAreaX = drawArea->left;					
-	int drawAreaY = drawArea->top;
-	int drawAreaW = drawArea->right - drawAreaX;
-	int drawAreaH = drawArea->bottom - drawAreaY;
+	int destAreaX = destArea->left;
+	int destAreaY = destArea->top;
+	int destAreaW = destArea->right - destAreaX;
+	int destAreaH = destArea->bottom - destAreaY;
 
-	for (int y = 0; y < drawAreaH; y += srcHeight)
+	for (int y = 0; y < destAreaH; y += tempSrcH)
 	{
-		rctSrc.top = (y + offSetY) % _imageInfo->height;
-		rctSrc.bottom = _imageInfo->height;
+		tempSrcRct.top = (y + offSetY) % _imageInfo->height;
+		tempSrcRct.bottom = _imageInfo->height;
+		tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
 
-		srcHeight = rctSrc.bottom - rctSrc.top;
-
-		if (y + srcHeight > drawAreaH)
+		if (y + tempSrcH > destAreaH)
 		{
-			rctSrc.bottom -= (y + srcHeight) - drawAreaH;
-			srcHeight = rctSrc.bottom - rctSrc.top;
+			tempSrcRct.bottom -= (y + tempSrcH) - destAreaH;
+			tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
 		}
 
-		rctDest.top = y + drawAreaY;
-		rctDest.bottom = rctDest.top + srcHeight;
+		tempDestRct.top = y + destAreaY;
+		// tempDestRct.bottom = destRct.top + srcHeight;
 
-		for (int x = 0; x < drawAreaW; x += srcWidth)
+		for (int x = 0; x < destAreaW; x += tempSrcW)
 		{
-			rctSrc.left = (x + offSetX) % _imageInfo->width;
-			rctSrc.right = _imageInfo->width;
+			tempSrcRct.left = (x + offSetX) % _imageInfo->width;
+			tempSrcRct.right = _imageInfo->width;
+			tempSrcW = tempSrcRct.right - tempSrcRct.left;
 
-			srcWidth = rctSrc.right - rctSrc.left;
-
-			if (x + srcWidth > drawAreaW)
+			if (x + tempSrcW > destAreaW)
 			{
-				rctSrc.right -= (x + srcWidth) - drawAreaW;
-				srcWidth = rctSrc.right - rctSrc.left;
+				tempSrcRct.right -= (x + tempSrcW) - destAreaW;
+				tempSrcW = tempSrcRct.right - tempSrcRct.left;
 			}
 
-			rctDest.left = x + drawAreaX;
-			rctDest.right = rctDest.left + srcWidth;
+			tempDestRct.left = x + destAreaX;
+			// tempDestRct.right = destRct.left + srcWidth;
 
-			render(hDC, rctDest.left, rctDest.top,
-				rctSrc.left, rctSrc.top,
-				rctSrc.right - rctSrc.left,
-				rctSrc.bottom - rctSrc.top);
+			render(hDC, tempDestRct.left, tempDestRct.top,
+				tempSrcRct.left, tempSrcRct.top, tempSrcW, tempSrcH);
+		}
+	}
+}
+
+void image::loopRenderP(HDC hDC, const LPRECT destArea, const LPRECT srcArea, int offSetX, int offSetY)
+{
+	if (offSetX < 0) offSetX = srcArea->right + (offSetX % (srcArea->right - srcArea->left));
+	if (offSetY < 0) offSetY = srcArea->bottom + (offSetY % (srcArea->bottom - srcArea->top));
+
+	int tempSrcW{}, tempSrcH{};
+	RECT tempDestRct{}, tempSrcRct{};
+
+	int destAreaX = destArea->left;
+	int destAreaY = destArea->top;
+	int destAreaW = destArea->right - destAreaX;
+	int destAreaH = destArea->bottom - destAreaY;
+
+	for (int y = 0; y < destAreaH; y += tempSrcH)
+	{
+		tempSrcRct.top = srcArea->top + (y + offSetY) % (srcArea->bottom - srcArea->top);
+		tempSrcRct.bottom = srcArea->top + (srcArea->bottom - srcArea->top);
+		tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
+
+		if (y + tempSrcH > destAreaH)
+		{
+			tempSrcRct.bottom -= (y + tempSrcH) - destAreaH;
+			tempSrcH = tempSrcRct.bottom - tempSrcRct.top;
+		}
+
+		tempDestRct.top = y + destAreaY;
+		// tempDestRct.bottom = destRct.top + tempSrcH;
+
+		for (int x = 0; x < destAreaW; x += tempSrcW)
+		{
+			tempSrcRct.left = srcArea->left + (x + offSetX) % (srcArea->right - srcArea->left);
+			tempSrcRct.right = srcArea->left + (srcArea->right - srcArea->left);
+			tempSrcW = tempSrcRct.right - tempSrcRct.left;
+
+			if (x + tempSrcW > destAreaW)
+			{
+				tempSrcRct.right -= (x + tempSrcW) - destAreaW;
+				tempSrcW = tempSrcRct.right - tempSrcRct.left;
+			}
+
+			tempDestRct.left = x + destAreaX;
+			// tempDestRct.right = destRct.left + tempSrcW;
+
+			render(hDC, tempDestRct.left, tempDestRct.top,
+				tempSrcRct.left, tempSrcRct.top, tempSrcW, tempSrcH);
 		}
 	}
 }
@@ -743,7 +786,7 @@ COLORREF image::changeColor(COLORREF originalColor, COLORREF newColor)
 {
 	HDC hTempDC = CreateCompatibleDC(_imageInfo->hMemDC);
 	BITMAPINFO bI = { 0 };
-	DWORD* ptrToBitmapBits = nullptr;
+	DWORD* bitmapData = nullptr;
 	bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bI.bmiHeader.biBitCount = 32;
 	bI.bmiHeader.biWidth = _imageInfo->width;
@@ -759,17 +802,17 @@ COLORREF image::changeColor(COLORREF originalColor, COLORREF newColor)
 	BYTE newG = static_cast<BYTE>((newColor >> 8) & 0xFF);
 	BYTE newR = static_cast<BYTE>((newColor) & 0xFF);
 
-	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&ptrToBitmapBits), 0, 0);
-	if (hTempBitmap == NULL) return originalColor;
+	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&bitmapData), 0, 0);
+	if (hTempBitmap == nullptr) return originalColor;
 	HBITMAP hTempOBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 	BitBlt(hTempDC, 0, 0, _imageInfo->width, _imageInfo->height, _imageInfo->hMemDC, 0, 0, SRCCOPY);
 	size_t area = static_cast<size_t>(_imageInfo->width * _imageInfo->height);
 	for (size_t i = 0; i < area; ++i)
 	{
-		BYTE* ptrToCurrPixel = reinterpret_cast<BYTE*>(&ptrToBitmapBits[i]);
-		if ((ptrToCurrPixel[0] == originalB) && (ptrToCurrPixel[1] == originalG) && (ptrToCurrPixel[2] == originalR))
+		BYTE* currPixelData = reinterpret_cast<BYTE*>(&bitmapData[i]);
+		if ((currPixelData[0] == originalB) && (currPixelData[1] == originalG) && (currPixelData[2] == originalR))
 		{
-			ptrToCurrPixel[0] = newB; ptrToCurrPixel[1] = newG; ptrToCurrPixel[2] = newR;
+			currPixelData[0] = newB; currPixelData[1] = newG; currPixelData[2] = newR;
 		}
 	}
 	BitBlt(_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, hTempDC, 0, 0, SRCCOPY);
@@ -782,7 +825,7 @@ COLORREF image::changeAllColors(COLORREF newColor, COLORREF exceptionalColor)
 {
 	HDC hTempDC = CreateCompatibleDC(_imageInfo->hMemDC);
 	BITMAPINFO bI = { 0 };
-	DWORD* ptrToBitmapBits = nullptr;
+	DWORD* bitmapData = nullptr;
 	bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bI.bmiHeader.biBitCount = 32;
 	bI.bmiHeader.biWidth = _imageInfo->width;
@@ -798,21 +841,72 @@ COLORREF image::changeAllColors(COLORREF newColor, COLORREF exceptionalColor)
 	BYTE exceptG = static_cast<BYTE>((exceptionalColor >> 8) & 0xFF);
 	BYTE exceptR = static_cast<BYTE>(exceptionalColor & 0xFF);
 
-	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&ptrToBitmapBits), 0, 0);
-	if (hTempBitmap == NULL) return newColor;
+	HBITMAP hTempBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&bitmapData), 0, 0);
+	if (hTempBitmap == nullptr) return newColor;
 	HBITMAP hTempOBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 	BitBlt(hTempDC, 0, 0, _imageInfo->width, _imageInfo->height, _imageInfo->hMemDC, 0, 0, SRCCOPY);
 	size_t area = static_cast<size_t>(_imageInfo->width * _imageInfo->height);
 	for (size_t i = 0; i < area; ++i)
 	{
-		BYTE* ptrToCurrPixel = reinterpret_cast<BYTE*>(&ptrToBitmapBits[i]);
-		if ((ptrToCurrPixel[0] != exceptB) || (ptrToCurrPixel[1] != exceptG) || (ptrToCurrPixel[2] != exceptR))
+		BYTE* currPixelData = reinterpret_cast<BYTE*>(&bitmapData[i]);
+		if ((currPixelData[0] != exceptB) || (currPixelData[1] != exceptG) || (currPixelData[2] != exceptR))
 		{
-			ptrToCurrPixel[0] = newB; ptrToCurrPixel[1] = newG; ptrToCurrPixel[2] = newR;
+			currPixelData[0] = newB; currPixelData[1] = newG; currPixelData[2] = newR;
 		}
 	}
 	BitBlt(_imageInfo->hMemDC, 0, 0, _imageInfo->width, _imageInfo->height, hTempDC, 0, 0, SRCCOPY);
 	DeleteObject(SelectObject(hTempDC, hTempOBitmap));
 	DeleteDC(hTempDC);
 	return newColor;
+}
+
+image* image::copyNew() const
+{
+	image* newImg = new image;
+
+	newImg->_imageInfo = new IMAGE_INFO;
+	newImg->_imageInfo->resID = this->_imageInfo->resID;
+	newImg->_imageInfo->hMemDC = CreateCompatibleDC(this->_imageInfo->hMemDC);
+	newImg->_imageInfo->width = this->_imageInfo->width;
+	newImg->_imageInfo->height = this->_imageInfo->height;
+	newImg->_imageInfo->hBit = CreateCompatibleBitmap(this->_imageInfo->hMemDC, newImg->_imageInfo->width, newImg->_imageInfo->height); // 주의: newImg->_imageInfo->hMemDC를 this->_imageInfo->hMemDC 대신 사용하면 정상 작동을 하지 않는다. newImg->_imageInfo->hMemDC에 선택된 비트맵이 무엇인지 생각하면 이해하기 쉽다.
+	newImg->_imageInfo->hOBit = (HBITMAP)SelectObject(newImg->_imageInfo->hMemDC, newImg->_imageInfo->hBit);
+	if (!BitBlt(newImg->_imageInfo->hMemDC, 0, 0, newImg->_imageInfo->width, newImg->_imageInfo->height, this->_imageInfo->hMemDC, 0, 0, SRCCOPY))
+	{
+		DeleteObject(SelectObject(newImg->_imageInfo->hMemDC, newImg->_imageInfo->hOBit));
+		DeleteDC(newImg->_imageInfo->hMemDC);
+		return nullptr;
+	}
+	newImg->_imageInfo->currentFrameX = this->_imageInfo->currentFrameX;
+	newImg->_imageInfo->currentFrameY = this->_imageInfo->currentFrameY;
+	newImg->_imageInfo->maxFrameX = this->_imageInfo->maxFrameX;
+	newImg->_imageInfo->maxFrameY = this->_imageInfo->maxFrameY;
+	newImg->_imageInfo->frameWidth = this->_imageInfo->frameWidth;
+	newImg->_imageInfo->frameHeight = this->_imageInfo->frameHeight;
+	newImg->_imageInfo->loadType = this->_imageInfo->loadType;
+
+	if (this->_fileName != nullptr)
+	{
+		size_t len = strlen(this->_fileName);
+		newImg->_fileName = new CHAR[len + 1];
+		strcpy_s(newImg->_fileName, len + 1, this->_fileName);
+	}
+
+	newImg->_hasTransparentColor = this->_hasTransparentColor;
+	newImg->_transparentColor = this->_transparentColor;
+
+	newImg->_blendFunc.BlendFlags = 0;
+	newImg->_blendFunc.AlphaFormat = 0;
+	newImg->_blendFunc.BlendOp = AC_SRC_OVER;
+
+	newImg->_blendImageInfo = new IMAGE_INFO;
+	newImg->_blendImageInfo->loadType = this->_blendImageInfo->loadType;
+	newImg->_blendImageInfo->resID = this->_blendImageInfo->resID;
+	newImg->_blendImageInfo->hMemDC = CreateCompatibleDC(this->_imageInfo->hMemDC);
+	newImg->_blendImageInfo->hBit = CreateCompatibleBitmap(newImg->_imageInfo->hMemDC, newImg->_imageInfo->width, newImg->_imageInfo->height);
+	newImg->_blendImageInfo->hOBit = (HBITMAP)SelectObject(newImg->_blendImageInfo->hMemDC, newImg->_blendImageInfo->hBit);
+	newImg->_blendImageInfo->width = newImg->_imageInfo->width;
+	newImg->_blendImageInfo->height = newImg->_imageInfo->height;
+
+ 	return newImg;
 }

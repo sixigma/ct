@@ -1,50 +1,48 @@
 #include "stdafx.h"
 #include "gameScene.h"
-//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") // �ܼ� â ����
 
 int gameScene::_countForReEnablingKeyInput;
 
-gameScene::gameScene()
+gameScene::gameScene(int anyNum)
 {
+	UNREFERENCED_PARAMETER(anyNum);
+
+	_currOrg = _newOrg = { 0, 0 };
+
+	_totRegion = { 0, 0, WINW, WINH };
+	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+
+	_p = new player;
+	_p->init();
 }
 
 gameScene::~gameScene()
 {
-}
-
-HRESULT gameScene::init()
-{
-	_currOrg = _newOrg = { 0, 0 };
-
-	_totRegion = { 0, 0, 3036, 640 };
-	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.top };
-	//
-	_p = new player;
-	_p->init();
-	//
-
-	return S_OK;
-}
-
-void gameScene::release()
-{
-	//
 	_p->release();
 	SAFE_DEL(_p);
-	//
-
 }
+
+HRESULT gameScene::init() {	return S_OK; } // 변경 금지
+void gameScene::release() { } // 변경 금지
 
 void gameScene::update()
 {
-	if (KEY->down('X') && TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
+	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
+		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		TXT->toggleTextWindowPos();
+		if (KEY->down('X')) TXT->toggleTextWindowPos();
 	}
-	//
-	_p->update();
-	//
 
+	_p->update();
+
+
+
+
+
+	// 출력할 글 갱신
+	if (_isInBattle) TXT->updateBM();
+	else if (_isMenuDisplayed) TXT->updateC();
+	else TXT->updateL();
 }
 
 void gameScene::render()
@@ -59,10 +57,14 @@ void gameScene::render()
 	_p->render();
 	//
 
-	if (TXT->getTextWindowState() != TEXT_WINDOW_STATE::INVISIBLE)
+	// 글 출력
+	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
+		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE)
 	{
-		TXT->renderDialog(getMemDC());
+		if (_isInBattle) TXT->renderBM(getMemDC());
+		else TXT->renderL(getMemDC());
 	}
+	else if (_isMenuDisplayed) TXT->renderC(getMemDC(), _menuMsgPos.x, _menuMsgPos.y);
 
 #ifdef _DEBUG
 		{

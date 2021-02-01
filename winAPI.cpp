@@ -10,15 +10,15 @@
 
 HINSTANCE	_hInst;
 HWND		_hWnd;
-POINT		_mouse, _currOrg, _newOrg;
+POINT		_mouse, _currOrg, _newOrg, _menuMsgPos;
 RECT		_camMovLim, _totRegion;
-BOOL		_shouldChNotMove, _shouldBePaused, _shouldFadeOut, _shouldShowMenu;
+BOOL		_isChrUnmovable, _isGamePaused{ FALSE }, _isScrBlackingOut{ FALSE }, _isMenuDisplayed{ FALSE },
+			_isInBattle{ FALSE }, _isActiveBattle{ TRUE }, _shouldRenderUsingWindowCoords{ FALSE }, _prevRenderMode{ FALSE };
 float		_currMasterVolume, _currBGMVolume, _currSFXVolume;
-string		_playChNames[7]{ "Crono", "Lucca", "Marle", "Frog", "Robo", "Ayla", "Magus"};
-string		_currentLine = "";
-int			_battleGaugeSpeed = 4, _textSpeed = 4, _textWindowSkin = 0, _battleGaugeType = 1;
-BOOL		_isActiveBattle = true, _shouldRenderUsingWindowCoords = false;
+string		_playChrNames[7]{ "Crono", "Lucca", "Marle", "Frog", "Robo", "Ayla", "Magus" };
+int			_battleGaugeSpeed{ 4 }, _battleMsgSpeed{ 4 }, _textWindowSkin{ 0 }, _battleGaugeType{ 1 };
 vector<int>	_events;
+BYTE		_textWindowAlpha{ 0xFF };
 
 playground _pg;
 

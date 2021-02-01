@@ -14,7 +14,7 @@ playground::~playground()
 HRESULT playground::init()
 {
 	gameNode::init(true);
-	keysToCheck = { VK_RETURN, VK_SPACE, VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP, 'A', 'S', 'D', 'X', 'C', 'V' }; // 입력을 확인할 키 나열(토글 키 제외)
+	keysToCheck = { VK_RETURN, VK_SPACE, VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP, VK_OEM_3, VK_LSHIFT, 'A', 'S', 'D', 'X', 'C', 'V' }; // 입력을 확인할 키 나열(토글 키 제외)
 
 #ifdef _DEBUG
 	vector<int> debugKeysToCheck = { VK_ADD, VK_SUBTRACT, VK_ESCAPE, VK_LBUTTON, VK_RBUTTON,
@@ -26,7 +26,7 @@ HRESULT playground::init()
 
 	SC->addScene("로딩 장면", new loadingScene);
 
-	_shouldFadeOut = FALSE;
+	_isScrBlackingOut = FALSE;
 
 	SC->changeScene("로딩 장면");
 
@@ -63,14 +63,14 @@ void playground::update()
 
 	gameNode::update();
 
-	if (_shouldFadeOut)
+	if (_isScrBlackingOut)
 	{
 		// 페이드아웃에 맞게 알파 값을 변경한다.
 		if (_blackScreenAlpha < 0xFF) _blackScreenAlpha += min(0x22, 0xFF - _blackScreenAlpha);
 		if (_blackScreenAlpha == 0xFF) {
 			if (_fadeCount++ == 30)
 			{
-				_shouldFadeOut = FALSE;
+				_isScrBlackingOut = FALSE;
 				_fadeCount = 0;
 			}
 		}
@@ -89,14 +89,11 @@ void playground::render()
 {
 	// PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
 
-	if (!_shouldFadeOut) SC->render();
+	if (!_isScrBlackingOut) SC->render();
 
-	if (_blackScreenAlpha > 0x00)
-	{
-		IMG->setRenderMode(TRUE);
-		IMG->alphaRender("검은 화면", getMemDC(), 0, 0, _blackScreenAlpha);
-		IMG->setRenderMode(FALSE);
-	}
+	_prevRenderMode = _shouldRenderUsingWindowCoords;
+	_shouldRenderUsingWindowCoords = TRUE;
+	if (_blackScreenAlpha > 0x00) IMG->alphaRender("검은 화면", getMemDC(), 0, 0, _blackScreenAlpha);
 	
 	if (KEY->isToggledOn(VK_SCROLL))
 	{
@@ -115,6 +112,13 @@ void playground::render()
 #endif
 	}
 
-	_backBuffer->render(getHDC(), _currOrg.x, _currOrg.y, 0, 0, WINW, WINH);
+	_backBuffer->render(getHDC(), 0, 0, 0, 0, WINW, WINH);
+	_shouldRenderUsingWindowCoords = _prevRenderMode;
+
+	if (KEY->down(VK_OEM_3))
+	{
+		if (KEY->press(VK_LSHIFT)) IMG->takeScreenshot(getHDC(), TRUE);
+		else IMG->takeScreenshot(getHDC(), FALSE);
+	}
 }
 

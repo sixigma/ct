@@ -4,7 +4,7 @@
 #include "startScene.h"
 #include <process.h> // _beginthreadex
 
-loadingScene::loadingScene(): _currentCount(0), _progressPieAngle(0), _relSecondEndPointX(PROGRESS_PIE_OUTER_RADIUS), _relSecondEndPointY(PROGRESS_PIE_OUTER_RADIUS * 2) {}
+loadingScene::loadingScene(): _currentCount(0), _progressPieAngle(0.f), _relSecondEndPointX(PROGRESS_PIE_OUTER_RADIUS), _relSecondEndPointY(PROGRESS_PIE_OUTER_RADIUS * 2) {}
 
 loadingScene::~loadingScene() {}
 
@@ -32,6 +32,8 @@ HRESULT loadingScene::init()
 		return E_FAIL;
 	}
 	ResumeThread(_hThread);
+
+	_needleVertices = { {PROGRESS_PIE_OUTER_RADIUS, 10}, {PROGRESS_PIE_OUTER_RADIUS + 5, PROGRESS_PIE_OUTER_RADIUS}, {PROGRESS_PIE_OUTER_RADIUS, PROGRESS_PIE_OUTER_RADIUS + 5}, {PROGRESS_PIE_OUTER_RADIUS - 5, PROGRESS_PIE_OUTER_RADIUS}};
 
 	return S_OK;
 }
@@ -65,10 +67,12 @@ void loadingScene::render()
 	SetDCBrushColor(_hPrgDC, RGB(71, 71, 71));
 	Ellipse(_hPrgDC, 0, 0, PROGRESS_PIE_OUTER_RADIUS * 2, PROGRESS_PIE_OUTER_RADIUS * 2);
 	SetDCBrushColor(_hPrgDC, RGB(216 - static_cast<int>(_progressRatio * 20.f), 176 + static_cast<int>(_progressRatio * 79.f), 64));
-	Pie(_hPrgDC, 0, 0, PROGRESS_PIE_OUTER_RADIUS * 2, PROGRESS_PIE_OUTER_RADIUS * 2,
+	if (_progressRatio > FLT_MIN) Pie(_hPrgDC, 0, 0, PROGRESS_PIE_OUTER_RADIUS * 2, PROGRESS_PIE_OUTER_RADIUS * 2,
 		static_cast<int>(_relSecondEndPointX), static_cast<int>(_relSecondEndPointY), PROGRESS_PIE_OUTER_RADIUS, 0);
 	SetDCBrushColor(_hPrgDC, RGB(0, 0, 0));
 	Ellipse(_hPrgDC, 10, 10, PROGRESS_PIE_INNER_DIAMETER, PROGRESS_PIE_INNER_DIAMETER);
+	SetDCBrushColor(_hPrgDC, RGB(71, 71, 71));
+	Polygon(_hPrgDC, _needleVertices, *&POINT({PROGRESS_PIE_OUTER_RADIUS, PROGRESS_PIE_OUTER_RADIUS}), -_progressPieAngle);
 	BitBlt(getMemDC(),
 		   WINW - PROGRESS_PIE_OUTER_RADIUS * 2 - 20, WINH - PROGRESS_PIE_OUTER_RADIUS * 2 - 20,
 		   WINW - PROGRESS_PIE_OUTER_RADIUS * 2, WINH - PROGRESS_PIE_OUTER_RADIUS * 2,
@@ -86,11 +90,6 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 {
 	loadingScene* loadingParams = (loadingScene*)params;
 
-	// 장면
-	SC->addScene("시작 화면", new startScene);
-	SC->addScene("게임 장면", new gameScene);
-	++loadingParams->_currentCount;
-	
 	// 시작 화면 그림
 
 	++loadingParams->_currentCount;
@@ -108,7 +107,11 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	++loadingParams->_currentCount;
 
 	// 기타 그림
-	IMG->addF("텍스트 창 스킨 셋", "res/images/textWindowSkins.bmp", 1024, 2560, 1, 8);
+	IMG->addF("글 출력 창 스킨 타일셋", "res/images/tilesets/skinTileset.bmp", 256, 1024, 8, 32);
+	IMG->add("대사 출력 창 스킨", 1024, 320); // 초기 빈 비트맵
+	IMG->add("전투 메시지 창 스킨", 1024, 96); // 초기 빈 비트맵
+	IMG->add("설정 메시지 창 스킨", 898, 128); // 초기 빈 비트맵
+	IMG->setAllWindowSkins();
 	IMG->addF("흰색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("비활성 타일셋0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("하늘색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
@@ -175,7 +178,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->find("녹색 UI 글꼴")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
 	++loadingParams->_currentCount;
 
-	ifstream file;
+//	ifstream file;
 	string line;
 	// 배경음
 	//file.open("res/bgm/fileList.txt");
@@ -213,6 +216,11 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 
 	// 글꼴 사용 준비
 	TXT->prepareToUseFonts();
+
+	// 장면
+	SC->addScene("시작 화면", new startScene);
+	SC->addScene("게임 장면", new gameScene(1));
+	++loadingParams->_currentCount;
 
 	while (loadingParams->_currentCount != MAX_SLEEP_CALLS)
 	{

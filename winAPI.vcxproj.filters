@@ -8,13 +8,13 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="winAPI.cpp">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </ClCompile>
     <ClCompile Include="gameScene.cpp">
       <Filter>Game\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </ClCompile>
     <ClCompile Include="animation.cpp">
       <Filter>Framework\Image-Related</Filter>
@@ -76,6 +76,21 @@
     <ClCompile Include="videoPlayer.cpp">
       <Filter>Framework\Video-Related</Filter>
     </ClCompile>
+    <ClCompile Include="imageManager_textWindowSkin.cpp">
+      <Filter>Framework\Image-Related</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipmentItem.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="etcItem.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpendableItem.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -85,19 +100,19 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </ClInclude>
     <ClInclude Include="winAPI.h">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </ClInclude>
     <ClInclude Include="gameScene.h">
       <Filter>Game\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </ClInclude>
     <ClInclude Include="animation.h">
       <Filter>Framework\Image-Related</Filter>
@@ -168,13 +183,25 @@
     <ClInclude Include="videoPlayer.h">
       <Filter>Framework\Video-Related</Filter>
     </ClInclude>
+    <ClInclude Include="EquipmentItem.h">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="etcItem.h">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpendableItem.h">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </Image>
     <Image Include="winAPI.ico">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +210,6 @@
     </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{04d218e9-52eb-492a-a306-4c9d202df0e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Window">
-      <UniqueIdentifier>{4113a4ab-ebe1-462c-a73f-748100d07ae0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\GameScene">
       <UniqueIdentifier>{5f081608-2bfb-412f-a022-cb885c08ca23}</UniqueIdentifier>
@@ -229,10 +253,13 @@
     <Filter Include="Game\GameScene\Maps\Events">
       <UniqueIdentifier>{680ed4f1-8dba-4e61-96b0-a5f6074d753a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows API">
+      <UniqueIdentifier>{4113a4ab-ebe1-462c-a73f-748100d07ae0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="winAPI.rc">
-      <Filter>Window</Filter>
+      <Filter>Windows API</Filter>
     </ResourceCompile>
   </ItemGroup>
 </Project>

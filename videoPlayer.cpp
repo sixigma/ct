@@ -145,11 +145,15 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 {
 	videoPlayer* ps = (videoPlayer*)params;
 
+	LONG scrWidth = ps->windowRct.right - ps->windowRct.left;
+	LONG scrHeight = ps->windowRct.bottom - ps->windowRct.top;
+	size_t totPixels = static_cast<size_t>(scrWidth * scrHeight * 4);
+
 	BITMAPINFO bI{ 0 };
 	bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 	bI.bmiHeader.biBitCount = 32;
-	bI.bmiHeader.biWidth = ps->windowRct.right - ps->windowRct.left;
-	bI.bmiHeader.biHeight = ps->windowRct.top - ps->windowRct.bottom; // 음수로 쓴다.
+	bI.bmiHeader.biWidth = scrWidth;
+	bI.bmiHeader.biHeight = -scrHeight; // 음수로 쓴다.
 	bI.bmiHeader.biCompression = BI_RGB;
 	bI.bmiHeader.biPlanes = 1;
 
@@ -157,13 +161,13 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	HDC hTempDC = CreateCompatibleDC(hDC); // 소스(source)로 사용할 DC의 핸들
 
 	vector<BYTE> bitmapData;
-	bitmapData.reserve(static_cast<size_t>((bI.bmiHeader.biWidth) * (-bI.bmiHeader.biHeight) * 4));
+	bitmapData.reserve(totPixels);
 	BYTE* bitmapDataPtr = bitmapData.data();
 
 	HBITMAP hBitmap = CreateDIBSection(hTempDC, &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&bitmapDataPtr), NULL, 0);
 	HBITMAP hOBitmap = (HBITMAP)SelectObject(hTempDC, hBitmap);
 
-	bitmapData.reserve(static_cast<size_t>((bI.bmiHeader.biWidth) * (-bI.bmiHeader.biHeight) * 4));
+	bitmapData.reserve(totPixels);
 
 	//double frameRate = 
 	double avgFrameRate = av_q2d(ps->_formatContext->streams[ps->_videoStreamIndex]->avg_frame_rate);
@@ -171,7 +175,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	
 	// ARGB 데이터 저장 공간
 	BYTE* bufBGRA = static_cast<BYTE*>(av_malloc(static_cast<size_t>(av_image_get_buffer_size(AV_PIX_FMT_RGB32,
-									   bI.bmiHeader.biWidth, -bI.bmiHeader.biHeight, 1))));
+									   scrWidth, scrHeight, 1))));
 
 	ps->_packet = av_packet_alloc();
 	ps->_videoFrame = av_frame_alloc();
@@ -179,7 +183,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 
 	ps->_imageConvContext = sws_getContext(ps->_videoCodecContext->width, ps->_videoCodecContext->height,
 		ps->_videoCodecContext->pix_fmt, // 픽셀 형식
-		bI.bmiHeader.biWidth, -bI.bmiHeader.biHeight,
+		scrWidth, scrHeight,
 		AV_PIX_FMT_RGB32,
 		/*SWS_BICUBIC*/SWS_BILINEAR,
 		nullptr, nullptr, // 필터 적용을 하지 않는다.
@@ -188,7 +192,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 	
 	// 데이터 포인터들과 라인 크기들을 지정된 매개 변수에 맞추어 준비한다.
 	av_image_fill_arrays(ps->_videoFrameBGRA->data, ps->_videoFrameBGRA->linesize, bufBGRA,
-		AV_PIX_FMT_RGB32, bI.bmiHeader.biWidth, -bI.bmiHeader.biHeight, 1);
+		AV_PIX_FMT_RGB32, scrWidth, scrHeight, 1);
 
 	ps->_currTime = chrono::high_resolution_clock::now();
 	ps->_elapsedTime = 0ns;
@@ -228,11 +232,11 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 			{
 				//av_free(bufBGRA);
 				//bufBGRA = static_cast<BYTE*>(av_malloc(static_cast<size_t>(av_image_get_buffer_size(AV_PIX_FMT_RGB32,
-				//							 bI.bmiHeader.biWidth, -bI.bmiHeader.biHeight, 1))));
+				//							 scrWidth, scrHeight, 1))));
 				//av_frame_unref(ps->_videoFrameBGRA);
 
 				av_image_fill_arrays(ps->_videoFrameBGRA->data, ps->_videoFrameBGRA->linesize, bufBGRA,
-					AV_PIX_FMT_RGB32, bI.bmiHeader.biWidth, -bI.bmiHeader.biHeight, 1);
+					AV_PIX_FMT_RGB32, scrWidth, scrHeight, 1);
 
 				if (avcodec_send_packet(ps->_videoCodecContext, ps->_packet) == 0)  // 화상 패킷 데이터를 디코더에 보낸다. 성공한다면
 				{
@@ -246,14 +250,15 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 										0, ps->_videoCodecContext->height,
 										ps->_videoFrameBGRA->data, ps->_videoFrameBGRA->linesize);
 
-							memcpy(bitmapDataPtr, bufBGRA, static_cast<size_t>((bI.bmiHeader.biWidth) * (-bI.bmiHeader.biHeight) * 4));
+							copy_n(bufBGRA, totPixels, bitmapDataPtr);
+							// 또는 memcpy(bitmapDataPtr, bufBGRA, totPixels);
 
 							if (ps->_videoCodecContext->frame_number == 1)
 							{
 								audioCh->setPosition(17, FMOD_TIMEUNIT_MS);
 								SND->resume("오프닝");
 							}
-							BitBlt(ps->getMemDC(), 0, 0, bI.bmiHeader.biWidth, -bI.bmiHeader.biHeight, hTempDC, 0, 0, SRCCOPY);
+							BitBlt(ps->getMemDC(), 0, 0, scrWidth, scrHeight, hTempDC, 0, 0, SRCCOPY);
 						}
 						else break;
 					}
@@ -288,7 +293,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 
 
 
-// 추후 참고용:
+// (참고)
 //if (av_read_frame(_formatContext, &_packet) == 0) // 스트림의 다음 프레임을 읽는 데에 성공한다면
 //{
 //	if (_packet.stream_index == _videoStreamIndex)
@@ -300,11 +305,10 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 //			uint8_t* videoData = _videoFrame->data[0];
 //			//char pictureType = av_get_picture_type_char(_videoFrame->pict_type);
 //			//int frameNum = _videoCodecContext->frame_number;
-//			//int64_t PTS = _videoFrame->pts;
-//			//int64_t DTS = _videoFrame->pkt_dts;
 //			//int keyFrame = _videoFrame->key_frame;
 //			//int codedPictureNum = _videoFrame->coded_picture_number;
 //			//int displayPictureNum = _videoFrame->display_picture_number;
+//			//...
 //		}
 //	}
 //	else if (_packet.stream_index == _audioStreamIndex)
@@ -314,7 +318,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 //		{
 //			// _audioFrame 사용
 //			uint8_t* audioData = _audioFrame->data[0];
-//			
+//			// ...
 //		}
 //	}
 //	av_packet_unref(&_packet); // 패킷 재사용을 하려면 이 함수를 호출하여야 한다.
