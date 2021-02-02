@@ -151,7 +151,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
+    <ClInclude Include="battleModeSelectScene.h" />
     <ClInclude Include="character.h" />
+    <ClInclude Include="characterNamingScene.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="effectManager.h" />
     <ClInclude Include="EquipmentItem.h" />
@@ -187,6 +189,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="battleModeSelectScene.cpp" />
+    <ClCompile Include="characterNamingScene.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
     <ClCompile Include="EquipmentItem.cpp" />

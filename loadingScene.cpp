@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "loadingScene.h"
 #include "gameScene.h"
+#include "battleModeSelectScene.h"
+#include "characterNamingScene.h"
 #include "startScene.h"
 #include <process.h> // _beginthreadex
+#include <fstream>
 
 loadingScene::loadingScene(): _currentCount(0), _progressPieAngle(0.f), _relSecondEndPointX(PROGRESS_PIE_OUTER_RADIUS), _relSecondEndPointY(PROGRESS_PIE_OUTER_RADIUS * 2) {}
 
@@ -90,8 +93,8 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 {
 	loadingScene* loadingParams = (loadingScene*)params;
 
-	// 시작 화면 그림
-
+	// 전투 모드 선택 화면 그림
+	IMG->add("전투 모드 로고", "res/images/battleMode.bmp", 364, 160, TRUE, RGB(255, 0, 255));
 	++loadingParams->_currentCount;
 
 	// 맵 그림
@@ -111,6 +114,10 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("대사 출력 창 스킨", 1024, 320); // 초기 빈 비트맵
 	IMG->add("전투 메시지 창 스킨", 1024, 96); // 초기 빈 비트맵
 	IMG->add("설정 메시지 창 스킨", 898, 128); // 초기 빈 비트맵
+	IMG->add("전투 모드 선택 메시지 창 스킨", 896, 316); // 초기 빈 비트맵
+	IMG->add("이름 입력 창 1 스킨", 572, 252); // 초기 빈 비트맵
+	IMG->add("이름 입력 창 2 스킨", 768, 572); // 초기 빈 비트맵
+	IMG->add("이름 입력 안내 창 스킨", 896, 192); // 초기 빈 비트맵
 	IMG->setAllWindowSkins();
 	IMG->addF("흰색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("비활성 타일셋0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
@@ -178,7 +185,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->find("녹색 UI 글꼴")->changeColor(RGB(255, 0, 255) & RGB(132, 255, 148), RGB(255, 0, 255));
 	++loadingParams->_currentCount;
 
-//	ifstream file;
+	ifstream file;
 	string line;
 	// 배경음
 	//file.open("res/bgm/fileList.txt");
@@ -186,29 +193,22 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	//{
 	//	while (getline(file, line))
 	//	{
-	//		if (line == "3 - Title Screen.mp3")
-	//		{
-	//			SND->addSound(line, "res/bgm/3 - Title Screen.mp3", true, false);
-	//		}
-	//		else
-	//		{
-	//			SND->addSound(line, "res/bgm/" + line, true, true);
-	//		}
+	//		SND->addSound("배경음 " + line.substr(0, line.size() - 4), "res/bgm/" + line, true, true);
 	//	}
 	//}
 	//file.close();
 	++loadingParams->_currentCount;
 
 	// 효과음
-	//file.open("res/sfx/fileList.txt");
-	//if (file.is_open())
-	//{
-	//	while (getline(file, line))
-	//	{
-	//		SND->addSound(line, "res/sfx/" + line, false, false);
-	//	}
-	//}
-	//file.close();
+	file.open("res/sfx/fileList.txt");
+	if (file.is_open())
+	{
+		while (getline(file, line))
+		{
+			SND->addSound("효과음 " + line.substr(0, line.size() - 4), "res/sfx/" + line, false, false);
+		}
+	}
+	file.close();
 	++loadingParams->_currentCount;
 
 	// 오프닝 영상 소리
@@ -219,7 +219,9 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 
 	// 장면
 	SC->addScene("시작 화면", new startScene);
-	SC->addScene("게임 장면", new gameScene(1));
+	SC->addScene("전투 모드 선택 화면", new battleModeSelectScene);
+	SC->addScene("이름 변경 화면", new characterNamingScene(0)); // Crono
+	SC->addScene("게임 장면", new gameScene(0));
 	++loadingParams->_currentCount;
 
 	while (loadingParams->_currentCount != MAX_SLEEP_CALLS)
