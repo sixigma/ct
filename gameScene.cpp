@@ -3,6 +3,7 @@
 
 int gameScene::_countForReEnablingKeyInput;
 
+// 설명: gameScene을 상속받는 클래스의 객체가 생성될 때에도 gameScene()이 호출되기 때문에 아래 생성자를 별도로 정의하였다.
 gameScene::gameScene(int anyNum)
 {
 	UNREFERENCED_PARAMETER(anyNum);
@@ -25,8 +26,13 @@ gameScene::~gameScene()
 
 }
 
-HRESULT gameScene::init() {	return S_OK; } // 변경 금지
-void gameScene::release() { } // 변경 금지
+HRESULT gameScene::init() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출하여도 문제가 발생하지 않을 것만 나열하여야 한다.
+{
+	SC->delScene("이름 변경 화면");
+	return S_OK;
+}
+void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출하여도 문제가 발생하지 않을 것만 나열하여야 한다.
+{ }
 
 void gameScene::update()
 {

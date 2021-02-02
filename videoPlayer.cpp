@@ -24,10 +24,7 @@ void videoPlayer::update()
 {
 	if (!_isPlayingVideo && !_shouldCloseThread)
 	{
-		_shouldCloseThread = TRUE;
-		WaitForSingleObject(_hThread, INFINITE);
-		CloseHandle(_hThread);
-		_hThread = nullptr;
+		release();
 		_shouldCloseThread = FALSE;
 
 		playOpening();
@@ -58,13 +55,6 @@ void videoPlayer::release()
 
 void videoPlayer::playOpening()
 {
-	//av_frame_free(&_audioFrame);
-	avformat_close_input(&_formatContext);
-	sws_freeContext(_imageConvContext);
-	avcodec_free_context(&_videoCodecContext);
-	//avcodec_free_context(&_audioCodecContext);
-	//==================================================================//
-
 	// 소리 재생을 준비한다.
 	SND->play("오프닝", _currMasterVolume * _currBGMVolume);
 	SND->pause("오프닝");

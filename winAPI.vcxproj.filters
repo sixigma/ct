@@ -91,6 +91,12 @@
     <ClCompile Include="item.cpp">
       <Filter>Game\GameScene\Items</Filter>
     </ClCompile>
+    <ClCompile Include="battleModeSelectScene.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="characterNamingScene.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -194,6 +200,12 @@
     </ClInclude>
     <ClInclude Include="item.h">
       <Filter>Game\GameScene\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="battleModeSelectScene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="characterNamingScene.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,28 +2,27 @@
 #include "sceneManager.h"
 #include "gameNode.h"
 
-gameNode* sceneManager::_currentScene = NULL;
+gameNode* sceneManager::_currentScene;
 
 HRESULT sceneManager::init()
 {
-	_currentScene = NULL;
+	_currentScene = nullptr;
 
 	return S_OK;
 }
 
 void sceneManager::release()
 {
-	sceneIter miSceneList = _sceneList.begin();
-
-	for (; miSceneList != _sceneList.end();)
+	sceneListIter _sceneListIter = _sceneList.begin();
+	for (; _sceneListIter != _sceneList.end();)
 	{
-		if (miSceneList->second != NULL)
+		if (_sceneListIter->second != nullptr)
 		{
-			if (miSceneList->second == _currentScene) miSceneList->second->release();
-			SAFE_DEL(miSceneList->second);
-			miSceneList = _sceneList.erase(miSceneList);
+			if (_sceneListIter->second == _currentScene) _sceneListIter->second->release();
+			SAFE_DEL(_sceneListIter->second);
+			_sceneListIter = _sceneList.erase(_sceneListIter);
 		}
-		else ++miSceneList;
+		else ++_sceneListIter;
 	}
 	_sceneList.clear();
 }
@@ -47,17 +46,25 @@ gameNode* sceneManager::addScene(string sceneName, gameNode* scene)
 	return scene;
 }
 
-
 HRESULT sceneManager::changeScene(string sceneName)
 {
-	sceneIter find = _sceneList.find(sceneName);
-	if (find == _sceneList.end()) return E_FAIL;
-	if (find->second == _currentScene) return S_OK;
-	if (SUCCEEDED(find->second->init()))
+	sceneListIter _sceneListIter = _sceneList.find(sceneName);
+	if (_sceneListIter == _sceneList.end()) return E_FAIL;
+	if (_sceneListIter->second == _currentScene) return S_OK;
+	if (SUCCEEDED(_sceneListIter->second->init()))
 	{
 		if (_currentScene) _currentScene->release();
-		_currentScene = find->second;
+		_currentScene = _sceneListIter->second;
 		return S_OK;
 	}
 	return E_FAIL;
+}
+
+void sceneManager::delScene(string sceneName)
+{
+	sceneListIter _sceneListIter = _sceneList.find(sceneName);
+	if (_sceneListIter == _sceneList.end()) return;
+	if (_sceneListIter->second == _currentScene) return;
+	SAFE_DEL(_sceneListIter->second);
+	_sceneList.erase(_sceneListIter);
 }

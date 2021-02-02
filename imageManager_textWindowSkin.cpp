@@ -3,7 +3,7 @@
 
 void imageManager::setWindowSkin(string tilesetStrKey, string skinStrKey, int width, int height, int destX, int destY)
 {
-	if (width < 96 || height < 96 || height % 16 > 0) return;
+	if (width < 96 || height < 96) return;
 	image* img = find(tilesetStrKey);
 	image* img2 = find(skinStrKey);
 	if (!img || !img2) return;
@@ -35,14 +35,21 @@ void imageManager::setWindowSkin(string tilesetStrKey, string skinStrKey, int wi
 	img->render(hTempDC, 0, height - 32, 0, _textWindowSkin * 128 + 96, 32, 32); // 좌하단 모서리
 	img->render(hTempDC, width - 32, height - 32, 96, _textWindowSkin * 128 + 96, 32, 32); // 우하단 모서리
 
-	size_t sectionHeight = static_cast<size_t>(height / 16);
-	size_t sectionArea = static_cast<size_t>(width) * sectionHeight;
-	for (size_t sectionNum = 0; sectionNum < 16; ++sectionNum)
+	int sectionHeight = (height + 15) / 16; // 올림
+	int sectionArea = width * sectionHeight;
+	int bitmapArea = width * height;
+	int sectionAreaOffset = 16 * sectionArea - bitmapArea; // 이 값이 0보다 크면 이 값에 해당하는 영역만큼은 아래 반복문에서 무시된다. 높이가 16으로 나누어 떨어지지 않을 때 제일 밝은 영역을 제일 어두운 영역보다 더 크게 하려면 필요한 변수이다.
+
+	for (int sectionNum = 0; sectionNum < 16; ++sectionNum)
 	{
 		if (sectionNum == 7) continue;
 		signed char valueChange = static_cast<signed char>(8 * (static_cast<int>(sectionNum) - 7));
-		for (size_t i = sectionNum * sectionArea; i < (sectionNum + 1) * sectionArea; ++i)
+
+		// bI.bmiHeader.biHeight를 음수로 설정하지 않아 높이 방향으로는 거꾸로 연산하여야 하므로 아래처럼 sectionAreaOffset을 감하여야 한다.
+		// i가 음수가 될 수 있으므로 size_t를 사용하지 않는다.
+		for (int i = sectionNum * sectionArea - sectionAreaOffset; i < (sectionNum + 1) * sectionArea - sectionAreaOffset; ++i)
 		{
+			if (i < 0) continue;
 			BYTE* currPixelData = reinterpret_cast<BYTE*>(&bitmapData[i]);
 			currPixelData[0] = min(max(currPixelData[0] + valueChange, 0x00), 0xFF);
 			currPixelData[1] = min(max(currPixelData[1] + valueChange, 0x00), 0xFF);
@@ -60,7 +67,10 @@ void imageManager::setAllWindowSkins()
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "대사 출력 창 스킨", 1024, 320);
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "전투 메시지 창 스킨", 1024, 96);
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "설정 메시지 창 스킨", 898, 128);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "전투 모드 선택 메시지 창 스킨", 896, 316);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "이름 입력 창 1 스킨", 572, 252);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "이름 입력 창 2 스킨", 768, 572);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "이름 입력 안내 창 스킨", 896, 192);
 
-	// 리마인더: 추가 필요
 
 }
