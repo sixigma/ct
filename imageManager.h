@@ -404,7 +404,7 @@ inline void imageManager::animRenderZ(LONG zIndex, string strKey, args ...params
 {
 	image* img = find(strKey); if (img == nullptr) return;
 	if (sizeof...(params) == 0) return;
-	function<void()> func = [img, params...]() { return img->aniRender(params...); };
+	function<void()> func = [img, params...]() { return img->animRender(params...); };
 	if (func == NULL) return;
 	_funcsToCall.insert(make_pair(zIndex, func));
 }
