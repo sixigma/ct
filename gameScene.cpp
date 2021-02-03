@@ -31,7 +31,8 @@ gameScene::gameScene(int anyNum)
 	_mapList.push_back(new teleport);			//3
 
 
-	_totRegion = { 0, 0, 3072, 1856 };
+	//_totRegion = { 0 , 0 , WINW, WINH };
+	_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
 	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 	_currMap = _mapList[0];
 	_currMap->setLinkTo(_p);

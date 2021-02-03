@@ -834,7 +834,7 @@ void player::keySetting()
 	{
 		if (_Pset.state != NORMAL_IDLE)_Pset.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_RIGHT) && WINW > _Pset.pt.x)
+	if (KEY->press(VK_RIGHT))
 	{
 		if (_T != 2)_T = 2;
 		if (_run)
@@ -871,7 +871,7 @@ void player::keySetting()
 	{
 		if (_Pset.state != NORMAL_IDLE)_Pset.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_DOWN) && _Pset.pt.y < WINH)
+	if (KEY->press(VK_DOWN))
 	{
 		if (_T != 0)_T = 0;
 		if (_run)
