@@ -98,6 +98,10 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	++loadingParams->_currentCount;
 
 	// 맵 그림
+	IMG->add("bossGato", "res/images/maps/bossGato.bmp", 1024, 1024, false, RGB(255, 0, 255));
+	IMG->add("millennialFair", "res/images/maps/millennialFair.bmp", 3072, 1856, false, RGB(255, 0, 255));
+	IMG->add("leeneSquare", "res/images/maps/leeneSquare.bmp", 3072, 1468, false, RGB(255, 0, 255));
+	IMG->add("teleport", "res/images/maps/telepod.bmp", 1024, 1024, false, RGB(255, 0, 255));
 
 	++loadingParams->_currentCount;
 

@@ -97,6 +97,21 @@
     <ClCompile Include="characterNamingScene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="millennialFair.cpp">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="teleport.cpp">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="bossGatoStage.cpp">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="mapManager.cpp">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="leeneSquare.cpp">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -206,6 +221,21 @@
     </ClInclude>
     <ClInclude Include="characterNamingScene.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="mapManager.h">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="millennialFair.h">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="teleport.h">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="bossGatoStage.h">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="leeneSquare.h">
+      <Filter>Game\GameScene\Maps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

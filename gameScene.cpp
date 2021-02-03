@@ -1,7 +1,18 @@
 #include "stdafx.h"
 #include "gameScene.h"
+#include "player.h"
+#include "millennialFair.h"
+#include "bossGatoStage.h"
+#include "teleport.h"
+#include "leeneSquare.h"
+#include "mapManager.h"
 
 int gameScene::_countForReEnablingKeyInput;
+
+player* gameScene::_p;
+vector<mapManager*> gameScene::_mapList;
+mapManager* gameScene::_currMap;
+int gameScene::_prevMapNum, gameScene::_mapNum;
 
 // 설명: gameScene을 상속받는 클래스의 객체가 생성될 때에도 gameScene()이 호출되기 때문에 아래 생성자를 별도로 정의하였다.
 gameScene::gameScene(int anyNum)
@@ -10,12 +21,23 @@ gameScene::gameScene(int anyNum)
 
 	_currOrg = _newOrg = { 0, 0 };
 
-	_totRegion = { 0, 0, WINW, WINH };
-	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
-
 	_p = new player;
 	_p->init();
 
+
+	_mapList.push_back(new millennialFair);		//0
+	_mapList.push_back(new leeneSquare);		//1
+	_mapList.push_back(new bossGatoStage);		//2
+	_mapList.push_back(new teleport);			//3
+
+
+	_totRegion = { 0, 0, 3072, 1856 };
+	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+	_currMap = _mapList[0];
+	_currMap->setLinkTo(_p);
+	_currMap->init();
+
+	
 }
 
 gameScene::~gameScene()
@@ -23,6 +45,11 @@ gameScene::~gameScene()
 	_p->release();
 	SAFE_DEL(_p);
 
+	_currMap->release();
+	for (size_t i = 0; i < _mapList.size(); ++i)
+	{
+		SAFE_DEL(_mapList[i]);
+	}
 
 }
 
@@ -44,7 +71,7 @@ void gameScene::update()
 
 
 	_p->update();
-
+	_currMap->update();
 
 
 
@@ -59,11 +86,19 @@ void gameScene::render()
 {
 #ifdef _DEBUG
 	char str[256];
-	//if (KEY->isToggledOn(VK_TAB)) DrawRct(getMemDC(), _p->getPos().x - 32, _p->getPos().y - 8, 64, 8);
+	if (KEY->isToggledOn(VK_TAB)) DrawRct(getMemDC(), _p->getPos().x - 32, _p->getPos().y - 8, 64, 8);
 #endif
-
+	if ((!(_isChrUnmovable)) && _prevMapNum == _mapNum)
+	{
+		if (_countForReEnablingKeyInput == 0) _isChrUnmovable = TRUE;
+		--_countForReEnablingKeyInput;
+	}
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
+	_currMap->render();
 	_p->render();
+
+	
+	
 
 
 
@@ -104,6 +139,43 @@ void gameScene::render()
 		}
 #endif
 }
+
+void gameScene::goToMap(int num)
+{
+	_isChrUnmovable = FALSE;
+	_currMap->release();
+	_countForReEnablingKeyInput = 24;
+	_prevMapNum = _mapNum;
+	switch (num)
+	{
+	case 1: //메인광장
+		_totRegion = { 0, 0, 3072, 1856 };
+		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+		_currMap = _mapList[0];
+		break;
+	case 2: //마루 만나는 곳
+		_totRegion = { 0, 0, 3072, 1468 };
+		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+		_currMap = _mapList[1];
+		break;
+	case 3: //보스 가토
+		_totRegion = { 0, 0, 1024, 1024 };
+		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+		_currMap = _mapList[2];
+		break;
+
+	case 4: //텔레포트 이벤트
+		_totRegion = { 0, 0, 1024, 1024 };
+		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+		_currMap = _mapList[3];
+		break;
+
+	}
+	_currMap->setLinkTo(_p);
+	_currMap->init();
+}
+
+
 
 void gameScene::updateViewport(int x, int y)
 {

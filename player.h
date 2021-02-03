@@ -171,4 +171,6 @@ public:
 
 	//플레이어 현재 이름
 	string getName() { return _Pset.name; }
+	//플레이어 좌표
+	POINT& getPos() { return _Pset.pt; }
 };
