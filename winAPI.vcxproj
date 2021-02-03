@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="animation.h" />
     <ClInclude Include="battleModeSelectScene.h" />
+    <ClInclude Include="bossGatoStage.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="characterNamingScene.h" />
     <ClInclude Include="effect.h" />
@@ -168,7 +169,11 @@
     <ClInclude Include="item.h" />
     <ClInclude Include="keyAnimManager.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="leeneSquare.h" />
+    <ClInclude Include="mapManager.h" />
+    <ClInclude Include="millennialFair.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="teleport.h" />
     <ClInclude Include="textManager.h" />
     <ClInclude Include="loadingScene.h" />
     <ClInclude Include="startScene.h" />
@@ -190,6 +195,7 @@
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="battleModeSelectScene.cpp" />
+    <ClCompile Include="bossGatoStage.cpp" />
     <ClCompile Include="characterNamingScene.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="effectManager.cpp" />
@@ -206,7 +212,11 @@
     <ClCompile Include="item.cpp" />
     <ClCompile Include="keyAnimManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="leeneSquare.cpp" />
+    <ClCompile Include="mapManager.cpp" />
+    <ClCompile Include="millennialFair.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="teleport.cpp" />
     <ClCompile Include="textManager.cpp" />
     <ClCompile Include="loadingScene.cpp" />
     <ClCompile Include="startScene.cpp" />

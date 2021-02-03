@@ -1,15 +1,24 @@
 #pragma once
 #include "gameNode.h"
-#include "player.h"
 
 constexpr int VIEWPORT_UPDATE_OFFSET = 2;
+
+class mapManager;
+class player;
 
 class gameScene : public gameNode
 {
 private:
 	static int _countForReEnablingKeyInput;
-	player* _p;
+	static player* _p;
 
+	static vector<mapManager*> _mapList;
+	static mapManager* _currMap;
+	static int currPlPos;
+	static int _prevMapNum, _mapNum;
+protected:
+	int probeX = 0;
+	int probeY = 0;
 
 public:
 	gameScene() = default;
@@ -23,5 +32,10 @@ public:
 
 	void updateViewport(int x, int y);
 	void setViewport(int x, int y);
+
+	static void setMapNum(int num) { _mapNum = num; } //맵
+	static int getPrevMapNum() { return _prevMapNum; }
+	static void goToMap(int num);
 };
+
 
