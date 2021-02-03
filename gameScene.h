@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include <memory>
 
 constexpr int VIEWPORT_UPDATE_OFFSET = 2;
 
@@ -12,8 +13,8 @@ private:
 	static int _countForReEnablingKeyInput;
 	static player* _p;
 
-	static vector<mapManager*> _mapList;
-	static mapManager* _currMap;
+	static vector<shared_ptr<mapManager>> _mapList;
+	static shared_ptr<mapManager> _currMap;
 	static int currPlPos;
 	static int _prevMapNum, _mapNum;
 protected:

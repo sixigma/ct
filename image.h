@@ -44,10 +44,12 @@ public:
 	HRESULT init(const char* fileName, int width, int height,
 		BOOL hasTransparentColor = FALSE, COLORREF transparentColor = RGB(0, 0, 0));
 
+	// 그림 전체 영역을 프레임 시트로 다루고 싶을 때 사용하는 초기화 함수
 	HRESULT init(const char* fileName, int width, int height, 
 		int frameX, int frameY,
 		BOOL hasTransparentColor = FALSE, COLORREF transparentColor = RGB(0, 0, 0));
 
+	// 그림 일부 영역을 프레임 시트로 다루고 싶을 때 사용하는 초기화 함수
 	HRESULT init(const char* fileName, int x, int y,
 	int width, int height, int frameX, int frameY,
 	BOOL hasTransparentColor = FALSE, COLORREF transtransparentColorColor = RGB(0, 0, 0));

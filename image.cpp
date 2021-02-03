@@ -151,13 +151,13 @@ HRESULT image::init(const char* fileName, int x, int y, int width, int height, i
 	_imageInfo->resID = 0;
 	_imageInfo->hMemDC = CreateCompatibleDC(hDC);
 	HDC hTempDC = CreateCompatibleDC(hDC);
-	HBITMAP hTempBitmap = (HBITMAP)LoadImage(_hInst, fileName, IMAGE_BITMAP, width, height, LR_LOADFROMFILE);
+	HBITMAP hTempBitmap = (HBITMAP)LoadImage(_hInst, fileName, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HBITMAP hOTempBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 	_imageInfo->hBit = CreateCompatibleBitmap(hDC, width, height);
+	_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
 	BitBlt(_imageInfo->hMemDC, 0, 0, width, height, hTempDC, x, y, SRCCOPY);
 	DeleteObject(SelectObject(hTempDC, hOTempBitmap));
 	DeleteDC(hTempDC);
-	_imageInfo->hOBit = (HBITMAP)SelectObject(_imageInfo->hMemDC, _imageInfo->hBit);
 
 	_imageInfo->width = width;
 	_imageInfo->height = height;

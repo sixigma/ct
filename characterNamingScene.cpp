@@ -124,6 +124,7 @@ void characterNamingScene::update()
 void characterNamingScene::render()
 {
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
+	_shouldRenderUsingWindowCoords = TRUE;
 
 	IMG->render("이름 입력 창 1 스킨", getMemDC(), 320, 32);
 	_chrFaceImg->render(getMemDC(), 320 + 32, 64);
@@ -138,26 +139,32 @@ void characterNamingScene::render()
 	TXT->render(getMemDC(), "0 1 2 3 4 5 6 7 8 9", 128 + 80, 288 + 48 + 384);
 	TXT->render(getMemDC(), "` \" : & ( ) ' . ,  ", 128 + 80, 288 + 48 + 448);
 
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 92, 4, 2);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 92, 5, 2);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 92 + 32, 4, 3);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 92 + 32, 5, 3);
+	IMG->frameRender("위치 표시 타일셋", getMemDC(), 620 + 32 * _nameArrowPos, 92, 2, 1);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 92, 4, 2);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 92, 5, 2);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 92 + 32, 4, 3);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 92 + 32, 5, 3);
 
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 184, 4, 0);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 184, 5, 0);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 184 + 32, 4, 1);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 184 + 32, 5, 1);
+	IMG->frameRender("위치 표시 타일셋", getMemDC(), 620 + 32 * _nameArrowPos, 184, 2, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 184, 4, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 184, 5, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 * _nameArrowPos, 184 + 32, 4, 1);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 620 + 32 + 32 * _nameArrowPos, 184 + 32, 5, 1);
 
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 64 * (_selectArrowPos % 10), 332 + 64 * (_selectArrowPos / 10), 0, 0);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 32 + 64 * (_selectArrowPos % 10), 332 + 64 * (_selectArrowPos / 10), 1, 0);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 64 * (_selectArrowPos % 10), 332 + 32 + 64 * (_selectArrowPos / 10), 0, 1);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 32 + 64 * (_selectArrowPos % 10), 332 + 32 + 64 * (_selectArrowPos / 10), 1, 1);
+	IMG->frameRender("위치 표시 타일셋", getMemDC(), 144 + 64 * (_selectArrowPos % 10), 332 + 64 * (_selectArrowPos / 10), 0, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 64 * (_selectArrowPos % 10), 332 + 64 * (_selectArrowPos / 10), 0, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 32 + 64 * (_selectArrowPos % 10), 332 + 64 * (_selectArrowPos / 10), 1, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 64 * (_selectArrowPos % 10), 332 + 32 + 64 * (_selectArrowPos / 10), 0, 1);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 144 + 32 + 64 * (_selectArrowPos % 10), 332 + 32 + 64 * (_selectArrowPos / 10), 1, 1);
+
+	_shouldRenderUsingWindowCoords = FALSE;
 
 	if (_state == namingSceneState::INFO_MSG_UP)
 	{
+		_shouldRenderUsingWindowCoords = TRUE;
 		IMG->render("이름 입력 안내 창 스킨", getMemDC(), 64, 384);
-		
 		TXT->render(getMemDC(), "Enter a name, then push the\nStart Button.", 64 + 96, 384 + 44, 0);
+		_shouldRenderUsingWindowCoords = FALSE;
 	}
 	else if (_state == namingSceneState::INFO_MSG_DOWN)
 	{
