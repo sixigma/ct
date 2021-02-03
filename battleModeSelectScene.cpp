@@ -43,6 +43,9 @@ void battleModeSelectScene::update()
 void battleModeSelectScene::render()
 {
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
+
+	_shouldRenderUsingWindowCoords = TRUE;
+
 	IMG->render("전투 모드 로고", getMemDC(), 328, 96);
 
 	IMG->render("전투 모드 선택 메시지 창 스킨", getMemDC(), 64, 512);
@@ -50,10 +53,11 @@ void battleModeSelectScene::render()
 	TXT->render(getMemDC(), "ACTIVE", 416, 336);
 	TXT->render(getMemDC(), "WAIT", 448, 400);
 
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 352, 332 + 64 * _isWaitSelected, 0, 0);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 352 + 32, 332 + 64 * _isWaitSelected, 1, 0);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 352, 332 + 64 * _isWaitSelected + 32, 0, 1);
-	IMG->frameRender("흰색 타일셋0", getMemDC(), 352 + 32, 332 + 64 * _isWaitSelected + 32, 1, 1);
+	IMG->frameRender("위치 표시 타일셋", getMemDC(), 352, 332 + 64 * _isWaitSelected, 0, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 352, 332 + 64 * _isWaitSelected, 0, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 352 + 32, 332 + 64 * _isWaitSelected, 1, 0);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 352, 332 + 64 * _isWaitSelected + 32, 0, 1);
+	//IMG->frameRender("흰색 타일셋0", getMemDC(), 352 + 32, 332 + 64 * _isWaitSelected + 32, 1, 1);
 
 	TXT->renderC(getMemDC(), 64 + 96, 512 + 40);
 
@@ -63,4 +67,6 @@ void battleModeSelectScene::render()
 		_isScrBlackingOut = TRUE;
 		SC->changeScene("이름 변경 화면");
 	}
+
+	_shouldRenderUsingWindowCoords = FALSE;
 }

@@ -10,8 +10,8 @@
 int gameScene::_countForReEnablingKeyInput;
 
 player* gameScene::_p;
-vector<mapManager*> gameScene::_mapList;
-mapManager* gameScene::_currMap;
+vector<shared_ptr<mapManager>> gameScene::_mapList;
+shared_ptr<mapManager> gameScene::_currMap;
 int gameScene::_prevMapNum, gameScene::_mapNum;
 
 // 설명: gameScene을 상속받는 클래스의 객체가 생성될 때에도 gameScene()이 호출되기 때문에 아래 생성자를 별도로 정의하였다.
@@ -24,12 +24,10 @@ gameScene::gameScene(int anyNum)
 	_p = new player;
 	_p->init();
 
-
-	_mapList.push_back(new millennialFair);		//0
-	_mapList.push_back(new leeneSquare);		//1
-	_mapList.push_back(new bossGatoStage);		//2
-	_mapList.push_back(new teleport);			//3
-
+	_mapList.emplace_back(new millennialFair);		//0
+	_mapList.emplace_back(new leeneSquare);		//1
+	_mapList.emplace_back(new bossGatoStage);		//2
+	_mapList.emplace_back(new teleport);			//3
 
 	//_totRegion = { 0 , 0 , WINW, WINH };
 	_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
@@ -37,29 +35,29 @@ gameScene::gameScene(int anyNum)
 	_currMap = _mapList[0];
 	_currMap->setLinkTo(_p);
 	_currMap->init();
-
-	
 }
 
-gameScene::~gameScene()
+gameScene::~gameScene() // 주의: 중복 호출이 되어도 문제가 발생하지 않을 것만 나열하여야 한다.
 {
-	_p->release();
-	SAFE_DEL(_p);
-
-	_currMap->release();
-	for (size_t i = 0; i < _mapList.size(); ++i)
+	if (_p != nullptr)
 	{
-		SAFE_DEL(_mapList[i]);
+		_p->release();
+		SAFE_DEL(_p);
 	}
 
+	if (_currMap != nullptr)
+	{
+		_currMap->release();
+		_currMap = nullptr;
+	}
 }
 
-HRESULT gameScene::init() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출하여도 문제가 발생하지 않을 것만 나열하여야 한다.
+HRESULT gameScene::init() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
 {
 	SC->delScene("이름 변경 화면");
 	return S_OK;
 }
-void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출하여도 문제가 발생하지 않을 것만 나열하여야 한다.
+void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
 { }
 
 void gameScene::update()
@@ -97,10 +95,6 @@ void gameScene::render()
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
 	_currMap->render();
 	_p->render();
-
-	
-	
-
 
 
 	// 글 출력

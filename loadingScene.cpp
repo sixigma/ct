@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "loadingScene.h"
-#include "gameScene.h"
 #include "battleModeSelectScene.h"
 #include "characterNamingScene.h"
 #include "startScene.h"
+#include "gameScene.h"
 #include <process.h> // _beginthreadex
 #include <fstream>
 
@@ -124,6 +124,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("이름 입력 안내 창 스킨", 896, 192); // 초기 빈 비트맵
 	IMG->setAllWindowSkins();
 	IMG->addF("흰색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
+	IMG->addF("위치 표시 타일셋", "res/images/tilesets/tileset0.bmp", 0, 0, 256, 128, 4, 2, TRUE, RGB(255, 0, 255)); // 삼각형, 손 모양 출력 전용(위 타일셋과 동일 파일을 사용하지만 초기화를 달리한다.)
 	IMG->addF("비활성 타일셋0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("하늘색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("빨간색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));

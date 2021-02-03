@@ -632,10 +632,11 @@ void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
 					_currPosY -= 16;
 					break;
 			}
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
-			IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
+			IMG->frameRender("위치 표시 타일셋", _hTextWindowDC, _currPosX, _currPosY, 0, 1);
+			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
+			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
+			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
+			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
 		}
 
 		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
