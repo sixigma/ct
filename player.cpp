@@ -54,18 +54,11 @@ void player::update()
 	{
 		if (_Pset.state == NORMAL_IDLE ||
 			_Pset.state == NORMAL_WALK ||
-			_Pset.state == NORMAL_RUN ||
-			_Pset.state == NORMAL_TALK ||
-			_Pset.state == NORMAL_EVENT)
+			_Pset.state == NORMAL_RUN)
 		{
 			_Pset.state = BATTLE_READY;
 		}
-		else if (_Pset.state == BATTLE_STANDBY ||
-			_Pset.state == BATTLE_ATK ||
-			_Pset.state == BATTLE_SKILL ||
-			_Pset.state == BATTLE_HIT ||
-			_Pset.state == BATTLE_HELP ||
-			_Pset.state == BATTLE_WIN)
+		else if (_Pset.state == BATTLE_STANDBY)
 		{
 			_Pset.state = BATTLE_WIN;
 		}
@@ -889,10 +882,10 @@ void player::keySetting()
 	{
 		if (_Pset.state != NORMAL_IDLE)_Pset.state = NORMAL_IDLE;
 	}
-	if (KEY->press('X'))
+	if (KEY->press('C'))
 	{
 		if (_run == false)_run = true;
 	}
-	else if (KEY->up('X')) { if (_run == true)_run = false; }
+	else if (KEY->up('C')) { if (_run == true)_run = false; }
 
 }

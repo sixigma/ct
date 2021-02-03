@@ -119,6 +119,8 @@ public:
 	template<typename...args>
 	void animRenderZ(LONG zIndex, image* img, args... params);
 	template<typename...args>
+	void animRenderHZ(LONG zIndex, image* img, args... params);
+	template<typename...args>
 	void loopRenderZ(LONG zIndex, image* img, args... params);
 
 	// zIndex 순서로 함수를 호출할 수 있도록 함수를 등록하는 함수(선언) - strKey 사용
@@ -144,6 +146,8 @@ public:
 	void alphaRenderZ(LONG zIndex, string strKey, args... params);
 	template<typename...args>
 	void animRenderZ(LONG zIndex, string strKey, args... params);
+	template<typename...args>
+	void animRenderHZ(LONG zIndex, string strKey, args... params);
 	template<typename...args>
 	void loopRenderZ(LONG zIndex, string strKey, args... params);
 
@@ -275,6 +279,16 @@ inline void imageManager::animRenderZ(LONG zIndex, image* img, args ...params)
 }
 
 template<typename ...args>
+inline void imageManager::animRenderHZ(LONG zIndex, image* img, args ...params)
+{
+	if (img == nullptr) return;
+	if (sizeof...(params) == 0) return;
+	function<void()> func = [img, params...]() { return img->animRenderH(params...); };
+	if (func == NULL) return;
+	_funcsToCall.insert(make_pair(zIndex, func));
+}
+
+template<typename ...args>
 inline void imageManager::loopRenderZ(LONG zIndex, image* img, args ...params)
 {
 	if (img == nullptr) return;
@@ -391,6 +405,16 @@ inline void imageManager::animRenderZ(LONG zIndex, string strKey, args ...params
 	image* img = find(strKey); if (img == nullptr) return;
 	if (sizeof...(params) == 0) return;
 	function<void()> func = [img, params...]() { return img->aniRender(params...); };
+	if (func == NULL) return;
+	_funcsToCall.insert(make_pair(zIndex, func));
+}
+
+template<typename ...args>
+inline void imageManager::animRenderHZ(LONG zIndex, string strKey, args ...params)
+{
+	image* img = find(strKey); if (img == nullptr) return;
+	if (sizeof...(params) == 0) return;
+	function<void()> func = [img, params...]() { return img->animRenderH(params...); };
 	if (func == NULL) return;
 	_funcsToCall.insert(make_pair(zIndex, func));
 }
