@@ -118,6 +118,15 @@
     <ClCompile Include="chronoHome2.cpp">
       <Filter>Game\GameScene\Maps</Filter>
     </ClCompile>
+    <ClCompile Include="frog.cpp">
+      <Filter>Game\GameScene\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="lucca.cpp">
+      <Filter>Game\GameScene\Players</Filter>
+    </ClCompile>
+    <ClCompile Include="crono.cpp">
+      <Filter>Game\GameScene\Players</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -248,6 +257,15 @@
     </ClInclude>
     <ClInclude Include="chronoHome2.h">
       <Filter>Game\GameScene\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="lucca.h">
+      <Filter>Game\GameScene\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="crono.h">
+      <Filter>Game\GameScene\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="frog.h">
+      <Filter>Game\GameScene\Players</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

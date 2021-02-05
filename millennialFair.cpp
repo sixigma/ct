@@ -5,7 +5,7 @@
 HRESULT millennialFair::init()
 {
 	setMapNum(1);
-	currPlPos = &pl->getPos();
+	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 6) *currPlPos = { 1560, 1733 };
 	else if (getPrevMapNum() == 2) *currPlPos = { 1625, 200 }; //millennialFair에서 leene로 가는 방향
 	else *currPlPos = { 1560, 1733 };

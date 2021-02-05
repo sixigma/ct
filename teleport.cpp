@@ -5,7 +5,7 @@
 HRESULT teleport::init()
 {
 	setMapNum(4);
-	currPlPos = &pl->getPos();
+	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 2) *currPlPos = { 548, 746 };
 	else *currPlPos = { 548, 746 };
 	exit.push_back({ 444, 974 , 444 + 196, 974 +46 });

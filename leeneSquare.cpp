@@ -7,7 +7,7 @@ HRESULT leeneSquare::init()
 	event1 = 0;
 
 	setMapNum(2);
-	currPlPos = &pl->getPos();
+	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 1) *currPlPos = { 1600, 1400 };
 	else if (getPrevMapNum() == 3) *currPlPos = { 100, 500 }; //가토방에서 다시 leene로 왔을 때 위치
 	else if (getPrevMapNum() == 4) *currPlPos = { 1593, 340 }; //텔레포트

@@ -90,7 +90,7 @@ void gameScene::render()
 {
 #ifdef _DEBUG
 	char str[256];
-	if (KEY->isToggledOn(VK_TAB)) DrawRct(getMemDC(), _p->getPos().x - 32, _p->getPos().y - 8, 64, 8);
+	//if (KEY->isToggledOn(VK_TAB)) DrawRct(getMemDC(), _p->getCrono()->getPos().x - 32, _p->getCrono()->getPos().y - 8, 64, 8);
 #endif
 	if ((!(_isChrUnmovable)) && _prevMapNum == _mapNum)
 	{
@@ -115,7 +115,7 @@ void gameScene::render()
 		{
 			if (KEY->isToggledOn(VK_SCROLL))
 			{
-				//sprintf_s(str, "Player pos: %d, %d", _p->getPos().x, _p->getPos().y);
+				//sprintf_s(str, "Player pos: %d, %d", _p->getCrono()->getPos().x, _p->getCrono()->getPos().y);
 				//TextOut(getMemDC(), 0, 48, str, static_cast<int>(strlen(str)));
 
 				sprintf_s(str, "Pointer pos: %d, %d (%d, %d)", _mouse.x + _currOrg.x, _mouse.y + _currOrg.y, _mouse.x, _mouse.y);
