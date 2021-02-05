@@ -210,9 +210,6 @@
     <ClInclude Include="dataIOManager.h">
       <Filter>Framework\Text-Related</Filter>
     </ClInclude>
-    <ClInclude Include="character.h">
-      <Filter>Game\GameScene\Players</Filter>
-    </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Game\GameScene\Players</Filter>
     </ClInclude>
@@ -267,6 +264,9 @@
     <ClInclude Include="frog.h">
       <Filter>Game\GameScene\Players</Filter>
     </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>Game\GameScene\Character</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -307,9 +307,6 @@
     <Filter Include="Framework\Others">
       <UniqueIdentifier>{edb7a47b-f903-4726-b939-c6a7da5f231d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\GameScene\Enemies">
-      <UniqueIdentifier>{e53056a4-6a9b-42ef-99a0-a5577bd9a77b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameScene\Players">
       <UniqueIdentifier>{a57fb616-eb2a-4471-8ae9-ead75746267e}</UniqueIdentifier>
     </Filter>
@@ -327,6 +324,12 @@
     </Filter>
     <Filter Include="Windows API">
       <UniqueIdentifier>{4113a4ab-ebe1-462c-a73f-748100d07ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameScene\Character">
+      <UniqueIdentifier>{cd77e119-b523-4351-b2cf-fc7b0c93bbd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameScene\Players\Enemies">
+      <UniqueIdentifier>{e53056a4-6a9b-42ef-99a0-a5577bd9a77b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
