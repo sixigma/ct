@@ -112,6 +112,12 @@
     <ClCompile Include="leeneSquare.cpp">
       <Filter>Game\GameScene\Maps</Filter>
     </ClCompile>
+    <ClCompile Include="chronoHome.cpp">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="chronoHome2.cpp">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -235,6 +241,12 @@
       <Filter>Game\GameScene\Maps</Filter>
     </ClInclude>
     <ClInclude Include="leeneSquare.h">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="chronoHome.h">
+      <Filter>Game\GameScene\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="chronoHome2.h">
       <Filter>Game\GameScene\Maps</Filter>
     </ClInclude>
   </ItemGroup>

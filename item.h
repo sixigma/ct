@@ -14,6 +14,7 @@ class item : public gameNode
 protected:
 	category itemCategory;
 	string itemName;
+	string itemTip;
 	int attack;			//장비공격력
 	int defense;		//장비 방어력
 	int power;			//물리공격데미지관련	
@@ -30,6 +31,7 @@ protected:
 	int maxHp;			//최대체력증가
 	int recoveryMp;		//마나회복
 	int maxMp;			//최대마나증가
+	int sell;			//판매 가치
 	int money;			//가격
 public:
 	virtual HRESULT init(string _name);

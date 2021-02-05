@@ -1,18 +1,15 @@
 #pragma once
-
-//펜던트를 찾아주는 이벤트, 종
-
 #include "gameScene.h"
 #include "mapManager.h"
 #include "player.h"
 
-class leeneSquare: public mapManager
+class chronoHome2 : public mapManager
 {
 protected:
 
 public:
-	leeneSquare() {}
-	~leeneSquare() override {}
+	chronoHome2() {}
+	~chronoHome2() override {}
 
 	int  event1;
 	int  event2;
@@ -22,7 +19,4 @@ public:
 	virtual void update() override;
 	virtual void render() override;
 
-	int getEvent1() { return event1; }
-	int getEvent2() { return event2; }
 };
-

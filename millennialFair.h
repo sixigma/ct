@@ -25,8 +25,7 @@ public:
 	void release() override;
 	void render() override;
 	
-	void mapTool();
-	void loadMap();
+
 
 };
 

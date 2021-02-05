@@ -1,20 +1,15 @@
 #pragma once
-//노래 부르는 연습보스 
-
-//#include "gameNode.h"
 #include "gameScene.h"
 #include "mapManager.h"
 #include "player.h"
 
-
-class bossGatoStage : public mapManager
+class chronoHome : public mapManager
 {
 protected:
-	float			 _cameraX;
-	float			 _cameraY;
+	
 public:
-	bossGatoStage() {}
-	~bossGatoStage() override {}
+	chronoHome() {}
+	~chronoHome() override {}
 
 	virtual HRESULT init() override;
 	virtual void update() override;

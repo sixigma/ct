@@ -5,7 +5,10 @@
 #include "bossGatoStage.h"
 #include "teleport.h"
 #include "leeneSquare.h"
+#include "chronoHome.h"
+#include "chronoHome2.h"
 #include "mapManager.h"
+
 
 int gameScene::_countForReEnablingKeyInput;
 
@@ -25,14 +28,16 @@ gameScene::gameScene(int anyNum)
 	_p->init();
 
 	_mapList.emplace_back(new millennialFair);		//0
-	_mapList.emplace_back(new leeneSquare);		//1
+	_mapList.emplace_back(new leeneSquare);			//1
 	_mapList.emplace_back(new bossGatoStage);		//2
 	_mapList.emplace_back(new teleport);			//3
+	_mapList.emplace_back(new chronoHome);			//4
+	_mapList.emplace_back(new chronoHome2);			//5
 
-	//_totRegion = { 0 , 0 , WINW, WINH };
-	_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
+	_totRegion = { 0 , 0 , WINW, WINH };
+	//_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
 	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
-	_currMap = _mapList[0];
+	_currMap = _mapList[4];
 	_currMap->setLinkTo(_p);
 	_currMap->init();
 }
@@ -164,7 +169,16 @@ void gameScene::goToMap(int num)
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[3];
 		break;
-
+	case 5:
+		_totRegion = { 0, 0, 1024, 1024 };
+		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+		_currMap = _mapList[4];
+		break;
+	case 6:
+		_totRegion = { 0, 0, 1024, 1024 };
+		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+		_currMap = _mapList[5];
+		break;
 	}
 	_currMap->setLinkTo(_p);
 	_currMap->init();

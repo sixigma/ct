@@ -1,40 +1,46 @@
 #include "stdafx.h"
-#include "teleport.h"
+#include "chronoHome2.h"
 #include "player.h"
-
-HRESULT teleport::init()
+HRESULT chronoHome2::init()
 {
-	setMapNum(4);
-	currPlPos = &pl->getPos();
-	if (getPrevMapNum() == 2) *currPlPos = { 548, 746 };
-	else *currPlPos = { 548, 746 };
-	exit.push_back({ 444, 974 , 444 + 196, 974 +46 });
 
+	setMapNum(6);
+	currPlPos = &pl->getPos();
+	if (getPrevMapNum() == 5) *currPlPos = { 765, 385 };
+	if (getPrevMapNum() == 1) *currPlPos = { 710, 715 };
+	else *currPlPos = { 765, 385 };
+
+	// ========================================================
+
+
+	exit.push_back({ 569, 195, 569+58, 195+130 });
+	exit.push_back({ 640, 781, 640 + 131, 781 + 40 });
 	prevPlPos = *currPlPos;
-	gameScene::setViewport(currPlPos->x, currPlPos->y);
+	gameScene::setViewport(0, 0);
 	return S_OK;
 }
 
-void teleport::release()
+void chronoHome2::update()
+{
+	for (size_t i = 0; i < exit.size(); ++i)
+	{
+		if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(5);
+		if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(1);
+	}
+
+	mapCollision();
+	prevPlPos = *currPlPos;
+}
+
+void chronoHome2::release()
 {
 	
 }
 
-void teleport::update()
+void chronoHome2::render()
 {
-	//if (currPlPos->y - 32 > 1024) gameScene::goToMap(2);
-	for (size_t i = 0; i < exit.size(); ++i)
-	{
-		if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
-	}
+	IMG->render("크로노집아래", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 
-	gameScene::updateViewport(currPlPos->x, currPlPos->y);
-	prevPlPos = *currPlPos;
-}
-
-void teleport::render()
-{
-	IMG->render("teleport", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 #ifdef _DEBUG
 	{
 		if (KEY->isToggledOn(VK_CAPITAL))
