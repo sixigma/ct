@@ -6,7 +6,7 @@ HRESULT bossGatoStage::init()
 {
 	//_mapImg = imageManager::getSingleton()->add("bossGato", L"res/images/maps/bossGato.bmp");
 	setMapNum(3);
-	currPlPos = &pl->getPos();
+	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 2) *currPlPos = { 660, 780 };
 	else if (getPrevMapNum() == 4) *currPlPos = { 1050, 1000 }; 
 	

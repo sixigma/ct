@@ -5,7 +5,7 @@ HRESULT chronoHome2::init()
 {
 
 	setMapNum(6);
-	currPlPos = &pl->getPos();
+	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 5) *currPlPos = { 765, 385 };
 	if (getPrevMapNum() == 1) *currPlPos = { 710, 715 };
 	else *currPlPos = { 765, 385 };

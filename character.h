@@ -91,3 +91,72 @@ struct tagChaSet	//캐릭터 셋팅
 
 	STATE state;		//스테이트 이넘
 };
+struct tagImage
+{
+	image* idle;		//보통
+	image* walk;		//걷기
+	image* run;			//달리기
+	image* Bready;		//배틀 준비
+	image* rush;		//달려들기
+	image* atk;			//공격/크리
+	image* atk2;		//공격2(원거리)
+	image* spin;		//스핀(크로노 스킬)
+	image* hit;			//피격
+	image* hit2;		//피격2		
+	image* win;			//승리포즈
+	image* Bwin;		//배틀 승리
+	image* downs;		//쓰러지기 직전
+	image* down;		//쓰러짐
+	image* cantRun;		//달리다 벽에 부딪힐 때	
+	image* drink;		//마시기		
+	image* handsUp;		//손 올리기	
+	image* ladder;		//사다리		
+	image* tied;		//묶임		
+	image* what;		//궁금		
+	image* skill;		//스킬
+	image* skill2;		//스킬2
+	image* skill3;		//스킬3
+	image* smile;		//웃음
+	image* glass;		//안경(루카)
+};
+
+struct tagAni
+{
+	//0 : front / 1 : back / 2 : right / 3 : left
+	//보통은 위와 같이 적용되지만, 일부 이미지는 2장 / 1장만 있을 수도 있다
+
+	animation* idle_0, *idle_1, *idle_2;					//서있을 때의 애니			0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* walk_0, *walk_1, *walk_2;					//걸을 때의 애니			0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* run_0, *run_1, *run_2;						//달릴 때의 애니			0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* Bready_0, *Bready_1, *Bready_3, *Bready_2;	//배틀 준비중의 애니		0 : 앞 / 1 : 뒤 / 3 : 왼쪽
+	animation* SB_0, *SB_1, *SB_3, *SB_2;					//스탠바이 중의 애니		0 : 앞 / 1 : 뒤 / 3 : 왼쪽
+	animation* rush_0, *rush_1, *rush_2;					//달려들 때의 애니			0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* atk_0, *atk_1, *atk_2;						//공격할 때의 애니			0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* cri_0, *cri_1, *cri_2;						//공격-크리티컬 때의 애니	0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* atk2_0, *atk2_1, *atk2_2;					//원거리 공격할 때의 애니	0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* hit_0, *hit_1, *hit_2;						//피격 때의 애니			0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* hit2_0, *hit2_2, *hit2_1;					//피격 때의 애니2			0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* spin;										//스핀 때의 애니
+	animation* downs_0, *downs_1, *downs_2;					//쓰러지기 직전의 애니		0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* down;										//쓰러졌을 때의 애니		
+	animation* down_0, *down_1, *down_2;					//쓰러졌을 때의 애니(방향이 나뉘어있을때 씀)
+	animation* Bwin;										//이겼을 때의 애니(방향 상관없을 때 씀)
+	animation* Bwin_0, *Bwin_1, *Bwin_3, *Bwin_2;			//이겼을 때의 애니			0 : 앞 / 1 : 뒤 / 3 : 왼쪽
+	animation* win;											//승리포즈만 취할 때
+
+	animation* cantRun_0, *cantRun_1, *cantRun_2;			//못달린다				0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* drink;										//마시기
+	animation* handsUp_0, *handsUp_1;						//손들기					0 : 앞 / 1 : 뒤
+	animation* ladder;										//사다리					
+	animation* tied_0, *tied_1, *tied_2;					//묶임					0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+	animation* what_0, *what_1, *what_2;					//?						0 : 앞 / 1 : 뒤 / 2 : 오른쪽
+
+	animation* skill_0, *skill_1, *skill_2, *skill_3;		//스킬
+	animation* skill2_0, *skill2_1, *skill2_2, *skill2_3;	//스킬2
+	animation* skill3_0, *skill3_1, *skill3_2, *skill3_3;	//스킬3
+	animation* glass_0, *glass_2;							//안경 애니
+
+	animation*  oneArr_0, *oneArr_1, *oneArr_2;	//한장의 애니일 때 / 각 숫자는 세로로 몇째줄인지 알려줌
+	animation* twoArrT_0, *twoArrT_1, *twoArrT_2;	//두장의 애니일 때 / 반복할 때
+	animation* twoArrF_0, *twoArrF_1, *twoArrF_2;	//두장의 애니일 때 / 반복 안할 때
+};
