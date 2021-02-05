@@ -4,11 +4,13 @@
 
 HRESULT leeneSquare::init()
 {
+	event1 = 0;
+
 	setMapNum(2);
 	currPlPos = &pl->getPos();
 	if (getPrevMapNum() == 1) *currPlPos = { 1600, 1400 };
 	else if (getPrevMapNum() == 3) *currPlPos = { 100, 500 }; //가토방에서 다시 leene로 왔을 때 위치
-	else if (getPrevMapNum() == 4) *currPlPos = { 500, 500 }; //텔레포트
+	else if (getPrevMapNum() == 4) *currPlPos = { 1593, 340 }; //텔레포트
 	else *currPlPos = { 1600, 1400 };
 
 	cO.push_back({0, 0 , 1530, 380});
@@ -58,6 +60,10 @@ HRESULT leeneSquare::init()
 	eR.push_back({ 448, 1108 , 448 + 56, 1108 + 56 }); // 광장 음식 먹는 음식먹는 이벤트
 	eR.push_back({ 1854, 510 , 1854+61, 510 + 61 }); //목걸이 있는 위치
 
+	exit.push_back({ 1473, 1424, 1473 + 190, 1424 + 43 });
+	exit.push_back({ 0, 335, 65, 335 + 249 });
+	exit.push_back({ 1468, 0, 1468 + 199, 63 });
+
 	prevPlPos = *currPlPos;
 	gameScene::setViewport(currPlPos->x, currPlPos->y);
 	return S_OK;
@@ -65,18 +71,29 @@ HRESULT leeneSquare::init()
 
 void leeneSquare::release()
 {
-	cO.clear();
-	eR.clear();
+
 }
 
 void leeneSquare::update()
 {
-	if (currPlPos->x - 32 < 0 && currPlPos->y >= 300 && currPlPos->y <=580 ) gameScene::goToMap(3); //가토 + &&y?? 의 위치.
-	if (currPlPos->y + 32 > 1500 && currPlPos->x >= 1400 && currPlPos->x <= 1600) gameScene::goToMap(1); //메인 광장가는 위치 &&x는?
+	//if (currPlPos->x - 32 < 0 && currPlPos->y >= 300 && currPlPos->y <= 580) gameScene::goToMap(3); //가토 + &&y?? 의 위치.
+	//if (currPlPos->y + 32 > 1500 && currPlPos->x >= 1400 && currPlPos->x <= 1600) gameScene::goToMap(1); //메인 광장가는 위치 &&x는?
+	//if (currPlPos->y - 32 < 0) gameScene::goToMap(4); //텔레포트 가는 방향
 
+	for (size_t i = 0; i < exit.size(); ++i)
+	{
+		if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(1);
+		if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(3);
+		if (PtInRect(&exit[2], *currPlPos)) gameScene::goToMap(4);
+	}
 	if (currPlPos->x + 32 > 3072) currPlPos->x = 3072; //x의 우측.
-	if (currPlPos->y + 32 < 0) gameScene::goToMap(4); //텔레포트 가는 방향
-	 
+	
+	for (size_t i = 0; i < eR.size(); ++i)
+	{
+		if (PtInRect(&eR[0], *currPlPos))event1 = 1;//보따리 이벤트 접촉
+		if (PtInRect(&eR[1], *currPlPos))event2 = 1;//팬던트 이벤트
+	}
+
 
 	mapCollision();
 	gameScene::updateViewport(currPlPos->x, currPlPos->y);
@@ -86,6 +103,8 @@ void leeneSquare::update()
 void leeneSquare::render()
 {
 	IMG->render("leeneSquare", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	if(event1 == 0)IMG->render("보따리", getMemDC(), eR[0].left, eR[0].top - 64);
+	if(event2 == 0)IMG->render("펜던트", getMemDC(), eR[1].left, eR[1].top);
 #ifdef _DEBUG
 	{
 		if (KEY->isToggledOn(VK_CAPITAL))
@@ -110,6 +129,20 @@ void leeneSquare::render()
 			for (size_t i = 0; i < eR.size(); ++i)
 			{
 				DrawRct(getMemDC(), eR[i]);
+			}
+			DeleteObject(SelectObject(getMemDC(), hOPen));
+			DeleteObject(SelectObject(getMemDC(), hOBrush));
+		}
+
+		if (KEY->isToggledOn(VK_CAPITAL))
+		{
+			HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 255));
+			HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 255));
+			HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
+			HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
+			for (size_t i = 0; i < exit.size(); ++i)
+			{
+				DrawRct(getMemDC(), exit[i]);
 			}
 			DeleteObject(SelectObject(getMemDC(), hOPen));
 			DeleteObject(SelectObject(getMemDC(), hOBrush));

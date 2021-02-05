@@ -26,7 +26,8 @@ HRESULT bossGatoStage::init()
 
 
 	eR.push_back({ 532, 731, 532 + 233, 731 +35 });
-	
+
+	exit.push_back({ 542, 962, 542 + 194, 962 + 56 });
 	prevPlPos = *currPlPos;
 		
 	return S_OK;
@@ -34,8 +35,11 @@ HRESULT bossGatoStage::init()
 
 void bossGatoStage::update()
 {
-	if (currPlPos->y - probeY > 1024) gameScene::goToMap(2);
-	
+	//if (currPlPos->y - probeY > 1024) gameScene::goToMap(2);
+	for (size_t i = 0; i < exit.size(); ++i)
+	{
+		if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
+	}
 
 	mapCollision();
 	prevPlPos = *currPlPos;
@@ -43,8 +47,7 @@ void bossGatoStage::update()
 
 void bossGatoStage::release()
 {
-	cO.clear();
-	eR.clear();
+	
 }
 
 void bossGatoStage::render()
@@ -75,6 +78,19 @@ void bossGatoStage::render()
 				for (size_t i = 0; i < eR.size(); ++i)
 				{
 					DrawRct(getMemDC(), eR[i]);
+				}
+				DeleteObject(SelectObject(getMemDC(), hOPen));
+				DeleteObject(SelectObject(getMemDC(), hOBrush));
+			}
+			if (KEY->isToggledOn(VK_CAPITAL))
+			{
+				HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 255));
+				HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 255));
+				HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
+				HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
+				for (size_t i = 0; i < exit.size(); ++i)
+				{
+					DrawRct(getMemDC(), exit[i]);
 				}
 				DeleteObject(SelectObject(getMemDC(), hOPen));
 				DeleteObject(SelectObject(getMemDC(), hOBrush));

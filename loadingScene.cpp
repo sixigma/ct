@@ -102,7 +102,11 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("millennialFair", "res/images/maps/millennialFair.bmp", 3072, 1856, false, RGB(255, 0, 255));
 	IMG->add("leeneSquare", "res/images/maps/leeneSquare.bmp", 3072, 1468, false, RGB(255, 0, 255));
 	IMG->add("teleport", "res/images/maps/telepod.bmp", 1024, 1024, false, RGB(255, 0, 255));
-
+	IMG->add("크로노집위", "res/images/maps/chronohome1.bmp", 1024, 844, false, RGB(255, 0, 255));
+	IMG->add("크로노집아래", "res/images/maps/chronohome2.bmp", 1024, 844, false, RGB(255, 0, 255));
+	//아이템 그림
+	IMG->add("펜던트", "res/images/maps/pendant.bmp", 64, 64, true, RGB(255, 0, 255));
+	IMG->add("보따리", "res/images/maps/specialmeal.bmp", 64, 64, true, RGB(255, 0, 255));
 	++loadingParams->_currentCount;
 
 	// 캐릭터 그림

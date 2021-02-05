@@ -11,6 +11,7 @@ protected:
 
 	vector <RECT> cO; // collision object 충돌용 옵젝
 	vector <RECT> eR; // event 활성화 여부 확인해주는 렉트
+	vector <RECT> exit; // 나가버리기
 	POINT prevPlPos;
 	POINT* currPlPos;
 	RECT tempRct;

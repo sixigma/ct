@@ -9,6 +9,7 @@ HRESULT mapManager::init()
 
 void mapManager::release()
 {
+	
 }
 
 void mapManager::update()

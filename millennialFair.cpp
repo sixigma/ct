@@ -6,9 +6,9 @@ HRESULT millennialFair::init()
 {
 	setMapNum(1);
 	currPlPos = &pl->getPos();
-	if (getPrevMapNum() == 0) *currPlPos = { 1550, 1500 };
+	if (getPrevMapNum() == 6) *currPlPos = { 1560, 1733 };
 	else if (getPrevMapNum() == 2) *currPlPos = { 1625, 200 }; //millennialFair에서 leene로 가는 방향
-	else *currPlPos = { 1550, 1500 };
+	else *currPlPos = { 1560, 1733 };
 
 	cO.push_back({ 0, 0 , 1280, 384 });
 	cO.push_back({ 0, 383 , 260, 383+497 });
@@ -38,7 +38,9 @@ HRESULT millennialFair::init()
 	cO.push_back({ 2836, 1146  , 2836 + 235, 1146 + 129 });
 	cO.push_back({ 2880 , 838   , 2880 + 192, 838 + 341 });
 
-
+	//나가보리기
+	exit.push_back({ 1471, 1816 , 1471 +201, 1816 + 48});
+	exit.push_back({ 1413, 0 , 1413 + 313, 44 });
 	prevPlPos = *currPlPos;
 	gameScene::setViewport(currPlPos->x, currPlPos->y);
 
@@ -52,12 +54,14 @@ void millennialFair::update()
 	if (currPlPos->x + 32 > 3072) currPlPos->x = 3072;	//x축의 오른쪽
 	if (currPlPos->x < 32) currPlPos->x = 32;			//x축의 왼쪽
 
-	if (currPlPos->y - 32 <32 && currPlPos->x >= 1500 && currPlPos->x <= 1750) gameScene::goToMap(2);	//y축의 위쪽
 
+	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(6);
+	if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(2);
+	
 	
 
 	if (currPlPos->y > 32 + 1856) currPlPos->y = 32 + 1856; 
-
+	mapCollision();
 	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
 
@@ -65,19 +69,55 @@ void millennialFair::update()
 
 void millennialFair::release()
 {
-	cO.clear();
-	eR.clear();
+	
 }
 
 void millennialFair::render()
 {
 	IMG->render("millennialFair", getMemDC(), _currOrg.x, _currOrg.y,_currOrg.x,_currOrg.y, WINW, WINH);
+#ifdef _DEBUG
+	{
+		if (KEY->isToggledOn(VK_CAPITAL))
+		{
+			HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
+			HBRUSH hBrush = CreateSolidBrush(RGB(0, 255, 0));
+			HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
+			HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
+			for (size_t i = 0; i < cO.size(); ++i)
+			{
+				DrawRct(getMemDC(), cO[i]);
+			}
+			DeleteObject(SelectObject(getMemDC(), hOPen));
+			DeleteObject(SelectObject(getMemDC(), hOBrush));
+		}
+		if (KEY->isToggledOn(VK_CAPITAL))
+		{
+			HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 255));
+			HBRUSH hBrush = CreateSolidBrush(RGB(0, 255, 255));
+			HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
+			HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
+			for (size_t i = 0; i < eR.size(); ++i)
+			{
+				DrawRct(getMemDC(), eR[i]);
+			}
+			DeleteObject(SelectObject(getMemDC(), hOPen));
+			DeleteObject(SelectObject(getMemDC(), hOBrush));
+		}
+		if (KEY->isToggledOn(VK_CAPITAL))
+		{
+			HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 255));
+			HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 255));
+			HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
+			HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
+			for (size_t i = 0; i < exit.size(); ++i)
+			{
+				DrawRct(getMemDC(), exit[i]);
+			}
+			DeleteObject(SelectObject(getMemDC(), hOPen));
+			DeleteObject(SelectObject(getMemDC(), hOBrush));
+		}
+	}
+
+#endif
 }
 
-void millennialFair::mapTool()
-{
-}
-
-void millennialFair::loadMap()
-{
-}
