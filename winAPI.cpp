@@ -20,6 +20,10 @@ int			_battleGaugeSpeed{ 4 }, _battleMsgSpeed{ 4 }, _textWindowSkin{ 0 }, _battl
 vector<int>	_events;
 BYTE		_textWindowAlpha{ 0xFF };
 
+int _crtXsize, _crtYsize;
+
+vector<vector<tileInfo>>	_tile;
+
 playground _pg;
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

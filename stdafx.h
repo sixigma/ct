@@ -20,6 +20,7 @@ using namespace std;
 #define WINY 50 // 창 시작점 y 좌표
 #define WINW 1024 // 창 너비
 #define WINH 896 // 창 높이
+#define TILESIZE 64
 
 #define RNG randomNumber::getSingleton()
 #define KEY keyManager::getSingleton()
@@ -36,6 +37,16 @@ using namespace std;
 #define SAFE_REL(p) {if (p) {(p)->release(); (p) = nullptr;}}
 //==================================
 
+extern struct tileInfo
+{
+	RECT rect;
+	int geography;		//속성
+	bool rectYes;		//렉트 즉, 벽이 있는가?
+	POINT tilePos;
+	POINT layerPos1;
+	POINT layerPos2;
+};
+
 extern HINSTANCE	_hInst;
 extern HWND			_hWnd;
 extern POINT		_mouse, _currOrg, _newOrg, _menuMsgPos;
@@ -47,6 +58,9 @@ extern float		_currMasterVolume, _currBGMVolume, _currSFXVolume;
 extern string		_playChrNames[7];
 extern int			_battleGaugeSpeed, _battleMsgSpeed, _textWindowSkin, _battleGaugeType;
 extern vector<int>	_events;
+
+extern vector<vector<tileInfo>>	_tile;
+extern int _crtXsize, _crtYsize;
 
 #include "keyManager.h"
 #include "randomNumber.h"
