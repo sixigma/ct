@@ -80,6 +80,11 @@ public:
 	//피격 등에 설정시킬 STATE setter
 	void setState(STATE state) { _croSet.state = state; }
 
+	//방향전환 T setter
+	void setT(int T) { _T = T; }
+
+	//getter
+
 	//크로노 현재 힘
 	int getPower() { return _croSt.power; }
 	//크로노 현재 마력
@@ -118,6 +123,9 @@ public:
 
 	//피격 등을 확인할 STATE getter
 	STATE getState() { return _croSet.state; }
+
+	//방향확인용 T getter
+	int getT() { return _T; }
 
 	POINT& getPos() { return _croSet.pt; }
 
