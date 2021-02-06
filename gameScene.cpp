@@ -34,10 +34,15 @@ gameScene::gameScene(int anyNum)
 	_mapList.emplace_back(new chronoHome);			//4
 	_mapList.emplace_back(new chronoHome2);			//5
 
-	_totRegion = { 0 , 0 , WINW, WINH };
+	_totRegion = { 0, 0, 1024, 1024 };
+	_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+
+
+	//_totRegion = { 0 , 0 , WINW, WINH };
 	//_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
-	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
-	_currMap = _mapList[0];
+	//_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
+
+	_currMap = _mapList[4];
 	_currMap->setLinkTo(_p);
 	_currMap->init();
 }
@@ -142,7 +147,7 @@ void gameScene::render()
 void gameScene::goToMap(int num)
 {
 	_isChrUnmovable = FALSE;
-	_currMap->release();
+	//_currMap->release();
 	_countForReEnablingKeyInput = 24;
 	_prevMapNum = _mapNum;
 	switch (num)
@@ -150,12 +155,12 @@ void gameScene::goToMap(int num)
 	case 1: //메인광장
 		_totRegion = { 0, 0, 3072, 1856 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
-		_currMap = _mapList[0];
+		_currMap = _mapList[1];
 		break;
 	case 2: //마루 만나는 곳
 		_totRegion = { 0, 0, 3072, 1468 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
-		_currMap = _mapList[1];
+		_currMap = _mapList[0];
 		break;
 	case 3: //보스 가토
 		_totRegion = { 0, 0, 1024, 1024 };
@@ -168,12 +173,12 @@ void gameScene::goToMap(int num)
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[3];
 		break;
-	case 5:
+	case 5://크로노위층
 		_totRegion = { 0, 0, 1024, 1024 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[4];
 		break;
-	case 6:
+	case 6://아랫층
 		_totRegion = { 0, 0, 1024, 1024 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[5];

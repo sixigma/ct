@@ -117,14 +117,16 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	++loadingParams->_currentCount;
 
 	// 맵 그림
-	IMG->add("CronoRoom1", "res/images/maps/CronoRoom2.bmp", 1024, 1024, true, RGB(179, 38, 189));
+	IMG->add("CronoRoom1", "res/images/maps/CronoRoom1.bmp", 1024, 1024, true, RGB(179, 38, 189));
 	IMG->add("CronoRoom2", "res/images/maps/CronoRoom2.bmp", 1024, 1024, true, RGB(179, 38, 189));
 	IMG->add("CronoRoomZ1", "res/images/maps/CronoRoomZ1.bmp", 1024, 1024, true, RGB(179, 38, 189));
+	IMG->add("CronoRoom3", "res/images/maps/CronoRoom3.bmp", 1024, 1024, true, RGB(179, 38, 189));
+	IMG->add("CronoRoomZ3", "res/images/maps/CronoRoomZ3.bmp", 1024, 1024, true, RGB(179, 38, 189));
 	IMG->add("Leene_SquareZ", "res/images/maps/Leene_Square_Z.bmp", 3072, 1856, true, RGB(179, 38, 189));
 	IMG->add("Leene_Square", "res/images/maps/Leene_Square.bmp", 3072, 1856, true, RGB(179, 38, 189));
-	IMG->add("Leene_SquareZ", "res/images/maps/Leene_Square_Z.bmp", 3072, 1856, true, RGB(179, 38, 189));
 	IMG->add("Leene_Square2", "res/images/maps/Leene_Square2.bmp", 3072, 1472, true, RGB(179, 38, 189));
 	IMG->add("Leene_SquareZ2", "res/images/maps/Leene_Square_Z2.bmp", 3072, 1472, true, RGB(179, 38, 189));
+
 	//아이템 그림
 	IMG->add("펜던트", "res/images/maps/pendant.bmp", 64, 64, true, RGB(255, 0, 255));
 	IMG->add("보따리", "res/images/maps/specialmeal.bmp", 64, 64, true, RGB(255, 0, 255));

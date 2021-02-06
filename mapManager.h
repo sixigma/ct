@@ -15,7 +15,7 @@ protected:
 	POINT prevPlPos;
 	POINT* currPlPos;
 	RECT tempRct;
-	
+	vector<vector<tileInfo>> tile;
 
 public:
 	mapManager() 

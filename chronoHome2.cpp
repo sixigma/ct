@@ -4,17 +4,15 @@
 HRESULT chronoHome2::init()
 {
 
-	setMapNum(6);
 	currPlPos = &pl->getCrono()->getPos();
-	if (getPrevMapNum() == 5) *currPlPos = { 765, 385 };
-	if (getPrevMapNum() == 1) *currPlPos = { 710, 715 };
+	if (getPrevMapNum() == 5) *currPlPos = { 630, 425 };
+	else if (getPrevMapNum() == 1) *currPlPos = { 710, 715 };
 	else *currPlPos = { 765, 385 };
-
+	setMapNum(6);
 	// ========================================================
 
-
-	exit.push_back({ 569, 195, 569+58, 195+130 });
-	exit.push_back({ 640, 781, 640 + 131, 781 + 40 });
+	exit.push_back({ 575, 100, 595, 400 });
+	exit.push_back({ 640, 1005, 640 + 200, 1005 + 40 });
 	prevPlPos = *currPlPos;
 	gameScene::setViewport(0, 0);
 	return S_OK;
@@ -22,24 +20,27 @@ HRESULT chronoHome2::init()
 
 void chronoHome2::update()
 {
-	for (size_t i = 0; i < exit.size(); ++i)
-	{
-		if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(5);
-		if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(1);
-	}
+	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(5);
+	if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(1);
 
 	mapCollision();
+	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
 }
 
 void chronoHome2::release()
 {
-	
+	cO.clear();
+	eR.clear();
+	tile.clear();
 }
 
 void chronoHome2::render()
 {
-	IMG->render("크로노집아래", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	//IMG->render("크로노집아래", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+
+	IMG->renderZ(2000, IMG->find("CronoRoomZ3"), getMemDC(), 0, 0);
+	IMG->renderZ(0, IMG->find("CronoRoom3"), getMemDC(), 0, 0);
 
 #ifdef _DEBUG
 	{
