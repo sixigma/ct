@@ -118,6 +118,11 @@ public:
 	//피격 등을 확인할 STATE getter
 	STATE getState() { return _lucSet.state; }
 
+	//방향전환 T setter
+	void setT(int T) { _T = T; }
+	//방향확인용 T getter
+	int getT() { return _T; }
+
 	POINT& getPos() { return _lucSet.pt; }
 
 };
