@@ -37,7 +37,7 @@ gameScene::gameScene(int anyNum)
 	_totRegion = { 0 , 0 , WINW, WINH };
 	//_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
 	_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
-	_currMap = _mapList[4];
+	_currMap = _mapList[0];
 	_currMap->setLinkTo(_p);
 	_currMap->init();
 }
@@ -100,7 +100,6 @@ void gameScene::render()
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
 	_currMap->render();
 	_p->render();
-
 
 	// 글 출력
 	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE

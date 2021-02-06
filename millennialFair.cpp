@@ -74,7 +74,11 @@ void millennialFair::release()
 
 void millennialFair::render()
 {
-	IMG->render("millennialFair", getMemDC(), _currOrg.x, _currOrg.y,_currOrg.x,_currOrg.y, WINW, WINH);
+	IMG->renderZ(2000, IMG->find("CronoRoomZ1"), getMemDC(), 0, 0);
+	IMG->renderZ(0, IMG->find("CronoRoom1"), getMemDC(), 0, 0);
+	
+	IMG->execZ();
+
 #ifdef _DEBUG
 	{
 		if (KEY->isToggledOn(VK_CAPITAL))

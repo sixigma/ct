@@ -34,5 +34,13 @@ public:
 	void setLinkTo(player*& p) { pl = p; }
 	void mapCollision();
 
+	void addXtile();
+	void removeXtile();
+	void addYtile();
+	void removeYtile();
+	void load();
+	void load2(const char* _name);
+	void tileMapLoad(string strKey, int width, int height);
+
 };
 

@@ -38,6 +38,25 @@ HRESULT loadingScene::init()
 
 	_needleVertices = { {PROGRESS_PIE_OUTER_RADIUS, 10}, {PROGRESS_PIE_OUTER_RADIUS + 5, PROGRESS_PIE_OUTER_RADIUS}, {PROGRESS_PIE_OUTER_RADIUS, PROGRESS_PIE_OUTER_RADIUS + 5}, {PROGRESS_PIE_OUTER_RADIUS - 5, PROGRESS_PIE_OUTER_RADIUS}};
 
+	_crtXsize = 34;
+	_crtYsize = 16;
+
+	for (int y = 0; y < _crtYsize; y++)
+	{
+		vector<tileInfo> muonVtTile;
+		for (int x = 0; x < _crtXsize - 18; x++)
+		{
+			tileInfo muonTile;
+			muonTile.tilePos = { x,y };
+			muonTile.layerPos1 = { 0,0 };
+			muonTile.layerPos2 = { 0,0 };
+			muonTile.geography = 0;
+			muonTile.rectYes = false;
+			muonVtTile.push_back(muonTile);
+			if (x == (_crtXsize - 18) - 1) _tile.push_back(muonVtTile);
+		}
+	}
+
 	return S_OK;
 }
 
@@ -98,12 +117,14 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	++loadingParams->_currentCount;
 
 	// 맵 그림
-	IMG->add("bossGato", "res/images/maps/bossGato.bmp", 1024, 1024, false, RGB(255, 0, 255));
-	IMG->add("millennialFair", "res/images/maps/millennialFair.bmp", 3072, 1856, false, RGB(255, 0, 255));
-	IMG->add("leeneSquare", "res/images/maps/leeneSquare.bmp", 3072, 1468, false, RGB(255, 0, 255));
-	IMG->add("teleport", "res/images/maps/telepod.bmp", 1024, 1024, false, RGB(255, 0, 255));
-	IMG->add("크로노집위", "res/images/maps/chronohome1.bmp", 1024, 844, false, RGB(255, 0, 255));
-	IMG->add("크로노집아래", "res/images/maps/chronohome2.bmp", 1024, 844, false, RGB(255, 0, 255));
+	IMG->add("CronoRoom1", "res/images/maps/CronoRoom2.bmp", 1024, 1024, true, RGB(179, 38, 189));
+	IMG->add("CronoRoom2", "res/images/maps/CronoRoom2.bmp", 1024, 1024, true, RGB(179, 38, 189));
+	IMG->add("CronoRoomZ1", "res/images/maps/CronoRoomZ1.bmp", 1024, 1024, true, RGB(179, 38, 189));
+	IMG->add("Leene_SquareZ", "res/images/maps/Leene_Square_Z.bmp", 3072, 1856, true, RGB(179, 38, 189));
+	IMG->add("Leene_Square", "res/images/maps/Leene_Square.bmp", 3072, 1856, true, RGB(179, 38, 189));
+	IMG->add("Leene_SquareZ", "res/images/maps/Leene_Square_Z.bmp", 3072, 1856, true, RGB(179, 38, 189));
+	IMG->add("Leene_Square2", "res/images/maps/Leene_Square2.bmp", 3072, 1472, true, RGB(179, 38, 189));
+	IMG->add("Leene_SquareZ2", "res/images/maps/Leene_Square_Z2.bmp", 3072, 1472, true, RGB(179, 38, 189));
 	//아이템 그림
 	IMG->add("펜던트", "res/images/maps/pendant.bmp", 64, 64, true, RGB(255, 0, 255));
 	IMG->add("보따리", "res/images/maps/specialmeal.bmp", 64, 64, true, RGB(255, 0, 255));
@@ -119,6 +140,8 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 
 	// 기타 그림
 	IMG->addF("글 출력 창 스킨 타일셋", "res/images/tilesets/skinTileset.bmp", 256, 1024, 8, 32);
+	IMG->addF("m", "res/images/tilesets/밀레니얼타일.bmp", 1152, 3648, 18, 57, true, RGB(179, 38, 189));
+	IMG->add("보스맵", 1024, 1024); // 맵을 위한 조기 빈 비트맵
 	IMG->add("대사 출력 창 스킨", 1024, 320); // 초기 빈 비트맵
 	IMG->add("전투 메시지 창 스킨", 1024, 96); // 초기 빈 비트맵
 	IMG->add("설정 메시지 창 스킨", 898, 128); // 초기 빈 비트맵
