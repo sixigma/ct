@@ -10,22 +10,10 @@ HRESULT bossGatoStage::init()
 	if (getPrevMapNum() == 2) *currPlPos = { 660, 780 };
 	else if (getPrevMapNum() == 4) *currPlPos = { 1050, 1000 }; 
 	
-	cO.push_back({ 0,0, 120,780 });
-	cO.push_back({ 0,770, 545, 980 });
-	cO.push_back({ 120,0, 190,700 });
-	cO.push_back({ 190,0, 260,380 });
-	cO.push_back({ 260,0, 320,320 });
-	cO.push_back({ 320,0, 450,260 });
-	cO.push_back({ 450,0, 580,300 });
-	cO.push_back({ 580,0, 675,250 });
-	cO.push_back({ 675,0, 1030,200 });
-	cO.push_back({ 950,0, 1030,980 });
-	cO.push_back({ 900,570, 1030,980 });
-	cO.push_back({ 740,765, 1030,980 });
+
 	// ========================================================
 
 
-	eR.push_back({ 532, 731, 532 + 233, 731 +35 });
 
 	exit.push_back({ 542, 962, 542 + 194, 962 + 56 });
 	prevPlPos = *currPlPos;
@@ -47,12 +35,14 @@ void bossGatoStage::update()
 
 void bossGatoStage::release()
 {
-	
+	cO.clear();
+	eR.clear();
+	tile.clear();
 }
 
 void bossGatoStage::render()
 {
-	IMG->render("bossGato", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	//IMG->render("bossGato", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 
 #ifdef _DEBUG
 		{

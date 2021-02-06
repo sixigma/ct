@@ -3,16 +3,17 @@
 #include "player.h"
 HRESULT chronoHome::init()
 {
-	setMapNum(5);
-	currPlPos = &pl->getCrono()->getPos();
-	if (getPrevMapNum() == 6) *currPlPos = { 310, 700 };
-	else *currPlPos = { 675, 495 };
 
+	currPlPos = &pl->getCrono()->getPos();
+	if (getPrevMapNum() == 6) *currPlPos = { 450, 995 };
+	else *currPlPos = { 645, 440 };
+
+	setMapNum(5);
 	
 	// ========================================================
 
 
-	exit.push_back({ 432, 740, 432 + 50, 740 + 102 });
+	exit.push_back({ 495, 1005, 495 + 100, 1005 + 100 });
 
 	prevPlPos = *currPlPos;
 	gameScene::setViewport(0, 0);
@@ -21,24 +22,27 @@ HRESULT chronoHome::init()
 
 void chronoHome::update()
 {
-	for (size_t i = 0; i < exit.size(); ++i)
-	{
-	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(6);
-	}
 
+	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(6);
 
 	mapCollision();
+	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
 }
 
 void chronoHome::release()
 {
-	
+	cO.clear();
+	eR.clear();
+	tile.clear();
 }
 
 void chronoHome::render()
 {
-	IMG->render("크로노집위", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	IMG->renderZ(2000, IMG->find("CronoRoomZ1"), getMemDC(), 0, 0);
+	IMG->renderZ(0, IMG->find("CronoRoom1"), getMemDC(), 0, 0);
+
+	//IMG->execZ();
 
 #ifdef _DEBUG
 	{

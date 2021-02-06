@@ -19,7 +19,9 @@ void mapManager::update()
 
 void mapManager::render()
 {
-
+	cO.clear();
+	eR.clear();
+	tile.clear();
 }
 
 void mapManager::mapCollision()
