@@ -37,7 +37,7 @@ using namespace std;
 #define SAFE_REL(p) {if (p) {(p)->release(); (p) = nullptr;}}
 //==================================
 
-extern struct tileInfo
+struct tileInfo
 {
 	RECT rect;
 	int geography;		//속성
