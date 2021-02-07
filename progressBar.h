@@ -1,7 +1,7 @@
 #pragma once
 #include "gameNode.h"
 
-class progressBar: public gameNode
+class progressBar : public gameNode
 {
 private:
 	RECT _rctProgress;
@@ -27,5 +27,6 @@ public:
 
 	void setX(float x) { _x = x; }
 	void setY(float y) { _y = y; }
+	
 };
 

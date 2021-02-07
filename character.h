@@ -61,6 +61,8 @@ struct tagItemStatus	//아이템 능력치
 
 struct tagChaSet	//캐릭터 셋팅
 {
+	int triggerTime;	//전투 타이머 변수
+
 	POINT pt;			//캐릭터 포인트
 	POINT atk;			//캐릭터 공격시 공격지점 포인트
 
@@ -91,6 +93,7 @@ struct tagChaSet	//캐릭터 셋팅
 
 	STATE state;		//스테이트 이넘
 };
+
 struct tagImage
 {
 	image* idle;		//보통
@@ -160,3 +163,4 @@ struct tagAni
 	animation* twoArrT_0, *twoArrT_1, *twoArrT_2;	//두장의 애니일 때 / 반복할 때
 	animation* twoArrF_0, *twoArrF_1, *twoArrF_2;	//두장의 애니일 때 / 반복 안할 때
 };
+

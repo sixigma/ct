@@ -77,13 +77,22 @@ public:
 	//최대경험치 바꾸기
 	void setMaxExp(int maxExp) { _croSt.maxExp = maxExp; }
 
+
 	//피격 등에 설정시킬 STATE setter
 	void setState(STATE state) { _croSet.state = state; }
 
 	//방향전환 T setter
 	void setT(int T) { _T = T; }
 
+	//트리거타임 setter
+	void setTriggerTime(int triggerTime) { _croSet.triggerTime = triggerTime; }
+
+
 	//getter
+
+	//트리거타임 getter
+	int getTriggerTime() { return _croSet.triggerTime; }
+
 
 	//크로노 현재 힘
 	int getPower() { return _croSt.power; }

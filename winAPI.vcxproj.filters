@@ -130,6 +130,13 @@
     <ClCompile Include="Astar.cpp">
       <Filter>Framework\Astar</Filter>
     </ClCompile>
+    <ClCompile Include="battle.cpp" />
+    <ClCompile Include="enemy.cpp">
+      <Filter>Game\GameScene\Players\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="gato.cpp">
+      <Filter>Game\GameScene\Players\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -272,6 +279,13 @@
     </ClInclude>
     <ClInclude Include="Astar.h">
       <Filter>Framework\Astar</Filter>
+    </ClInclude>
+    <ClInclude Include="battle.h" />
+    <ClInclude Include="enemy.h">
+      <Filter>Game\GameScene\Players\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="gato.h">
+      <Filter>Game\GameScene\Players\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,8 @@ loadingScene::~loadingScene() {}
 
 HRESULT loadingScene::init()
 {
+	_shouldRenderUsingWindowCoords = TRUE;
+
 	_hTempDC = CreateCompatibleDC(getMemDC());
 	_hBitmap = CreateCompatibleBitmap(getMemDC(), WINW, WINH);
 	_hOBitmap = (HBITMAP)SelectObject(_hTempDC, _hBitmap);
@@ -103,6 +105,7 @@ void loadingScene::render()
 	// 로딩 완료 시
 	if (_currentCount == MAX_SLEEP_CALLS)
 	{
+		_shouldRenderUsingWindowCoords = FALSE;
 		CloseHandle(_hThread);
 		SC->changeScene("시작 화면");
 	}
@@ -151,6 +154,10 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("이름 입력 창 1 스킨", 572, 252); // 초기 빈 비트맵
 	IMG->add("이름 입력 창 2 스킨", 768, 572); // 초기 빈 비트맵
 	IMG->add("이름 입력 안내 창 스킨", 896, 192); // 초기 빈 비트맵
+	IMG->add("전투 윈도우 용 빈 비트맵", WINW, 192);
+	IMG->add("전투 창 스킨", 225, 192);
+	IMG->add("전투 스탯 창 스킨", 640, 192);
+	IMG->add("전투 적 목록 창 스킨", WINW / 2, 192);
 	IMG->setAllWindowSkins();
 	IMG->addF("흰색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("위치 표시 타일셋", "res/images/tilesets/tileset0.bmp", 0, 0, 256, 128, 4, 2, TRUE, RGB(255, 0, 255)); // 삼각형, 손 모양 출력 전용(위 타일셋과 동일 파일을 사용하지만 초기화를 달리한다.)
