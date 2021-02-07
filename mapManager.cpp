@@ -9,7 +9,8 @@ HRESULT mapManager::init()
 
 void mapManager::release()
 {
-	
+	cO.clear();
+	eR.clear();
 }
 
 void mapManager::update()
@@ -19,9 +20,21 @@ void mapManager::update()
 
 void mapManager::render()
 {
-	cO.clear();
-	eR.clear();
+	
 	//_tile.clear();
+}
+
+void mapManager::zorderUpdate()
+{
+	int yGrid = (int)(currPlPos->y / TILESIZE);
+	int xGrid = (int)(currPlPos->x / TILESIZE);
+
+	if (yGrid >= _totRegion.bottom / TILESIZE) return;
+
+	if (_tile[yGrid][xGrid].geography == 4)
+		zGrid = currPlPos->y + 20;
+	else
+		zGrid = currPlPos->y - 2;
 }
 
 void mapManager::mapCollision()
@@ -31,16 +44,17 @@ void mapManager::mapCollision()
 		for (int x = 0; x < _crtXsize-18; ++x)
 		{
 			if (!_tile[y][x].rectYes) continue;
-			if (currPlPos->x - probeX < _tile[y][x].rect.right && currPlPos->x + probeX > _tile[y][x].rect.left
-				&& currPlPos->y - probeY < _tile[y][x].rect.bottom && currPlPos->y + probeY > _tile[y][x].rect.top)
+
+			if (currPlPos->x < _tile[y][x].rect.right && currPlPos->x > _tile[y][x].rect.left
+				&& currPlPos->y < _tile[y][x].rect.bottom && currPlPos->y > _tile[y][x].rect.top)
 			{
 				int Xdiff = prevPlPos.x - currPlPos->x; //전 x 위치와 현 x 위치의 차이
 				int Ydiff = prevPlPos.y - currPlPos->y; //전 y 위치와 현 y 위치의 차이
 
-				if (Xdiff > 0) currPlPos->x = _tile[y][x].rect.right + probeX;
-				else if (Xdiff < 0) currPlPos->x = _tile[y][x].rect.left  - probeX;
-				if (Ydiff > 0)currPlPos->y = _tile[y][x].rect.bottom  + probeY;
-				else if (Ydiff < 0)currPlPos->y = _tile[y][x].rect.top - probeY;
+				if (Xdiff > 0) currPlPos->x = _tile[y][x].rect.right;
+				else if (Xdiff < 0) currPlPos->x = _tile[y][x].rect.left;
+				if (Ydiff > 0)currPlPos->y = _tile[y][x].rect.bottom;
+				else if (Ydiff < 0)currPlPos->y = _tile[y][x].rect.top;
 			}
 		}
 	}

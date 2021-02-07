@@ -39,12 +39,10 @@ void leeneSquare::update()
 	//if (currPlPos->y + 32 > 1500 && currPlPos->x >= 1400 && currPlPos->x <= 1600) gameScene::goToMap(1); //메인 광장가는 위치 &&x는?
 	//if (currPlPos->y - 32 < 0) gameScene::goToMap(4); //텔레포트 가는 방향
 
-
+	zorderUpdate();
 	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
 	if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(6);
 	//if (PtInRect(&exit[2], *currPlPos)) gameScene::goToMap(2);
-
-	if (currPlPos->x + 32 > 3072) currPlPos->x = 3072; //x의 우측.
 
 	if (eR.size() <= 0) return;
 	if (PtInRect(&eR[0], *currPlPos))event1 = 1;//보따리 이벤트 접촉
@@ -58,7 +56,7 @@ void leeneSquare::update()
 
 void leeneSquare::render()
 {
-	IMG->renderZ(2000, IMG->find("Leene_SquareZ"), getMemDC(), 0, 0);
+	IMG->renderZ(zGrid, IMG->find("Leene_SquareZ"), getMemDC(), 0, 0);
 	IMG->renderZ(0, IMG->find("Leene_Square"), getMemDC(), 0, 0);
 
 	if(event1 == 0)IMG->render("보따리", getMemDC(), eR[0].left, eR[0].top - 64);

@@ -22,8 +22,9 @@ HRESULT chronoHome2::init()
 void chronoHome2::update()
 {
 	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(5);
-	if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(1);
-
+	else if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(1);
+	else zorderUpdate();
+	
 	mapCollision();
 	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
@@ -41,7 +42,7 @@ void chronoHome2::render()
 {
 	//IMG->render("크로노집아래", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 
-	IMG->renderZ(2000, IMG->find("CronoRoomZ3"), getMemDC(), 0, 0);
+	IMG->renderZ(zGrid, IMG->find("CronoRoomZ3"), getMemDC(), 0, 0);
 	IMG->renderZ(0, IMG->find("CronoRoom3"), getMemDC(), 0, 0);
 
 #ifdef _DEBUG
