@@ -21,25 +21,27 @@ void mapManager::render()
 {
 	cO.clear();
 	eR.clear();
-	tile.clear();
+	//_tile.clear();
 }
 
 void mapManager::mapCollision()
 {
-	for (size_t i = 0; i < cO.size(); ++i)
+	for (int y = 0; y < _crtYsize; ++y)
 	{
-		if (currPlPos->x - probeX < cO[i].right && currPlPos->x + probeX > cO[i].left
-			&& currPlPos->y - probeY < cO[i].bottom && currPlPos->y + probeY > cO[i].top
-			
-			)
+		for (int x = 0; x < _crtXsize-18; ++x)
 		{
-			int Xdiff = prevPlPos.x - currPlPos->x; //전 x 위치와 현 x 위치의 차이
-			int Ydiff = prevPlPos.y - currPlPos->y; //전 y 위치와 현 y 위치의 차이
+			if (!_tile[y][x].rectYes) continue;
+			if (currPlPos->x - probeX < _tile[y][x].rect.right && currPlPos->x + probeX > _tile[y][x].rect.left
+				&& currPlPos->y - probeY < _tile[y][x].rect.bottom && currPlPos->y + probeY > _tile[y][x].rect.top)
+			{
+				int Xdiff = prevPlPos.x - currPlPos->x; //전 x 위치와 현 x 위치의 차이
+				int Ydiff = prevPlPos.y - currPlPos->y; //전 y 위치와 현 y 위치의 차이
 
-			if (Xdiff > 0) currPlPos->x = cO[i].right + probeX;
-			else if (Xdiff < 0) currPlPos->x = cO[i].left - probeX;
-			if (Ydiff > 0)currPlPos->y = cO[i].bottom + probeY;
-			else if (Ydiff < 0)currPlPos->y = cO[i].top - probeY;
+				if (Xdiff > 0) currPlPos->x = _tile[y][x].rect.right + probeX;
+				else if (Xdiff < 0) currPlPos->x = _tile[y][x].rect.left  - probeX;
+				if (Ydiff > 0)currPlPos->y = _tile[y][x].rect.bottom  + probeY;
+				else if (Ydiff < 0)currPlPos->y = _tile[y][x].rect.top - probeY;
+			}
 		}
 	}
 	prevPlPos = *currPlPos;
@@ -264,6 +266,7 @@ void mapManager::load2(const char* _name)
 			_tile[y][x].layerPos2 = { _tiles[x + (y * (_crtXsize - 18))].layerPos2.x , _tiles[x + (y * (_crtXsize - 18))].layerPos2.y };
 			_tile[y][x].geography = _tiles[x + (y * (_crtXsize - 18))].geography;
 			_tile[y][x].rectYes = _tiles[x + (y * (_crtXsize - 18))].rectYes;
+			_tile[y][x].rect = MakeRct(_tile[y][x].tilePos.x * TILESIZE, _tile[y][x].tilePos.y * TILESIZE, TILESIZE, TILESIZE);
 		}
 	}
 	CloseHandle(file);
@@ -305,8 +308,8 @@ void mapManager::tileMapLoad(string strKey, int width, int height)
 			//img->render(hTempDC, TILESIZE * x, TILESIZE * y, tile[y][x].layerPos1.x * 64, tile[y][x].layerPos1.y * 64, 64, 64);
 		}
 	}
-
 	BitBlt(img->getMemDC(), 0, 0, width, height, hTempDC, 0, 0, SRCCOPY);
+
 	DeleteObject(SelectObject(hTempDC, hTempOBitmap));
 	DeleteDC(hTempDC);
 

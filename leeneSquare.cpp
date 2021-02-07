@@ -5,20 +5,19 @@
 HRESULT leeneSquare::init()
 {
 	event1 = 0;
-
+	load2("res/mapInfo/밀레광장/saveMap1.map");
 	currPlPos = &pl->getCrono()->getPos();
-	if (getPrevMapNum() == 6) *currPlPos = { 1495 + 100, 1850 };
-	else if (getPrevMapNum() == 3) *currPlPos = { 100, 500 }; //가토방에서 다시 leene로 왔을 때 위치
+	if (getPrevMapNum() == 6) *currPlPos = { 1495 + 100, 1750 };
+	else if (getPrevMapNum() == 1) *currPlPos = { 1600, 144 }; 
 	else *currPlPos = { 1600, 1400 };
 
 
 	setMapNum(2);
-	
 
 	eR.push_back({ 448, 1108 , 448 + 56, 1108 + 56 }); // 광장 음식 먹는 음식먹는 이벤트
 	eR.push_back({ 1854, 510 , 1854+61, 510 + 61 }); //목걸이 있는 위치
 
-	exit.push_back({ 0, 335, 65, 335 + 249 });
+	exit.push_back({ 1500, 10, 1700, 30 });
 	exit.push_back({ 1495, 1866, 1680, 1866 + 63 });
 
 	prevPlPos = *currPlPos;
@@ -30,7 +29,8 @@ void leeneSquare::release()
 {
 	cO.clear();
 	eR.clear();
-	tile.clear();
+	//_tile.clear();
+
 }
 
 void leeneSquare::update()
@@ -40,12 +40,13 @@ void leeneSquare::update()
 	//if (currPlPos->y - 32 < 0) gameScene::goToMap(4); //텔레포트 가는 방향
 
 
-	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(1);
+	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
 	if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(6);
 	//if (PtInRect(&exit[2], *currPlPos)) gameScene::goToMap(2);
 
 	if (currPlPos->x + 32 > 3072) currPlPos->x = 3072; //x의 우측.
-	
+
+	if (eR.size() <= 0) return;
 	if (PtInRect(&eR[0], *currPlPos))event1 = 1;//보따리 이벤트 접촉
 	if (PtInRect(&eR[1], *currPlPos))event2 = 1;//팬던트 이벤트
 
@@ -70,9 +71,13 @@ void leeneSquare::render()
 			HBRUSH hBrush = CreateSolidBrush(RGB(0, 255, 0));
 			HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
 			HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
-			for (size_t i = 0; i < cO.size(); ++i)
+			for (int y = 0; y < _crtYsize; ++y)
 			{
-				DrawRct(getMemDC(), cO[i]);
+				for (int x = 0; x < _crtXsize - 18; ++x)
+				{
+					if (!_tile[y][x].rectYes) continue;
+					DrawRct(getMemDC(), _tile[y][x].rect);
+				}
 			}
 			DeleteObject(SelectObject(getMemDC(), hOPen));
 			DeleteObject(SelectObject(getMemDC(), hOBrush));

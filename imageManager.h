@@ -27,6 +27,8 @@ public:
 	// 이미지 추가
 	image* add(string strKey, int width, int height);
 
+	image * add(string strKey, int width, int height, BOOL hasTransparentColor, COLORREF transparentColor);
+
 	// 이미지 추가
 	image* add(string strKey, const char* fileName, int width, int height, BOOL hasTransparentColor = FALSE, COLORREF transparentColor = RGB(0, 0, 0));
 
