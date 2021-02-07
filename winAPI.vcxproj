@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
+    <ClInclude Include="Astar.h" />
     <ClInclude Include="battleModeSelectScene.h" />
     <ClInclude Include="bossGatoStage.h" />
     <ClInclude Include="character.h" />
@@ -199,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="Astar.cpp" />
     <ClCompile Include="battleModeSelectScene.cpp" />
     <ClCompile Include="bossGatoStage.cpp" />
     <ClCompile Include="characterNamingScene.cpp" />

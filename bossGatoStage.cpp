@@ -8,7 +8,7 @@ HRESULT bossGatoStage::init()
 
 	load2("res/mapInfo/가토/saveMap1.map");
 	currPlPos = &pl->getCrono()->getPos();
-	if (getPrevMapNum() == 2) *currPlPos = { 660, 780 };
+	if (getPrevMapNum() == 1) *currPlPos = { 644, 850 };
 	else if (getPrevMapNum() == 4) *currPlPos = { 1050, 1000 }; 
 	setMapNum(3);
 
