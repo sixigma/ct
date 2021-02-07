@@ -117,5 +117,6 @@ public:
 	TEXT_WINDOW_STATE getTextWindowState2() { return _textWindowState2; }
 
 	void toggleTextWindowPos() { _shouldWindowUseTheTopPane = !_shouldWindowUseTheTopPane; }
+	BOOL getTextWindowPos() { return _shouldWindowUseTheTopPane; }
 };
 

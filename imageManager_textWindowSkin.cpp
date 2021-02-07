@@ -67,6 +67,9 @@ void imageManager::setAllWindowSkins()
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "대사 출력 창 스킨", 1024, 320);
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "전투 메시지 창 스킨", 1024, 96);
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "설정 메시지 창 스킨", 898, 128);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "전투 창 스킨", 225, 192);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "전투 스탯 창 스킨", 640, 192);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "전투 적 목록 창 스킨", WINW / 2, 192);
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "전투 모드 선택 메시지 창 스킨", 896, 316);
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "이름 입력 창 1 스킨", 572, 252);
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "이름 입력 창 2 스킨", 768, 572);

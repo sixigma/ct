@@ -73,11 +73,10 @@ void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 
 void gameScene::update()
 {
 	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
-		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE)
+		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE || _isInBattle)
 	{
 		if (KEY->down('X')) TXT->toggleTextWindowPos();
 	}
-
 
 	_p->update();
 	_currMap->update();
