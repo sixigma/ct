@@ -201,17 +201,26 @@ void textManager::updateL()
 						}
 						else if (_character == '>')
 						{
-							if (tempStr[0] == 'w') // 기다리기이면(즉 <w자연수>가 있으면)
+							if (tempStr[0] == 'w') // 기다리기이면(즉 <w정수>가 있으면)
 							{
 								try
 								{
 									int count = stoi(tempStr.substr(1));
-									if (count > 0) _waitCount = count;
-									else if (count == 0) // 그 자연수가 0이면(바로 다음 글자까지 같이 출력하는 조건이면)
+									if (count > 0) _waitCount = count; // 정수가 양수이면 그만큼 기다리도록 변숫값을 변경한다.
+									else if (count < -1) // 정수가 -1보다 작은 음수 n이면(바로 다음 -n 개 문자가 함께 출력되는 조건이면)
 									{
-										iSS.get(_character);
-										if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
-										else _currStr1 += _character;
+										while (count < 0) // count가 0이 될 때까지
+										{
+											iSS.get(_character);
+											if (iSS.fail())
+											{
+												_isWholeCurrStrShown1 = TRUE;
+												break;
+											}
+											else _currStr1 += _character;
+											++count;
+										}
+										// 주의: 이때에는 <, [ 등 문자가 있는지 검사를 하지 않는다.
 									}
 								}
 								catch (const invalid_argument& e)
@@ -221,7 +230,7 @@ void textManager::updateL()
 							}
 							else if (tempStr == "acf") // 강제 자동 닫기(시간이 지나야만 닫는다.)이면(즉 <acf>가 있으면)
 							{
-								_waitCount = 60;
+								_waitCount = 60; // 60 프레임 기다리도록 변숫값을 변경한다.
 								_isGoingToBeAutoClosed = TRUE;
 								_shouldBeAutoClosed = TRUE;
 							}
