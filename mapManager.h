@@ -17,6 +17,8 @@ protected:
 	RECT tempRct;
 	vector<vector<tileInfo>> tile;
 
+	int zGrid;
+
 public:
 	mapManager() 
 	{ 
@@ -28,6 +30,8 @@ public:
 	void release() override;
 	void update() override;
 	void render() override;
+
+	void zorderUpdate();
 
 	
 	void setTrigger(bool trigger) { eventtrigger = trigger; }

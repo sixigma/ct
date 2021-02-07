@@ -23,7 +23,8 @@ void chronoHome::update()
 {
 
 	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(6);
-
+	else zorderUpdate();
+	
 	mapCollision();
 	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
@@ -39,7 +40,7 @@ void chronoHome::release()
 
 void chronoHome::render()
 {
-	IMG->renderZ(2000, IMG->find("CronoRoomZ1"), getMemDC(), 0, 0);
+	IMG->renderZ(zGrid, IMG->find("CronoRoomZ1"), getMemDC(), 0, 0);
 	IMG->renderZ(0, IMG->find("CronoRoom1"), getMemDC(), 0, 0);
 
 	//IMG->execZ();

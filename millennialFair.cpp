@@ -23,10 +23,7 @@ HRESULT millennialFair::init()
 //3072 1856
 void millennialFair::update()
 {
-	
-	
-	if (currPlPos->x + 32 > 3072) currPlPos->x = 3072;	//x축의 오른쪽
-	if (currPlPos->x < 32) currPlPos->x = 32;			//x축의 왼쪽
+	zorderUpdate();
 
 
 	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(1);
@@ -50,7 +47,7 @@ void millennialFair::release()
 
 void millennialFair::render()
 {
-	IMG->renderZ(2000, IMG->find("Leene_SquareZ2"), getMemDC(), 0, 0);
+	IMG->renderZ(zGrid, IMG->find("Leene_SquareZ2"), getMemDC(), 0, 0);
 	IMG->renderZ(0, IMG->find("Leene_Square2"), getMemDC(), 0, 0);
 
 #ifdef _DEBUG
