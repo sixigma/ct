@@ -11,9 +11,7 @@ HRESULT bossGatoStage::init()
 	currPlPos = &pl->getCrono()->getPos();
 
 	if (getPrevMapNum() == 1) *currPlPos = { 644, 850 };
-
-	if (getPrevMapNum() == 2) *currPlPos = { 660, 780 };
-
+	else if (getPrevMapNum() == 2) *currPlPos = { 660, 780 };
 	else if (getPrevMapNum() == 4) *currPlPos = { 1050, 1000 }; 
 	setMapNum(3);
 
@@ -56,7 +54,11 @@ void bossGatoStage::update()
 	
 	//if (currPlPos->y - probeY > 1024) gameScene::goToMap(2);
 	zorderUpdate();
-	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
+	if (PtInRect(&exit[0], *currPlPos))
+	{
+		gameScene::goToMap(2);
+		return;
+	}
 
 	mapCollision();
 	
@@ -71,6 +73,8 @@ void bossGatoStage::update()
 		if (!_ChkDialogueEnd)
 		{
 			_isChrUnmovable = true;
+			pl->getCrono()->setState(NORMAL_IDLE);
+			pl->getLucca()->setState(NORMAL_IDLE);
 			TXT->enqueueL
 			(
 				"They call me Gato{\n"
@@ -102,11 +106,11 @@ void bossGatoStage::release()
 
 	//_tile.clear();
 
-
 	_battle.reset();
 	_gato->release();
 	_gato.reset();
-
+	_ChkDialogueEnd = false;
+	_isInBattle = false;
 }
 
 void bossGatoStage::render()
@@ -117,11 +121,10 @@ void bossGatoStage::render()
 	IMG->renderZ(zGrid, IMG->find("보스맵Z"), getMemDC(), 0, 0);
 	IMG->renderZ(0, IMG->find("보스맵"), getMemDC(), 0, 0);
 
-
 	//IMG->render("bossGato", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 	_gato->render();
 	_shouldRenderUsingWindowCoords = TRUE;
-	_battle->renderBattle();
+	_battle->render();
 	_shouldRenderUsingWindowCoords = FALSE;
 #ifdef _DEBUG
 		{

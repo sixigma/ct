@@ -43,7 +43,7 @@ void gato::release()
 {
 	SAFE_DEL(_Ani.talk); 
 	SAFE_DEL(_Ani.idle_front);
-	SAFE_DEL(_Ani.move_front); SAFE_DEL(_Ani.move_back); SAFE_DEL(_Ani.move_right); SAFE_DEL(_Ani.atk_left);
+	SAFE_DEL(_Ani.move_front); SAFE_DEL(_Ani.move_back); SAFE_DEL(_Ani.move_right); SAFE_DEL(_Ani.move_left);
 	SAFE_DEL(_Ani.atk_front); SAFE_DEL(_Ani.atk_back); SAFE_DEL(_Ani.atk_right); SAFE_DEL(_Ani.atk_left);
 	SAFE_DEL(_Ani.hit);
 	SAFE_DEL(_Ani.Oth_F); SAFE_DEL(_Ani.Oth_B);  SAFE_DEL(_Ani.Oth_R);  SAFE_DEL(_Ani.Oth_L);

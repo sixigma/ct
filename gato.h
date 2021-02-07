@@ -5,8 +5,6 @@ class player;
 class gato : public enemy
 {
 private:
-
-
 	int _T;	//방향 전환(turn)		0 : front / 1 : back / 2 : right / 3 : left
 	//bool _up, _down, _right, _left;
 	int _Move;

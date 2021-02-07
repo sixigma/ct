@@ -26,55 +26,67 @@ void progressBar::update()
 	_rctProgress = MakeRctC(static_cast<int>(_x), static_cast<int>(_y), _progressBarFront->getWidth(), _progressBarFront->getHeight());
 }
 
-void progressBar::render()
+void progressBar::render(HDC hDC)
 {
-	IMG->renderZ(5001,"backBar", getMemDC(),
-		_rctProgress.left + _progressBarBack->getWidth() / 2,
-		static_cast<int>(_y) + _progressBarBack->getHeight() / 2, 0, 0,
+	IMG->render("backBar", hDC,
+		_rctProgress.left,
+		_rctProgress.top, 0, 0,
 		_progressBarBack->getWidth(), _progressBarBack->getHeight());
 
-	IMG->renderZ(5002, _progressBarFront,getMemDC(),
-		_rctProgress.left + _progressBarFront->getWidth() / 2,
-		static_cast<int>(_y) + _progressBarFront->getHeight() / 2, 0, 0,
+	_progressBarFront->render(hDC,
+		_rctProgress.left,
+		_rctProgress.top, 0, 0,
 		static_cast<int>(_width), _progressBarFront->getHeight());
 }
 
 void progressBar::setGauge(float currVal, float maxVal)
 {
-	
-
 	if (abs(currVal - maxVal) < FLT_EPSILON)
 	{
-		_width = _progressBarBack->getWidth();
+		_width = static_cast<float>(_progressBarBack->getWidth());
 		_progressBarFront = IMG->find("fullBar");
 	}
 	else
 	{
-		_width = (currVal / maxVal) * (_progressBarBack->getWidth() - 32) + 16;
+		_width = (currVal / maxVal) * (_progressBarBack->getWidth() - 32) + 16; // 보정치 적용
 		_progressBarFront = IMG->find("frontBar");
 	}
 }
 
-void progressBar::updateGauge(float currVal, float maxVal)
+void progressBar::setGauge(int currVal, int maxVal)
 {
-	if (currVal < FLT_EPSILON)
+	if (currVal == maxVal)
 	{
-		_width = 0; return;
-	}
-
-	float targetWidth = (currVal / maxVal) * _progressBarBack->getWidth();
-
-	if (abs(currVal - maxVal) < FLT_EPSILON)
-	{
-		_width = targetWidth;
-	}
-	else if (_width < ((currVal - 1.f) / maxVal) * _progressBarBack->getWidth())
-	{
-		_width = ((currVal - 1.f) / maxVal) * _progressBarBack->getWidth();
+		_width = static_cast<float>(_progressBarBack->getWidth());
+		_progressBarFront = IMG->find("fullBar");
 	}
 	else
 	{
-		if (abs(targetWidth - _width) > 4.f) _width += 4.f * (targetWidth - _width) / abs(targetWidth - _width);
-		else _width = targetWidth;
+		_width = (static_cast<float>(currVal) / static_cast<float>(maxVal)) * (_progressBarBack->getWidth() - 32) + 16; // 보정치 적용
+		_progressBarFront = IMG->find("frontBar");
 	}
 }
+
+//void progressBar::updateGauge(float currVal, float maxVal)
+//{
+//	if (currVal < FLT_EPSILON)
+//	{
+//		_width = 0; return;
+//	}
+//
+//	float targetWidth = (currVal / maxVal) * _progressBarBack->getWidth();
+//
+//	if (abs(currVal - maxVal) < FLT_EPSILON)
+//	{
+//		_width = targetWidth;
+//	}
+//	else if (_width < ((currVal - 1.f) / maxVal) * _progressBarBack->getWidth())
+//	{
+//		_width = ((currVal - 1.f) / maxVal) * _progressBarBack->getWidth();
+//	}
+//	else
+//	{
+//		if (abs(targetWidth - _width) > 4.f) _width += 4.f * (targetWidth - _width) / abs(targetWidth - _width);
+//		else _width = targetWidth;
+//	}
+//}

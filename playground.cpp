@@ -26,14 +26,14 @@ HRESULT playground::init()
 
 	SC->addScene("로딩 장면", new loadingScene);
 
-	_isScrBlackingOut = FALSE;
-
-	SC->changeScene("로딩 장면");
-
 	_blackScreenAlpha = 0x00;
 	_fadeCount = 0;
 	_currMasterVolume = 1.f;
 	_currBGMVolume = _currSFXVolume = 0.5f;
+	_isScrBlackingOut = FALSE;
+
+	SC->changeScene("로딩 장면");
+
 
 	return S_OK;
 }

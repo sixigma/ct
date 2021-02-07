@@ -656,6 +656,7 @@ void crono::imgSwitch()
 
 void crono::keySetting()
 {
+	if (_isChrUnmovable) return;
 	if (KEY->press(VK_LEFT) && 0 < _croSet.pt.x)
 	{
 		if (_T != 3)_T = 3;

@@ -61,7 +61,7 @@ public:
 	virtual void update();
 	virtual void render();
 
-	void attack(float Distance);
+	bool attack(float Distance);
 
 	//getter
 	int getEnemyExp() { return _Status.exp; }

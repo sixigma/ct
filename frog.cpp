@@ -40,8 +40,8 @@ void frog::release()
 	SAFE_DEL(an.downs_0); SAFE_DEL(an.downs_1); SAFE_DEL(an.downs_2);		//배틀 _ 쓰러지기 직전
 	SAFE_DEL(an.walk_0); SAFE_DEL(an.walk_1); SAFE_DEL(an.walk_2);			//노말 / 배틀 _ 걷기 애니
 	SAFE_DEL(an.run_0); SAFE_DEL(an.run_1); SAFE_DEL(an.run_2);				//노말 _ 달리기 애니
-	SAFE_DEL(an.Bready_0); SAFE_DEL(an.Bready_1); SAFE_DEL(an.Bready_3);	//배틀 _ 준비 애니
-	SAFE_DEL(an.SB_0); SAFE_DEL(an.SB_1); SAFE_DEL(an.SB_3);				//배틀 _ 스탠바이 애니
+	SAFE_DEL(an.Bready_0); SAFE_DEL(an.Bready_1); SAFE_DEL(an.Bready_3); SAFE_DEL(an.Bready_2);	//배틀 _ 준비 애니
+	SAFE_DEL(an.SB_0); SAFE_DEL(an.SB_1); SAFE_DEL(an.SB_3); SAFE_DEL(an.SB_2);				//배틀 _ 스탠바이 애니
 	SAFE_DEL(an.atk_0); SAFE_DEL(an.atk_1); SAFE_DEL(an.atk_2);				//배틀 _ 공격 애니
 	SAFE_DEL(an.cri_0); SAFE_DEL(an.cri_1); SAFE_DEL(an.cri_2);				//배틀 _ 크리티컬 애니
 	SAFE_DEL(an.Bwin_0); SAFE_DEL(an.Bwin_1); SAFE_DEL(an.Bwin_2);			//배틀 _ 승리
