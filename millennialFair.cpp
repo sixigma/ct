@@ -4,17 +4,17 @@
 
 HRESULT millennialFair::init()
 {
-	setMapNum(1);
+	load2("res/mapInfo/린광장/saveMap1.map");
 	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 6) *currPlPos = { 1560, 1733 };
-	else if (getPrevMapNum() == 2) *currPlPos = { 1562, 1369 }; //millennialFair에서 leene로 가는 방향
-	else *currPlPos = { 1560, 1733 };
+	else if (getPrevMapNum() == 3) *currPlPos = { 70, 400 }; 
+	else *currPlPos = { 1578, 1334 };
 
-
+	setMapNum(1);
 
 	//나가보리기
-	exit.push_back({ 1471, 1816 , 1471 +201, 1816 + 48});
-	exit.push_back({ 1413, 0 , 1413 + 313, 44 });
+	exit.push_back({ 1440, 1410 , 1440 + 256, 1410 + 64});
+	exit.push_back({ 0, 320 , 64, 320 + 256 });
 	prevPlPos = *currPlPos;
 	gameScene::setViewport(currPlPos->x, currPlPos->y);
 
@@ -29,8 +29,8 @@ void millennialFair::update()
 	if (currPlPos->x < 32) currPlPos->x = 32;			//x축의 왼쪽
 
 
-	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
-	if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(2);
+	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(1);
+	if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(3);
 	
 	
 
@@ -45,7 +45,7 @@ void millennialFair::release()
 {
 	cO.clear();
 	eR.clear();
-	tile.clear();
+	//_tile.clear();
 }
 
 void millennialFair::render()
@@ -61,9 +61,13 @@ void millennialFair::render()
 			HBRUSH hBrush = CreateSolidBrush(RGB(0, 255, 0));
 			HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
 			HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
-			for (size_t i = 0; i < cO.size(); ++i)
+			for (int y = 0; y < _crtYsize; ++y)
 			{
-				DrawRct(getMemDC(), cO[i]);
+				for (int x = 0; x < _crtXsize - 18; ++x)
+				{
+					if (!_tile[y][x].rectYes) continue;
+					DrawRct(getMemDC(), _tile[y][x].rect);
+				}
 			}
 			DeleteObject(SelectObject(getMemDC(), hOPen));
 			DeleteObject(SelectObject(getMemDC(), hOBrush));

@@ -5,15 +5,16 @@
 HRESULT bossGatoStage::init()
 {
 	//_mapImg = imageManager::getSingleton()->add("bossGato", L"res/images/maps/bossGato.bmp");
-	setMapNum(3);
+
+	load2("res/mapInfo/가토/saveMap1.map");
 	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 2) *currPlPos = { 660, 780 };
 	else if (getPrevMapNum() == 4) *currPlPos = { 1050, 1000 }; 
-	
+	setMapNum(3);
 
 	// ========================================================
 
-
+	tileMapLoad("보스맵", 1024, 1024);
 
 	exit.push_back({ 542, 962, 542 + 194, 962 + 56 });
 	prevPlPos = *currPlPos;
@@ -24,10 +25,8 @@ HRESULT bossGatoStage::init()
 void bossGatoStage::update()
 {
 	//if (currPlPos->y - probeY > 1024) gameScene::goToMap(2);
-	for (size_t i = 0; i < exit.size(); ++i)
-	{
-		if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
-	}
+
+	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
 
 	mapCollision();
 	prevPlPos = *currPlPos;
@@ -37,12 +36,16 @@ void bossGatoStage::release()
 {
 	cO.clear();
 	eR.clear();
-	tile.clear();
+	//_tile.clear();
 }
 
 void bossGatoStage::render()
 {
 	//IMG->render("bossGato", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	//IMG->render("보스맵", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	IMG->renderZ(2000, IMG->find("보스맵Z"), getMemDC(), 0, 0);
+	IMG->renderZ(0, IMG->find("보스맵"), getMemDC(), 0, 0);
+
 
 #ifdef _DEBUG
 		{

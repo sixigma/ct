@@ -147,9 +147,12 @@ void gameScene::render()
 void gameScene::goToMap(int num)
 {
 	_isChrUnmovable = FALSE;
-	//_currMap->release();
+
+	_currMap->release();
 	_countForReEnablingKeyInput = 24;
+
 	_prevMapNum = _mapNum;
+
 	switch (num)
 	{
 	case 1: //메인광장
@@ -157,11 +160,13 @@ void gameScene::goToMap(int num)
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[1];
 		break;
+
 	case 2: //마루 만나는 곳
 		_totRegion = { 0, 0, 3072, 1468 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[0];
 		break;
+
 	case 3: //보스 가토
 		_totRegion = { 0, 0, 1024, 1024 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
@@ -173,11 +178,13 @@ void gameScene::goToMap(int num)
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[3];
 		break;
+
 	case 5://크로노위층
 		_totRegion = { 0, 0, 1024, 1024 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 		_currMap = _mapList[4];
 		break;
+
 	case 6://아랫층
 		_totRegion = { 0, 0, 1024, 1024 };
 		_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };

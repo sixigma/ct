@@ -3,15 +3,14 @@
 #include "player.h"
 HRESULT chronoHome::init()
 {
-
+	load2("res/mapInfo/크로노의방/saveMap1.map");
 	currPlPos = &pl->getCrono()->getPos();
 	if (getPrevMapNum() == 6) *currPlPos = { 450, 995 };
-	else *currPlPos = { 645, 440 };
+	else *currPlPos = { 560, 679 };
 
 	setMapNum(5);
 	
 	// ========================================================
-
 
 	exit.push_back({ 495, 1005, 495 + 100, 1005 + 100 });
 
@@ -34,7 +33,8 @@ void chronoHome::release()
 {
 	cO.clear();
 	eR.clear();
-	tile.clear();
+	//_tile.clear();
+
 }
 
 void chronoHome::render()
@@ -52,9 +52,13 @@ void chronoHome::render()
 			HBRUSH hBrush = CreateSolidBrush(RGB(0, 255, 0));
 			HPEN hOPen = (HPEN)SelectObject(getMemDC(), hPen);
 			HBRUSH hOBrush = (HBRUSH)SelectObject(getMemDC(), hBrush);
-			for (size_t i = 0; i < cO.size(); ++i)
+			for (int y = 0; y < _crtYsize; ++y)
 			{
-				DrawRct(getMemDC(), cO[i]);
+				for (int x = 0; x < _crtXsize - 18; ++x)
+				{
+					if (!_tile[y][x].rectYes) continue;
+					DrawRct(getMemDC(), _tile[y][x].rect);
+				}
 			}
 			DeleteObject(SelectObject(getMemDC(), hOPen));
 			DeleteObject(SelectObject(getMemDC(), hOBrush));
