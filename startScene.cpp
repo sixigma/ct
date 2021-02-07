@@ -8,6 +8,7 @@ startScene::startScene(): vP(new videoPlayer)
 
 startScene::~startScene()
 {
+	SAFE_DEL(vP); // loadingScene에서 종료할 때를 생각하여 추가한 줄
 }
 
 HRESULT startScene::init()

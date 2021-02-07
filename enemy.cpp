@@ -28,7 +28,7 @@ void enemy::render()
 {
 }
 
-void enemy::attack(float Distance)
+bool enemy::attack(float Distance)
 {
 	/*
 	// 원거리 공격 / 근거리 공격 / 원거리에서 접근하여 근거리 공격 타입 나누기
@@ -54,4 +54,5 @@ void enemy::attack(float Distance)
 		}
 	}
 	*/
+	return true;
 }

@@ -19,12 +19,12 @@ class bossGatoStage : public mapManager
 {
 private:
 	shared_ptr<battle> _battle;
-	shared_ptr <gato> _gato;
+	shared_ptr<gato> _gato;
 
-	vector <gameNode*> _playerVector;
-	vector <enemy*>	_enemyVector;
-	vector <POINT> _PlBattleStartPos;
-	vector <POINT> _EmBattleStartPos;
+	vector<gameNode*> _playerVector;
+	vector<enemy*>	_enemyVector;
+	vector<POINT> _PlBattleStartPos;
+	vector<POINT> _EmBattleStartPos;
 
 	int _yOffset;
 	bool _ChkDialogueEnd;

@@ -5,6 +5,8 @@
 #include <queue>
 #include <functional>
 
+constexpr int maxTriggerTime = 2000;
+
 class enemy;
 class player;
 class crono;
@@ -36,11 +38,11 @@ class battle : public gameNode
 {
 private:
 
-	queue <function<void()>> _actionQueue;
-	vector <gameNode*>* _playerVector;
-	vector <enemy*>*	_enemyVector;
-	vector <POINT>*	_PlBattleStartPos;
-	vector <POINT>* _EmBattleStartPos;
+	queue<function<bool()>> _actionQueue;
+	vector<gameNode*>* _playerVector;
+	vector<enemy*>*	_enemyVector;
+	vector<POINT>*	_PlBattleStartPos;
+	vector<POINT>* _EmBattleStartPos;
 
 	BATTLE_STATE _battleState;
 	action _p1Action, _p2Action, _p3Action;
@@ -53,8 +55,6 @@ private:
 	int arrowPointer;
 	int preArrowPointer;
 	int _blinkCount[3];
-
-	int _maxTriggerTime;
 
 	int _yOffset;
 
@@ -87,12 +87,11 @@ public:
 	//shared_ptr<progressBar> getp1TurnBar() { return _plTurnBar[]; }
 	int& getBlinkCount(int i) { return _blinkCount[i]; }
 	// void setBlinkCount(int newCount, int i) { _blinkCount[i] = newCount; }
-	//void setLinkTo(player*_p) { this-> = _p; }
 	void renderBattle();
-	void TextWindowUpdate();
-	void renderL();
+	void updateBattleWindow();
+	void renderBattleWindow();
 
-	void init(vector <enemy*>*_enemyVector, vector <gameNode*>* _playerVector,
-			  vector <POINT>* _PlBattleStartPos, vector <POINT>* _EmBattleStartPos );
+	void init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector,
+			  vector<POINT>* _PlBattleStartPos, vector<POINT>* _EmBattleStartPos );
 };
 

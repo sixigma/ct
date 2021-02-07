@@ -87,8 +87,20 @@ void battle::update()
 			if (_textWindowState == TEXT_WINDOW_STATE::INVISIBLE)
 			{
 				_battleWindowOpeningCnt++;
-				if (_battleWindowOpeningCnt >= 60)
+				if (_battleWindowOpeningCnt >= 30)
 				{
+					_crono->setTriggerTime(50);
+					_lucca->setTriggerTime(0);
+
+					_plTurnBar[0] = make_shared<progressBar>();
+					_plTurnBar[1] = make_shared<progressBar>();
+
+					_plTurnBar[0]->init(387 + 433, 44, 160, 32);
+					_plTurnBar[1]->init(387 + 433, 44 + 48, 160, 32);
+
+					_plTurnBar[0]->setGauge(_crono->getTriggerTime(), maxTriggerTime);
+					_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), maxTriggerTime);
+
 					_textWindowState = TEXT_WINDOW_STATE::OPENING;
 				}
 			}
@@ -96,11 +108,13 @@ void battle::update()
 			else if (_textWindowState == TEXT_WINDOW_STATE::OPENING)
 			{
 				_battleWindowClipCount++;
-				if (_battleWindowClipCount == 11)
+				if (_battleWindowClipCount == 9)
 				{
 					_textWindowState = TEXT_WINDOW_STATE::VISIBLE;
 					_battleState = BATTLE_STATE::BATTLE_ATK_RDY;
 				}
+
+				updateBattleWindow();
 			}
 
 			break;
@@ -133,48 +147,61 @@ void battle::update()
 			{
 				_battleState = BATTLE_STATE::BATTLE_RUNNING;
 
-				_crono->setTriggerTime(50);
-				_lucca->setTriggerTime(0);
-
-				_plTurnBar[0] = make_shared<progressBar>();
-				_plTurnBar[1] = make_shared<progressBar>();
-
-				_plTurnBar[0]->init(387 + 433 + _currOrg.x, 641 + _currOrg.y + 28, 160, 32);
-				_plTurnBar[1]->init(387 + 433 + _currOrg.x, 641 + _currOrg.y + 28 + 48, 160, 32);
-
-				_plTurnBar[0]->setGauge(_crono->getTriggerTime(), _maxTriggerTime);
-				_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), _maxTriggerTime);
 			}
+
+			updateBattleWindow();
 			break;
 		}
 		case BATTLE_STATE::BATTLE_RUNNING:
 		{
-			_crono->setTriggerTime(_crono->getTriggerTime() + _crono->getSpeed());
-			_lucca->setTriggerTime(_lucca->getTriggerTime() + _lucca->getSpeed());
-			(*_enemyVector)[0]->setTriggerTime((*_enemyVector)[0]->getTriggerTime() + (*_enemyVector)[0]->getSpeed());
+			_crono->setTriggerTime(min(_crono->getTriggerTime() + _crono->getSpeed(), maxTriggerTime));
+			_lucca->setTriggerTime(min(_lucca->getTriggerTime() + _lucca->getSpeed(), maxTriggerTime));
+			(*_enemyVector)[0]->setTriggerTime(min((*_enemyVector)[0]->getTriggerTime() + (*_enemyVector)[0]->getSpeed(), maxTriggerTime));
 
-			_plTurnBar[0]->setGauge(_crono->getTriggerTime(), _maxTriggerTime);
-			_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), _maxTriggerTime);
-
-			if (_crono->getTriggerTime() >= _maxTriggerTime)
+			if (_crono->getTriggerTime() == maxTriggerTime)
 			{
-				_crono->setTriggerTime(_maxTriggerTime);
-
 				_shouldPopUpAction[0] = true;
 			}
 
-			if (_lucca->getTriggerTime() >= _maxTriggerTime)
+			if (_lucca->getTriggerTime() == maxTriggerTime)
 			{
-				_lucca->setTriggerTime(_maxTriggerTime);
-
 				_shouldPopUpAction[1] = true;
 			}
 
-			if ((*_enemyVector)[0]->getTriggerTime() >= _maxTriggerTime)
+			if ((*_enemyVector)[0]->getTriggerTime() == maxTriggerTime)
 			{
-				(*_enemyVector)[0]->setTriggerTime(_maxTriggerTime);
-				//_actionQueue.push(//공격 함수 추가 필요);
+				// _actionQueue.push([this]()->bool {return (*_enemyVector)[0]->attack(100.f); });
 			}
+
+			//게이지 다 찼을때
+			if (_shouldPopUpAction[0] || _shouldPopUpAction[1] || _shouldPopUpAction[2])
+			{
+				if (KEY->down(VK_DOWN))
+				{
+					if (arrowPointer < 2)
+						arrowPointer++;
+				}
+
+				else if (KEY->down(VK_UP))
+				{
+					if (arrowPointer > 0)
+						arrowPointer--;
+				}
+
+				// 키 추가 필요
+			}
+			preArrowPointer = arrowPointer; // 어디에 필요한지 확인 필요
+
+			if (_crono->getState() == BATTLE_HELP) _crono->setTriggerTime(0);
+			if (_lucca->getState() == BATTLE_HELP) _lucca->setTriggerTime(0);
+
+
+
+			// 게이지 갱신
+			_plTurnBar[0]->setGauge(_crono->getTriggerTime(), maxTriggerTime);
+			_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), maxTriggerTime);
+			// 적 TurnBar setGauge 추가 필요
+
 
 			if (_crono->getHP() == 0)
 			{
@@ -191,19 +218,26 @@ void battle::update()
 				(*_enemyVector)[0]->setTriggerTime(0);
 			}
 
-
+			if(!_actionQueue.empty())
+			{
+				if (_actionQueue.front()()) _actionQueue.pop();
+			}
+			updateBattleWindow();
 			break;
 		}
 		case BATTLE_STATE::BATTLE_ALL_ENEMY_DOWN:
 		{
+			updateBattleWindow();
 			break;
 		}
 		case BATTLE_STATE::BATTLE_CHECK_REWARD_RDY:
 		{
+			updateBattleWindow();
 			break;
 		}
 		case BATTLE_STATE::BATTLE_CHECK_REWARD_START:
 		{
+			updateBattleWindow();
 			break;
 		}
 		case BATTLE_STATE::BATTLE_UI_CLOSE:
@@ -224,22 +258,24 @@ void battle::update()
 						_battleState = BATTLE_STATE::BATTLE_RES_PLAYER;
 					}
 				}
+			updateBattleWindow();
 			break;
 		}
 		case BATTLE_STATE::BATTLE_RES_PLAYER:
 		{
-			if (reinterpret_cast <crono*> ((*_playerVector)[0])->getHP() == 0)
+			if (_crono->getHP() == 0)
 			{
-				reinterpret_cast <crono*> ((*_playerVector)[0])->hitDamage(-1);
-				reinterpret_cast <crono*> ((*_playerVector)[0])->setState (NORMAL_IDLE);
+				_crono->hitDamage(-1);
+				_crono->setState(NORMAL_IDLE);
 			}
 
-			if (reinterpret_cast <lucca*> ((*_playerVector)[1])->getHP() == 0)
+			if (_lucca->getHP() == 0)
 			{
-				reinterpret_cast <lucca*> ((*_playerVector)[1])->hitDamage(-1);
-				reinterpret_cast <lucca*> ((*_playerVector)[1])->setState(NORMAL_IDLE);
+				_lucca->hitDamage(-1);
+				_lucca->setState(NORMAL_IDLE);
 			}
-				_isChrUnmovable = false;
+
+			_isChrUnmovable = false;
 			_battleState = BATTLE_STATE::BATTLE_END;
 
 			break;
@@ -252,61 +288,21 @@ void battle::update()
 	
 
 	}
-	/*updateL();
 
+
+	/*
 	if (_isInBattle)
 	{
 		if (KEY->down('3'))
-			(*_enemyVector)[0]->hitDamage(99999);
+			(*_enemyVector)[0]->hitDamage(99999); // 시험용
 	}
-
-	//게이지 다 찼을때
-	if (_shouldPopUpAction)
-	{
-		if (KEY->down(VK_DOWN))
-		{
-			if (arrowPointer < 2)
-				arrowPointer++;
-		}
-
-		else if (KEY->down(VK_UP))
-		{
-			if (arrowPointer > 0)
-				arrowPointer--;
-		}
-	}
-
-		_nowTriggerTime += _p->getCrono()->getSpeed();
-
-	if (_nowTriggerTime >= _maxTriggerTime)
-	{
-		popUpAction(); //추후에 이름 수정
-		_nowTriggerTime = _maxTriggerTime;
-	}
-	if (_p->getCrono()->getState() == BATTLE_HELP)
-		_nowTriggerTime = 0;
-
-	if (TXT->getTextWindowPos())
-	{
-		_yOffset = -606;
-		_p1TurnBar->setY(35 + _currOrg.y + 28);
-	}
-	else
-	{
-		_yOffset = 0;
-		_p1TurnBar->setY(641 + _currOrg.y + 28);
-	}
-
-	_p1TurnBar->update();
-	_p1TurnBar->setGauge(_nowTriggerTime, _maxTriggerTime);
-
-	preArrowPointer = arrowPointer;*/
+	*/
 }
 
 
 void battle::render()
 {
-
+	renderBattleWindow();
 }
 
 void battle::action()
@@ -334,9 +330,8 @@ void battle::popUpAction()
 
 void battle::renderBattle()
 {
-	/*renderL();
 
-	int tempGetExp;
+	/*int tempGetExp;
 	tempGetExp = (*_enemyVector)[0]->getEnemyExp();
 
 
@@ -345,9 +340,23 @@ void battle::renderBattle()
 		TXT->enqueueBM("get" + to_string(tempGetExp) + "exp", true);
 		_forOnceWindow = false;
 	}
+*/
+}
+
+void battle::updateBattleWindow()
+{
 	if (_isInBattle)
 	{
-		renderL();
+		if (TXT->getTextWindowPos())
+		{
+			_yOffset = -606;
+		}
+		else
+		{
+			_yOffset = 0;
+		}
+
+		_shouldRenderUsingWindowCoords = TRUE;
 
 		IMG->render("전투 적 목록 창 스킨", hTempDC, 0, 0);
 		IMG->render("전투 스탯 창 스킨", hTempDC, 387, 0);
@@ -366,13 +375,13 @@ void battle::renderBattle()
 		//플레이어 1의 전투 액션 창, HP,MP,턴바
 
 		int currentHP;
-		currentHP = _p->getCrono()->getHP();
+		currentHP = _crono->getHP();
 		string str1 = to_string(currentHP);
 		string tempstr;
 
 		if (currentHP == 0)
 		{
-			_p->getCrono()->setState(BATTLE_HELP);
+			_crono->setState(BATTLE_HELP);
 			tempstr = "비활성 타일셋0";
 			_blinkCount[0] = 24;
 		}
@@ -412,7 +421,7 @@ void battle::renderBattle()
 		IMG->frameRender(tempstr, hTempDC, 710, 45, 11, 3); //hp와 mp사이의 :(콜론)
 
 		int currentMP;
-		currentMP = _p->getCrono()->getMP();
+		currentMP = _crono->getMP();
 		string str2 = to_string(currentMP);
 
 		for (int i = 0; i < str2.size(); i++)
@@ -430,8 +439,6 @@ void battle::renderBattle()
 			}
 		}
 
-		_p1TurnBar->render();
-
 		if (_shouldPopUpAction[0])
 		{
 			IMG->render("전투 창 스킨", hTempDC, 0, 0);
@@ -443,22 +450,20 @@ void battle::renderBattle()
 
 		}
 
-		//BitBlt(getMemDC(), 0, 641 + _yOffset, WINW, 192, hTempDC, 0, 0, SRCCOPY);//visible
+		_plTurnBar[0]->render(hTempDC);
+
+
+		_shouldRenderUsingWindowCoords = FALSE;
+
+	}
+}
+
+void battle::renderBattleWindow()
+{
+	if(_textWindowState == TEXT_WINDOW_STATE::OPENING || _textWindowState == TEXT_WINDOW_STATE::CLOSING)
+		IMG->renderZ(5000, IMG->find("전투 윈도우 용 빈 비트맵"), getMemDC(), 0 + _currOrg.x , 641 + _yOffset + _currOrg.y + 12 * (8 - _battleWindowClipCount), 0, 12 * (8 - _battleWindowClipCount), WINW, 24 * _battleWindowClipCount);
+	else if (_textWindowState == TEXT_WINDOW_STATE::VISIBLE)
 		IMG->renderZ(5000, IMG->find("전투 윈도우 용 빈 비트맵"), getMemDC(), 0 + _currOrg.x, 641 + _yOffset + _currOrg.y, 0, 0, WINW, 192);
-
-		
-	}*/
-}
-
-void battle::TextWindowUpdate()
-{
-}
-
-void battle::renderL()
-{
-	if(_textWindowState != TEXT_WINDOW_STATE::OPENING || _textWindowState == TEXT_WINDOW_STATE::CLOSING)
-		IMG->renderZ(5000, IMG->find("전투 윈도우 용 빈 비트맵"), getMemDC(), 0 + _currOrg.x ,
-		(641 + _yOffset + _currOrg.y+96)*(10- _battleWindowClipCount), 0, 0, WINW, 12 * _battleWindowClipCount);
 }
 
 void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector, vector<POINT>* _PlBattleStartPos, vector<POINT>* _EmBattleStartPos)
@@ -466,10 +471,6 @@ void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector
 
 	arrowPointer = 0;
 	preArrowPointer = 0;
-	_maxTriggerTime = 2000;
-
-
-
 
 	_blinkCount[0] = 24;
 	_blinkCount[1] = 24;
@@ -491,7 +492,7 @@ void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector
 	_textWindowState = TEXT_WINDOW_STATE::INVISIBLE;
 
 
-	_battleWindowOpeningCnt = 0;
+	_battleWindowOpeningCnt = _battleWindowClipCount = 0;
 	_battleCnt = 0;
 
 	_crono = reinterpret_cast <crono*> ((*_playerVector)[0]);
@@ -501,25 +502,3 @@ void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector
 	 _shouldPopUpAction[1] = false;
 	 _shouldPopUpAction[2] = false;
 }
-
-
-
-
-/*
-renderL (HDC hDC, int fontIdx, int colorIdx)
-{
-	if (_textWindowState1 != TEXT_WINDOW_STATE::INVISIBLE)
-	{
-		
-		PatBlt(_hTextWindowDC, 0, 0, WINW, 320, BLACKNESS);
-
-		// 글 출력 창 DC 비트맵 클리핑 영역 지정하기
-		if (_textWindowState1 == TEXT_WINDOW_STATE::OPENING || _textWindowState1 == TEXT_WINDOW_STATE::CLOSING)
-		{
-			IMG->setRctClipRgn(_hTextWindowDC, 0, 16 * (10 - _windowClipCount), WINW, 32 * _windowClipCount);
-		}
-
-		// 글 출력 창 DC 비트맵에 창 출력하기
-		IMG->render("대사 출력 창 스킨", _hTextWindowDC, 0, 0);
-
-}*/

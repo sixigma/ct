@@ -14,6 +14,30 @@ loadingScene::~loadingScene() {}
 HRESULT loadingScene::init()
 {
 	_shouldRenderUsingWindowCoords = TRUE;
+	
+	IMG->add("로고", "res/images/teamLogo.bmp", 364, 217, FALSE); // 알파 값이 있는 bmp 파일
+	_hLogoDC = CreateCompatibleDC(getMemDC());
+	_logoWidth = 364, _logoHeight = 217;
+	_logoARGBBytes.reserve(static_cast<size_t>(_logoWidth) * _logoHeight * 4);
+	_logoARGBData = _logoARGBBytes.data();
+
+	BITMAPINFO bI{ 0 };
+	bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bI.bmiHeader.biWidth = _logoWidth;
+	bI.bmiHeader.biHeight = -_logoHeight; // 음수 사용
+	bI.bmiHeader.biPlanes = 1;
+	bI.bmiHeader.biBitCount = 32;
+	bI.bmiHeader.biCompression = BI_RGB;
+	bI.bmiHeader.biSizeImage = 0;
+	_hLogoBitmap = CreateDIBSection(getMemDC(), &bI, DIB_RGB_COLORS, reinterpret_cast<void**>(&_logoARGBData), NULL, 0);
+	_hOLogoBitmap = (HBITMAP)SelectObject(_hLogoDC, _hLogoBitmap);
+	IMG->render("로고", _hLogoDC);
+	_logoAlphaFactor = 0.f;
+	_logoCountForAlphaFactor = 0.f;
+	_bF.BlendOp = AC_SRC_OVER;
+	_bF.BlendFlags = 0;
+	_bF.SourceConstantAlpha = 0xFF;
+	_bF.AlphaFormat = AC_SRC_ALPHA;
 
 	_hTempDC = CreateCompatibleDC(getMemDC());
 	_hBitmap = CreateCompatibleBitmap(getMemDC(), WINW, WINH);
@@ -31,14 +55,7 @@ HRESULT loadingScene::init()
 	_hOPrgPen = (HPEN)SelectObject(_hPrgDC, _hPrgPen);
 	SelectObject(_hPrgDC, GetStockObject(DC_BRUSH));
 
-	_hThread = (HANDLE)_beginthreadex(NULL, 0, threadFunc, this, CREATE_SUSPENDED, NULL);
-	if (!_hThread)
-	{
-		return E_FAIL;
-	}
-	ResumeThread(_hThread);
-
-	_needleVertices = { {PROGRESS_PIE_OUTER_RADIUS, 10}, {PROGRESS_PIE_OUTER_RADIUS + 5, PROGRESS_PIE_OUTER_RADIUS}, {PROGRESS_PIE_OUTER_RADIUS, PROGRESS_PIE_OUTER_RADIUS + 5}, {PROGRESS_PIE_OUTER_RADIUS - 5, PROGRESS_PIE_OUTER_RADIUS}};
+	_needleVertices = { {PROGRESS_PIE_OUTER_RADIUS, 10}, {PROGRESS_PIE_OUTER_RADIUS + 5, PROGRESS_PIE_OUTER_RADIUS}, {PROGRESS_PIE_OUTER_RADIUS, PROGRESS_PIE_OUTER_RADIUS + 5}, {PROGRESS_PIE_OUTER_RADIUS - 5, PROGRESS_PIE_OUTER_RADIUS} };
 
 	_crtXsize = 34;
 	_crtYsize = 16;
@@ -59,6 +76,13 @@ HRESULT loadingScene::init()
 		}
 	}
 
+	_hThread = (HANDLE)_beginthreadex(NULL, 0, threadFunc, this, CREATE_SUSPENDED, NULL);
+	if (!_hThread)
+	{
+		return E_FAIL;
+	}
+	ResumeThread(_hThread);
+
 	return S_OK;
 }
 
@@ -71,10 +95,15 @@ void loadingScene::release()
 	DeleteObject(_hBrush[1]);
 	DeleteObject(_hBrush[2]);
 	DeleteObject(_hBrush[3]);
+	DeleteObject(SelectObject(_hLogoDC, _hOLogoBitmap));
 	DeleteObject(SelectObject(_hTempDC, _hOBitmap));
 	DeleteObject(SelectObject(_hPrgDC, _hOPrgBitmap));
+	DeleteDC(_hLogoDC);
 	DeleteDC(_hTempDC);
 	DeleteDC(_hPrgDC);
+
+	_logoARGBBytes.clear();
+	CloseHandle(_hThread);
 }
 
 void loadingScene::update()
@@ -83,6 +112,22 @@ void loadingScene::update()
 	_progressPieAngle = _progressRatio * PI2;
 	_relSecondEndPointX = static_cast<float>(PROGRESS_PIE_OUTER_RADIUS) + static_cast<float>(PROGRESS_PIE_OUTER_RADIUS) * sinf(_progressPieAngle);
 	_relSecondEndPointY = static_cast<float>(PROGRESS_PIE_OUTER_RADIUS) - static_cast<float>(PROGRESS_PIE_OUTER_RADIUS) * cosf(_progressPieAngle);
+
+	IMG->render("로고", _hLogoDC);
+	_logoAlphaFactor = max(min(sinf(_logoCountForAlphaFactor) / 2.4f + 0.6f, 1.f), 0.2f);
+	_logoCountForAlphaFactor += 0.14f;
+	if (_logoCountForAlphaFactor >= PI2) _logoCountForAlphaFactor -= PI2;
+	BYTE* dataByte = _logoARGBData;
+	for (int i = 0; i < _logoHeight; ++i)
+	{
+		for (int j = 0; j < _logoWidth; ++j, dataByte += 4)
+		{
+			dataByte[3] = (BYTE)((float)dataByte[3] * _logoAlphaFactor);
+			dataByte[0] = (BYTE)roundf((float)(dataByte[0]) * ((float)(dataByte[3]) / (float)(0xFF))); // B
+			dataByte[1] = (BYTE)roundf((float)(dataByte[1]) * ((float)(dataByte[3]) / (float)(0xFF))); // G
+			dataByte[2] = (BYTE)roundf((float)(dataByte[2]) * ((float)(dataByte[3]) / (float)(0xFF))); // R
+		}
+	}
 }
 
 void loadingScene::render()
@@ -102,12 +147,14 @@ void loadingScene::render()
 		   WINW - PROGRESS_PIE_OUTER_RADIUS * 2, WINH - PROGRESS_PIE_OUTER_RADIUS * 2,
 		   _hPrgDC, 0, 0, SRCCOPY);
 
+	PatBlt(getMemDC(), (WINW - _logoWidth) / 2, (WINH - _logoHeight) / 2, _logoWidth, _logoHeight, BLACKNESS);
+	GdiAlphaBlend(getMemDC(), (WINW - _logoWidth) / 2, (WINH - _logoHeight) / 2, _logoWidth, _logoHeight, _hLogoDC, 0, 0, _logoWidth, _logoHeight, _bF);
+
 	// 로딩 완료 시
 	if (_currentCount == MAX_SLEEP_CALLS)
 	{
 		_shouldRenderUsingWindowCoords = FALSE;
-		CloseHandle(_hThread);
-		SC->changeScene("시작 화면");
+		SC->changeScene("시작 화면"); // 시작 화면으로 장면을 전환한다.
 	}
 }
 
@@ -129,6 +176,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("Leene_Square", "res/images/maps/Leene_Square.bmp", 3072, 1856, true, RGB(179, 38, 189));
 	IMG->add("Leene_Square2", "res/images/maps/Leene_Square2.bmp", 3072, 1472, true, RGB(179, 38, 189));
 	IMG->add("Leene_SquareZ2", "res/images/maps/Leene_Square_Z2.bmp", 3072, 1472, true, RGB(179, 38, 189));
+	++loadingParams->_currentCount;
 
 	//아이템 그림
 	IMG->add("펜던트", "res/images/maps/pendant.bmp", 64, 64, true, RGB(255, 0, 255));
@@ -158,7 +206,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("전투 창 스킨", 225, 192);
 	IMG->add("전투 스탯 창 스킨", 640, 192);
 	IMG->add("전투 적 목록 창 스킨", WINW / 2, 192);
-	IMG->setAllWindowSkins();
+	IMG->setAllWindowSkins(); ++loadingParams->_currentCount;
 	IMG->addF("흰색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("위치 표시 타일셋", "res/images/tilesets/tileset0.bmp", 0, 0, 256, 128, 4, 2, TRUE, RGB(255, 0, 255)); // 삼각형, 손 모양 출력 전용(위 타일셋과 동일 파일을 사용하지만 초기화를 달리한다.)
 	IMG->addF("비활성 타일셋0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
@@ -191,6 +239,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	PatBlt(loadingParams->_hTempDC, 0, 0, 512, 160, PATCOPY);
 	BitBlt(IMG->find("하늘색 UI 글꼴")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
 	IMG->find("하늘색 UI 글꼴")->changeColor(RGB(255, 0, 255) & RGB(10, 255, 255), RGB(255, 0, 255));
+	++loadingParams->_currentCount;
 	// 노란색
 	SelectObject(loadingParams->_hTempDC, loadingParams->_hBrush[1]);
 	PatBlt(loadingParams->_hTempDC, 0, 0, 384, 256, PATCOPY);
@@ -202,6 +251,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	PatBlt(loadingParams->_hTempDC, 0, 0, 512, 160, PATCOPY);
 	BitBlt(IMG->find("노란색 UI 글꼴")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
 	IMG->find("노란색 UI 글꼴")->changeColor(RGB(255, 0, 255) & RGB(255, 255, 10), RGB(255, 0, 255));
+	++loadingParams->_currentCount;
 	// 빨간색
 	SelectObject(loadingParams->_hTempDC, loadingParams->_hBrush[2]);
 	PatBlt(loadingParams->_hTempDC, 0, 0, 384, 256, PATCOPY);
@@ -213,6 +263,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	PatBlt(loadingParams->_hTempDC, 0, 0, 512, 160, PATCOPY);
 	BitBlt(IMG->find("빨간색 UI 글꼴")->getMemDC(), 0, 0, 512, 160, loadingParams->_hTempDC, 0, 0, SRCAND);
 	IMG->find("빨간색 UI 글꼴")->changeColor(RGB(255, 0, 255) & RGB(255, 10, 10), RGB(255, 0, 255));
+	++loadingParams->_currentCount;
 	// 녹색
 	SelectObject(loadingParams->_hTempDC, loadingParams->_hBrush[3]);
 	PatBlt(loadingParams->_hTempDC, 0, 0, 384, 256, PATCOPY);
@@ -227,14 +278,13 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	++loadingParams->_currentCount;
 
 	ifstream file;
-	string line;
 	// 배경음
 	//file.open("res/bgm/fileList.txt");
 	//if (file.is_open())
 	//{
-	//	while (getline(file, line))
+	//	while (getline(file, loadingParams->_line))
 	//	{
-	//		SND->addSound("배경음 " + line.substr(0, line.size() - 4), "res/bgm/" + line, true, true);
+	//		SND->addSound("배경음 " + loadingParams->_line.substr(0, loadingParams->_line.size() - 4), "res/bgm/" + loadingParams->_line, false, false);
 	//	}
 	//}
 	//file.close();
@@ -244,9 +294,9 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	file.open("res/sfx/fileList.txt");
 	if (file.is_open())
 	{
-		while (getline(file, line))
+		while (getline(file, loadingParams->_line))
 		{
-			SND->addSound("효과음 " + line.substr(0, line.size() - 4), "res/sfx/" + line, false, false);
+			SND->addSound("효과음 " + loadingParams->_line.substr(0, loadingParams->_line.size() - 4), "res/sfx/" + loadingParams->_line, false, false);
 		}
 	}
 	file.close();
@@ -254,9 +304,11 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 
 	// 오프닝 영상 소리
 	SND->addSound("오프닝", "res/videos/Chrono Trigger Opening.mp3", true, false);
+	++loadingParams->_currentCount;
 
 	// 글꼴 사용 준비
 	TXT->prepareToUseFonts();
+	++loadingParams->_currentCount;
 
 	// 장면
 	SC->addScene("시작 화면", new startScene);
