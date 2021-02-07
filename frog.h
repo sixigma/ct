@@ -81,7 +81,13 @@ public:
 	//방향전환 T setter
 	void setT(int T) { _T = T; }
 
+	//트리거타임 setter
+	void setTriggerTime(int triggerTime) { _frogSet.triggerTime = triggerTime; }
+
 	//getter
+
+	//트리거타임 getter
+	int getTriggerTime() { return _frogSet.triggerTime; }
 
 	//개구리 현재 힘
 	int getPower() { return _frogSt.power; }

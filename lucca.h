@@ -79,6 +79,14 @@ public:
 	//피격 등에 설정시킬 STATE setter
 	void setState(STATE state) { _lucSet.state = state; }
 
+	//트리거타임 setter
+	void setTriggerTime(int triggerTime) { _lucSet.triggerTime = triggerTime; }
+
+	//getter
+
+	//트리거타임 getter
+	int getTriggerTime() { return _lucSet.triggerTime; }
+
 	//루카 현재 힘
 	int getPower() { return _lucSt.power; }
 	//루카 현재 마력
