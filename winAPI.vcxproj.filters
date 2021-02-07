@@ -127,6 +127,9 @@
     <ClCompile Include="crono.cpp">
       <Filter>Game\GameScene\Character\Players</Filter>
     </ClCompile>
+    <ClCompile Include="Astar.cpp">
+      <Filter>Framework\Astar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">
@@ -267,6 +270,9 @@
     <ClInclude Include="character.h">
       <Filter>Game\GameScene\Character</Filter>
     </ClInclude>
+    <ClInclude Include="Astar.h">
+      <Filter>Framework\Astar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -330,6 +336,9 @@
     </Filter>
     <Filter Include="Game\GameScene\Character\Players">
       <UniqueIdentifier>{a57fb616-eb2a-4471-8ae9-ead75746267e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Astar">
+      <UniqueIdentifier>{435b423a-9dd4-4bf8-a018-861952dceccb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
