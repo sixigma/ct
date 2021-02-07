@@ -207,6 +207,12 @@ void textManager::updateL()
 								{
 									int count = stoi(tempStr.substr(1));
 									if (count > 0) _waitCount = count;
+									else if (count == 0) // 그 자연수가 0이면(바로 다음 글자까지 같이 출력하는 조건이면)
+									{
+										iSS.get(_character);
+										if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
+										else _currStr1 += _character;
+									}
 								}
 								catch (const invalid_argument& e)
 								{
@@ -286,6 +292,9 @@ void textManager::updateL()
 						else if (_character == ']')
 						{
 							_currStr1 += tempStr + ']';
+							iSS.get(_character);
+							if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
+							else _currStr1 += _character;
 							break;
 						}
 					}
@@ -374,7 +383,7 @@ void textManager::updateBM()
 				}
 
 				iSS.get(_character);
-				if (iSS.fail())	_isWholeCurrStrShown1 = TRUE;
+				if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
 				else if (_character == '[')
 				{
 					_currStr1 += _character;
@@ -395,6 +404,9 @@ void textManager::updateBM()
 							else if (_character == ']')
 							{
 								_currStr1 += tempStr + ']';
+								iSS.get(_character);
+								if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
+								else _currStr1 += _character;
 								break;
 							}
 						}
@@ -446,7 +458,6 @@ void textManager::updateBM()
 			if (_battleMsgQ2.size() > 1)
 			{
 				while (_battleMsgQ2.size() > 1) _battleMsgQ2.pop(); // 출력 대기 중인 스트링이 둘 이상이면 최근 출력 예약 스트링만 남긴다.
-
 				_isWholeCurrStrShown2 = FALSE;
 				_currStr2.clear();
 			}
@@ -506,7 +517,7 @@ void textManager::updateC()
 		}
 
 		iSS.get(_character);
-		if (iSS.fail())	_isWholeCurrStrShown1 = TRUE;
+		if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
 		else if (_character == '[')
 		{
 			_currStr1 += _character;
@@ -527,6 +538,9 @@ void textManager::updateC()
 					else if (_character == ']')
 					{
 						_currStr1 += tempStr + ']';
+						iSS.get(_character);
+						if (iSS.fail()) _isWholeCurrStrShown1 = TRUE;
+						else _currStr1 += _character;
 						break;
 					}
 				}
@@ -633,10 +647,6 @@ void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
 					break;
 			}
 			IMG->frameRender("위치 표시 타일셋", _hTextWindowDC, _currPosX, _currPosY, 0, 1);
-			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY, 0, 2);
-			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY, 1, 2);
-			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX, _currPosY + 32, 0, 3);
-			//IMG->frameRender("흰색 타일셋0", _hTextWindowDC, _currPosX + 32, _currPosY + 32, 1, 3);
 		}
 
 		// 글 출력 창 DC 비트맵에 있는 창과 대사를 hDC 비트맵에 출력하기
