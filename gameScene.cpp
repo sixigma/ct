@@ -84,6 +84,7 @@ void gameScene::update()
 
 
 
+
 	// 출력할 글 갱신
 	if (_isInBattle) TXT->updateBM();
 	else if (_isMenuDisplayed) TXT->updateC();
@@ -104,6 +105,7 @@ void gameScene::render()
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
 	_currMap->render();
 	_p->render();
+	IMG->execZ();
 
 	// 글 출력
 	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
@@ -113,7 +115,7 @@ void gameScene::render()
 		else TXT->renderL(getMemDC());
 	}
 	else if (_isMenuDisplayed) TXT->renderC(getMemDC(), _menuMsgPos.x, _menuMsgPos.y);
-
+	
 #ifdef _DEBUG
 		{
 			if (KEY->isToggledOn(VK_SCROLL))

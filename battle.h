@@ -27,25 +27,19 @@ enum class BATTLE_STATE
 	BATTLE_END					// 배틀 종료
 };
 
-enum action
-{
-	atk,
-	item,
-	skills
-};
-
 class battle : public gameNode
 {
 private:
 
 	queue<function<bool()>> _actionQueue;
+	queue<string> _msgQueue;
 	vector<gameNode*>* _playerVector;
 	vector<enemy*>*	_enemyVector;
 	vector<POINT>*	_PlBattleStartPos;
 	vector<POINT>* _EmBattleStartPos;
 
+
 	BATTLE_STATE _battleState;
-	action _p1Action, _p2Action, _p3Action;
 
 	shared_ptr<progressBar> _plTurnBar[3], _emTurnBar[3];
 
@@ -58,7 +52,6 @@ private:
 
 	int _yOffset;
 
-	bool _forOnceWindow;
 	bool _shouldPopUpAction[3];
 
 	TEXT_WINDOW_STATE _textWindowState;
@@ -68,7 +61,7 @@ private:
 
 	int _battleWindowOpeningCnt;
 	int _battleWindowClipCount;
-	int _battleCnt;
+	int _enemyRemainingCnt;
 
 
 public:
@@ -81,13 +74,11 @@ public:
 	void update() override;
 	void render() override;
 
-	void action();
-	void popUpAction();
+
 	int getArrowPointer() { return arrowPointer; }
 	//shared_ptr<progressBar> getp1TurnBar() { return _plTurnBar[]; }
 	int& getBlinkCount(int i) { return _blinkCount[i]; }
 	// void setBlinkCount(int newCount, int i) { _blinkCount[i] = newCount; }
-	void renderBattle();
 	void updateBattleWindow();
 	void renderBattleWindow();
 

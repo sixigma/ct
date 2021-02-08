@@ -4,6 +4,14 @@
 
 class crono;
 class lucca;
+class player;
+
+enum class ATTACK_STATE
+{
+	INIT,
+	RUNNING,
+	END
+};
 
 struct tagEnemyImg
 {
@@ -46,12 +54,14 @@ protected:
 	tagChaSet _ChaSet;
 	tagEnemyImg _Img;
 	tagEnemyAni _Ani;
-
+	ATTACK_STATE _AtkState;
 private:
 
-	crono* _crono;
-	lucca* _lucca;
 
+	lucca* _lucca;
+	player* pl;
+
+	int _atkAniStateCnt;
 public:
 	enemy();
 	~enemy();
@@ -61,16 +71,95 @@ public:
 	virtual void update();
 	virtual void render();
 
-	bool attack(float Distance);
+	template <class T>
+	bool atkSingleTarget(T* atkTarget,  enemy* attacker);
 
 	//getter
 	int getEnemyExp() { return _Status.exp; }
 	int getEnemyHP() { return _Status.hp; }
+	int getEnemyTP() { return _Status.techPoint; }
 	int getTriggerTime() { return _ChaSet.triggerTime; }
 	int getSpeed() { return _Status.speed; }
+	POINT& getPt() { return _ChaSet.pt; }
 
 	//setter
 	void setTriggerTime(int triggerTime) { _ChaSet.triggerTime = triggerTime; }
-	void hitDamage(int damage) { _Status.hp -= min(damage, _Status.hp); }
-	void setEnemyPos(POINT pt) { _ChaSet.pt = pt; }
+	bool hitDamage(int damage)
+	{
+		if (_Status.hp == 0) return false;
+	
+		_Status.hp -= min(damage, _Status.hp);
+		if (_Status.hp == 0)
+		{
+			_State = NORMAL_IDLE;
+			return true;
+		}
+		return false;
+	}
+	void setPt(POINT pt) { _ChaSet.pt = pt; }
+	void setState(STATE state) { _State = state; }
+	
 };
+
+template<class T>
+inline bool enemy::atkSingleTarget(T * atkTarget, enemy * attacker)
+{
+	//처음,중간에계속,끝 상태
+	if (attacker->getEnemyHP() <= 0) return true;
+	switch (_AtkState)
+	{
+		case  ATTACK_STATE::INIT:
+		{
+			POINT& _atkTargetPos = atkTarget->getPos();
+			POINT& _attackerPos = attacker->getPt();
+			if (Distance(_attackerPos.x, _attackerPos.y, _atkTargetPos.x, _atkTargetPos.y) > 30)
+			{
+				float tempTargetAngle;
+				tempTargetAngle = Angle(_attackerPos.x, _attackerPos.y, _atkTargetPos.x, _atkTargetPos.y);
+				//도착하는위치 이번프레임은 도착하는위치여야한다
+				attacker->setPt({ (int)(_attackerPos.x + 10 * cosf(tempTargetAngle)), (int)(_attackerPos.y - 10 * sinf(tempTargetAngle)) });
+			}
+			else
+			{
+				_AtkState = ATTACK_STATE::RUNNING;
+				_atkAniStateCnt = 0;
+			}
+			return false;
+		}
+		case  ATTACK_STATE::RUNNING:
+		{
+			if (_atkAniStateCnt == 0)
+			{
+				attacker->setState(BATTLE_ATK);
+				attacker->_Ani.atk_front->start();
+				_atkAniStateCnt++;
+			}
+			else if (_atkAniStateCnt > 0)
+			{
+				_atkAniStateCnt++;
+				if (_atkAniStateCnt == 20)
+				{
+					atkTarget->hitDamage(RNG->getIntFromTo(9, 11));
+				}
+				
+			}
+
+			if (attacker->_Ani.atk_front->getCurrPlaylistIdx() == 0 && _atkAniStateCnt >= 30)
+			{
+				attacker->_Ani.atk_front->stop();
+				attacker->setState(NORMAL_IDLE);
+				attacker->_Ani.idle_front->start();
+				_AtkState = ATTACK_STATE::END;
+			}
+			return false;
+		}
+
+		case  ATTACK_STATE::END:
+		{
+			_atkAniStateCnt = 0;
+			_AtkState = ATTACK_STATE::INIT;
+			return true;
+		}
+	}
+	return true;
+}

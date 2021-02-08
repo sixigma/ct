@@ -41,8 +41,6 @@ void battle::update()
 		}
 		case BATTLE_STATE::BATTLE_POS_RDY:
 		{
-			_battleCnt++;
-
 			POINT& _cronoPos =_crono->getPos();
 			POINT& _luccaPos = _lucca->getPos();
 
@@ -170,7 +168,17 @@ void battle::update()
 
 			if ((*_enemyVector)[0]->getTriggerTime() == maxTriggerTime)
 			{
-				// _actionQueue.push([this]()->bool {return (*_enemyVector)[0]->attack(100.f); });
+				int tempTargetPlayNum;
+				tempTargetPlayNum = RNG->getInt(2);
+				switch (tempTargetPlayNum)
+				{
+					case 0:
+						_actionQueue.push([this]()->bool {return (*_enemyVector)[0]->atkSingleTarget(_crono, (*_enemyVector)[0]); });
+						break;
+					case 1:
+						_actionQueue.push([this]()->bool {return (*_enemyVector)[0]->atkSingleTarget(_lucca, (*_enemyVector)[0]); });
+						break;
+				}
 			}
 
 			//게이지 다 찼을때
@@ -189,19 +197,50 @@ void battle::update()
 				}
 
 				// 키 추가 필요
+		
+			
+				else if (KEY->down('V'))
+				{
+					bool enemyDown = false;
+					switch (arrowPointer)
+					{
+						
+
+						case 0: // 일반 공격
+						{
+							enemyDown = (*_enemyVector)[0]->hitDamage(999999);
+
+							break;
+						}
+
+						case 1: // 스킬
+						{
+
+							break;
+						}
+
+						case 2: // 아이템
+						{
+
+							break;
+						}
+					}
+
+					if (enemyDown) { _enemyRemainingCnt--; }
+				}
 			}
 			preArrowPointer = arrowPointer; // 어디에 필요한지 확인 필요
 
 			if (_crono->getState() == BATTLE_HELP) _crono->setTriggerTime(0);
 			if (_lucca->getState() == BATTLE_HELP) _lucca->setTriggerTime(0);
+			
+			
 
 
 
 			// 게이지 갱신
 			_plTurnBar[0]->setGauge(_crono->getTriggerTime(), maxTriggerTime);
 			_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), maxTriggerTime);
-			// 적 TurnBar setGauge 추가 필요
-
 
 			if (_crono->getHP() == 0)
 			{
@@ -222,21 +261,64 @@ void battle::update()
 			{
 				if (_actionQueue.front()()) _actionQueue.pop();
 			}
+
+			if (_enemyRemainingCnt == 0)
+				_battleState = BATTLE_STATE::BATTLE_ALL_ENEMY_DOWN;
+
 			updateBattleWindow();
 			break;
 		}
 		case BATTLE_STATE::BATTLE_ALL_ENEMY_DOWN:
 		{
+			_crono->setState(BATTLE_WIN);
+			_lucca->setState(BATTLE_WIN);
+
+			_crono->setT(0);
+			_lucca->setT(0);
+
 			updateBattleWindow();
+
+			_battleState = BATTLE_STATE::BATTLE_CHECK_REWARD_RDY;
 			break;
 		}
 		case BATTLE_STATE::BATTLE_CHECK_REWARD_RDY:
 		{
+			if (RNG->getInt(2) == 1)
+			{
+				_msgQueue.push("Got 1x Tonic!");
+			}
+		
+			_msgQueue.push("Got " + to_string((*_enemyVector)[0]->getEnemyExp()) + " experience point(s)!");
+			_msgQueue.push("Got " + to_string((*_enemyVector)[0]->getEnemyTP()) +  " tech point(s)!");
+			// 골드 추가 필요
+			if (_crono->getState() != BATTLE_HELP)
+			{
+				_crono->plusExp((*_enemyVector)[0]->getEnemyExp());
+			}
+
+			if (_lucca->getState() != BATTLE_HELP)
+			{
+				_lucca->plusExp((*_enemyVector)[0]->getEnemyExp());
+			}
 			updateBattleWindow();
+			_battleState = BATTLE_STATE::BATTLE_CHECK_REWARD_START;
+
 			break;
 		}
 		case BATTLE_STATE::BATTLE_CHECK_REWARD_START:
 		{
+			if (TXT->getTextWindowState2() == TEXT_WINDOW_STATE::INVISIBLE)
+			{
+				if (!_msgQueue.empty())
+				{
+					TXT->enqueueBM(_msgQueue.front());
+				
+					_msgQueue.pop();
+				}
+
+				else _battleState = BATTLE_STATE::BATTLE_UI_CLOSE;
+			}
+
 			updateBattleWindow();
 			break;
 		}
@@ -266,14 +348,15 @@ void battle::update()
 			if (_crono->getHP() == 0)
 			{
 				_crono->hitDamage(-1);
-				_crono->setState(NORMAL_IDLE);
 			}
 
 			if (_lucca->getHP() == 0)
 			{
 				_lucca->hitDamage(-1);
-				_lucca->setState(NORMAL_IDLE);
 			}
+
+			_crono->setState(NORMAL_IDLE);
+			_lucca->setState(NORMAL_IDLE);
 
 			_isChrUnmovable = false;
 			_battleState = BATTLE_STATE::BATTLE_END;
@@ -283,64 +366,14 @@ void battle::update()
 		case BATTLE_STATE::BATTLE_END:
 		{
 			_isInBattle = false;
-			break;
+			break;	
 		}
-	
-
 	}
-
-
-	/*
-	if (_isInBattle)
-	{
-		if (KEY->down('3'))
-			(*_enemyVector)[0]->hitDamage(99999); // 시험용
-	}
-	*/
 }
-
 
 void battle::render()
 {
 	renderBattleWindow();
-}
-
-void battle::action()
-{
-	switch (_p1Action)
-	{
-	case atk:
-
-		break;
-	case item:
-
-		break;
-	case skills:
-
-		break;
-	}
-}
-
-void battle::popUpAction()
-{
-
-
-
-}
-
-void battle::renderBattle()
-{
-
-	/*int tempGetExp;
-	tempGetExp = (*_enemyVector)[0]->getEnemyExp();
-
-
-	if ((*_enemyVector)[0]->getEnemyHP() == 0 && _forOnceWindow)
-	{
-		TXT->enqueueBM("get" + to_string(tempGetExp) + "exp", true);
-		_forOnceWindow = false;
-	}
-*/
 }
 
 void battle::updateBattleWindow()
@@ -360,9 +393,9 @@ void battle::updateBattleWindow()
 
 		IMG->render("전투 적 목록 창 스킨", hTempDC, 0, 0);
 		IMG->render("전투 스탯 창 스킨", hTempDC, 387, 0);
-		TXT->render(hTempDC, "Gato", 64, 44);		//적 1의 이름 출력
-		TXT->render(hTempDC, "GreenImp", 64, 92);	//적 2의 이름 출력
-		TXT->render(hTempDC, "Roly", 64, 140);		//적 3의 이름 출력
+		TXT->render(hTempDC, "Gato", 64, 44);			//적 1의 이름 출력
+		//TXT->render(hTempDC, "GreenImp", 64, 92);		//적 2의 이름 출력
+		//TXT->render(hTempDC, "Roly", 64, 140);		//적 3의 이름 출력
 		TXT->render(hTempDC, _playChrNames[0], 416, 45); // 플레이어 1의 캐릭터 이름 출력
 		//TXT->render(hTempDC, _playChrNames[2], 416, 686+44); // 플레이어 2의 캐릭터 이름 출력
 
@@ -485,7 +518,7 @@ void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector
 	this->_PlBattleStartPos = _PlBattleStartPos;
 	this->_EmBattleStartPos = _EmBattleStartPos;
 
-	_forOnceWindow = true; // 테스트용
+
 
 	_battleState = BATTLE_STATE::BATTLE_NOT_START_YET;
 
@@ -493,7 +526,7 @@ void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector
 
 
 	_battleWindowOpeningCnt = _battleWindowClipCount = 0;
-	_battleCnt = 0;
+	_enemyRemainingCnt = this->_enemyVector->size();
 
 	_crono = reinterpret_cast <crono*> ((*_playerVector)[0]);
 	_lucca = reinterpret_cast <lucca*> ((*_playerVector)[1]);
