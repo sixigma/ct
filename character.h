@@ -18,6 +18,8 @@ struct tagStatus	//능력치
 	int Lv;				//레벨
 	int money;			//돈
 
+	int ability;		//특수능력(아이템)
+
 	int element;		//속성
 
 	int condition;		//상태이상
@@ -32,8 +34,8 @@ enum STATE			//상태이넘
 	NORMAL_TALK,	//대화할 때
 	NORMAL_EVENT,	//이벤트
 	NORMAL_READY,	//배틀 승리 후 주인공에게 모일 때
-	BATTLE_READY,	//준비(배틀 시작시 각자리로 날아갈 때)
-	BATTLE_STANDBY,	//대기
+	GETTING_READY,	//준비(배틀 시작시 각자리로 날아갈 때)
+	BATTLE_READY,	//대기
 	BATTLE_MOVE,	//배틀시 일반움직임
 	BATTLE_RUSH,	//배틀시 달려들기
 	BATTLE_ATK,		//근거리와 원거리 구분짓기
@@ -44,23 +46,6 @@ enum STATE			//상태이넘
 	BATTLE_WIN,	//승리시(경험치, 골드 등 얻을 때)
 	BATTLE_LOSE	//패배시(전부가 hp0이 될 때)
 };
-struct tagItemStatus	//아이템 능력치
-{
-	int weapon;			//무기		공격력+
-	int weapon2;		//무기2		특수능력
-
-	int head;			//머리		방어+
-	int head2;			//머리2		특수능력
-
-	int armor;			//갑옷		방어+
-	int armor2;			//갑옷2		특수능력
-
-	int acc;			//액세서리	능력치+
-	int acc2;			//액세서리2	능력치+
-
-	int money;			//구입 / 판매가격
-};
-
 struct tagChaSet	//캐릭터 셋팅
 {
 	int triggerTime;	//전투 타이머 변수

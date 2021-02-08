@@ -411,7 +411,7 @@ void lucca::imgSwitch()
 		_lucSet.ani->resume();
 		break;
 
-	case BATTLE_READY:
+	case GETTING_READY:
 		_lucSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
@@ -436,7 +436,7 @@ void lucca::imgSwitch()
 		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
-	case BATTLE_STANDBY:
+	case BATTLE_READY:
 		_lucSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
@@ -670,14 +670,14 @@ void lucca::keySetting()
 			_lucSet.state == NORMAL_WALK ||
 			_lucSet.state == NORMAL_RUN)
 		{
-			_lucSet.state = BATTLE_READY;
+			_lucSet.state = GETTING_READY;
 		}
-		else if (_lucSet.state == BATTLE_STANDBY)
+		else if (_lucSet.state == BATTLE_READY)
 		{
 			_lucSet.state = BATTLE_WIN;
 		}
 	}
-	if (KEY->down(VK_LBUTTON) && _lucSet.state == BATTLE_STANDBY)
+	if (KEY->down(VK_LBUTTON) && _lucSet.state == BATTLE_READY)
 	{
 		_lucSet.atk = _mouse;
 		_lucSet.atkS = _lucSet.pt;
@@ -697,12 +697,12 @@ void lucca::battleSwitch()
 {
 	switch (_lucSet.state)
 	{
-	case BATTLE_READY:
+	case GETTING_READY:
 
-		if (_lucSet.ani->getCurrPlaylistIdx() != 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.state = BATTLE_STANDBY;
+		if (_lucSet.ani->getCurrPlaylistIdx() != 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.state = BATTLE_READY;
 		else if (_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.ani->start();
 		break;
-	case BATTLE_STANDBY:
+	case BATTLE_READY:
 
 		if (_lucSet.ani->isPlay() == FALSE)_lucSet.ani->start();
 
@@ -743,7 +743,7 @@ void lucca::battleSwitch()
 		if (rad >= _lucSet.Dis)
 		{
 			_lucSet.ani->stop();
-			_lucSet.state = BATTLE_STANDBY;
+			_lucSet.state = BATTLE_READY;
 		}
 
 		else if (_lucSet.Dis > rad &&_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE) { _lucSet.ani->start(); }
@@ -758,7 +758,7 @@ void lucca::battleSwitch()
 		if (_lucSet.ani->getCurrPlaylistIdx() != 0 && _lucSet.ani->isPlay() == FALSE)
 		{
 			_lucSet.ani->stop();
-			_lucSet.state = BATTLE_STANDBY;
+			_lucSet.state = BATTLE_READY;
 		}
 		else if (_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE) { _lucSet.ani->start(); }
 

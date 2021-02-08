@@ -121,23 +121,23 @@ void battle::update()
 		{
 			bool _chkForState = true;
 
-			if (_crono->getState() != BATTLE_STANDBY)
+			if (_crono->getState() != BATTLE_READY)
 				
 			{
 				_chkForState = false;
-				if (_crono->getState() != BATTLE_READY)
+				if (_crono->getState() != GETTING_READY)
 					{
-						_crono->setState(BATTLE_READY);
+						_crono->setState(GETTING_READY);
 					}
 			}
 
-			if (_lucca->getState() != BATTLE_STANDBY)
+			if (_lucca->getState() != BATTLE_READY)
 
 			{
 				_chkForState = false;
-					if (_lucca->getState() != BATTLE_READY)
+					if (_lucca->getState() != GETTING_READY)
 						{
-							_lucca->setState(BATTLE_READY);
+							_lucca->setState(GETTING_READY);
 						}
 			}
 

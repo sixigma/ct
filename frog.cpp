@@ -384,7 +384,7 @@ void frog::imgSwitch()
 		_frogSet.ani->resume();
 		break;
 
-	case BATTLE_READY:
+	case GETTING_READY:
 		_frogSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
@@ -409,7 +409,7 @@ void frog::imgSwitch()
 		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
-	case BATTLE_STANDBY:
+	case BATTLE_READY:
 		_frogSet.img = im.Bready;
 		switch (_T)
 		{
@@ -659,14 +659,14 @@ void frog::keySetting()
 			_frogSet.state == NORMAL_WALK ||
 			_frogSet.state == NORMAL_RUN)
 		{
-			_frogSet.state = BATTLE_READY;
+			_frogSet.state = GETTING_READY;
 		}
-		else if (_frogSet.state == BATTLE_STANDBY)
+		else if (_frogSet.state == BATTLE_READY)
 		{
 			_frogSet.state = BATTLE_WIN;
 		}
 	}
-	if (KEY->down(VK_LBUTTON) && _frogSet.state == BATTLE_STANDBY)
+	if (KEY->down(VK_LBUTTON) && _frogSet.state == BATTLE_READY)
 	{
 		_frogSet.atk = _mouse;
 		_frogSet.atkS = _frogSet.pt;
@@ -686,16 +686,16 @@ void frog::battleSwitch()
 {
 	switch (_frogSet.state)
 	{
-	case BATTLE_READY:
+	case GETTING_READY:
 		//시작 시 start / 끝났을 때 STACDBY 상태가 되는 것을 설정한다
 		if (_frogSet.ani->getCurrPlaylistIdx() != 0 && _frogSet.ani->isPlay() == FALSE)
 		{
-			_frogSet.state = BATTLE_STANDBY;
+			_frogSet.state = BATTLE_READY;
 			_frogSet.ani->stop();
 		}
 		else if (_frogSet.ani->getCurrPlaylistIdx() == 0 && _frogSet.ani->isPlay() == FALSE)_frogSet.ani->start();
 		break;
-	case BATTLE_STANDBY:
+	case BATTLE_READY:
 		//배틀 행동 선택 가능할 때 움직일 수 있다
 		//임시로 stop 상태일 때 움직이게 해놨음
 		if (_frogSet.ani->isPlay() == FALSE)_frogSet.ani->start();
@@ -753,7 +753,7 @@ void frog::battleSwitch()
 		if (rad >= _frogSet.Dis)
 		{
 			_frogSet.ani->stop();
-			_frogSet.state = BATTLE_STANDBY;
+			_frogSet.state = BATTLE_READY;
 		}
 
 		else if (_frogSet.Dis > rad &&_frogSet.ani->getCurrPlaylistIdx() == 0 && _frogSet.ani->isPlay() == FALSE) { _frogSet.ani->start(); }

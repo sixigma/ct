@@ -131,11 +131,10 @@
       <Filter>Framework\Astar</Filter>
     </ClCompile>
     <ClCompile Include="battle.cpp" />
-    <ClCompile Include="enemy.cpp">
-      <Filter>Game\GameScene\Players\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="gato.cpp">
-      <Filter>Game\GameScene\Players\Enemies</Filter>
+    <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="gato.cpp" />
+    <ClCompile Include="marle.cpp">
+      <Filter>Game\GameScene\Character\Players</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -281,11 +280,10 @@
       <Filter>Framework\Astar</Filter>
     </ClInclude>
     <ClInclude Include="battle.h" />
-    <ClInclude Include="enemy.h">
-      <Filter>Game\GameScene\Players\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="gato.h">
-      <Filter>Game\GameScene\Players\Enemies</Filter>
+    <ClInclude Include="enemy.h" />
+    <ClInclude Include="gato.h" />
+    <ClInclude Include="marle.h">
+      <Filter>Game\GameScene\Character\Players</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

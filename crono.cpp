@@ -470,7 +470,7 @@ void crono::imgSwitch()
 		_croSet.ani->resume();
 		break;
 
-	case BATTLE_READY:
+	case GETTING_READY:
 		_croSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
@@ -495,7 +495,7 @@ void crono::imgSwitch()
 		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
-	case BATTLE_STANDBY:
+	case BATTLE_READY:
 		_croSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
@@ -741,14 +741,14 @@ void crono::keySetting()
 			_croSet.state == NORMAL_WALK ||
 			_croSet.state == NORMAL_RUN)
 		{
-			_croSet.state = BATTLE_READY;
+			_croSet.state = GETTING_READY;
 		}
-		else if (_croSet.state == BATTLE_STANDBY)
+		else if (_croSet.state == BATTLE_READY)
 		{
 			_croSet.state = BATTLE_WIN;
 		}
 	}
-	if (KEY->down(VK_LBUTTON) && _croSet.state == BATTLE_STANDBY)
+	if (KEY->down(VK_LBUTTON) && _croSet.state == BATTLE_READY)
 	{
 		_croSet.atk = _mouse;
 		_croSet.atkS = _croSet.pt;
@@ -769,16 +769,16 @@ void crono::battleSwitch()
 {
 	switch (_croSet.state)
 	{
-	case BATTLE_READY:
+	case GETTING_READY:
 		//시작 시 start / 끝났을 때 STACDBY 상태가 되는 것을 설정한다
 		if (_croSet.ani->getCurrPlaylistIdx() != 0 && _croSet.ani->isPlay() == FALSE)
 		{
-			_croSet.state = BATTLE_STANDBY;
+			_croSet.state = BATTLE_READY;
 			_croSet.ani->stop();
 		}
 		else if (_croSet.ani->getCurrPlaylistIdx() == 0 && _croSet.ani->isPlay() == FALSE)_croSet.ani->start();
 		break;
-	case BATTLE_STANDBY:
+	case BATTLE_READY:
 		//멈춤 상태라면 start
 		if (_croSet.ani->isPlay() == FALSE)_croSet.ani->start();
 		break;
@@ -818,9 +818,9 @@ void crono::battleSwitch()
 
 		_croSet.pt.x -= static_cast<int>(cosf(_croSet.angle) * 15);
 		_croSet.pt.y -= -static_cast<int>(sinf(_croSet.angle) * 15);
-		//if (rad >= Distance(static_cast<float>(_croSet.pt.x), static_cast<float>(_croSet.pt.y), static_cast<float>(_croSet.atkS.x), static_cast<float>(_croSet.atkS.y))) { _croSet.state = BATTLE_STANDBY; }
+		//if (rad >= Distance(static_cast<float>(_croSet.pt.x), static_cast<float>(_croSet.pt.y), static_cast<float>(_croSet.atkS.x), static_cast<float>(_croSet.atkS.y))) { _croSet.state = BATTLE_READY; }
 
-		if (rad >= _croSet.Dis) { _croSet.state = BATTLE_STANDBY; }
+		if (rad >= _croSet.Dis) { _croSet.state = BATTLE_READY; }
 		break;
 	case BATTLE_WIN:
 		//노말_레디는 전투 후 크로노(1번째 플레이어)쪽으로 모인다, 임시로 idle로 바로 바뀌게 했다
