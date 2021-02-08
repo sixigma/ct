@@ -41,7 +41,7 @@ void player::update()
 
 void player::render()
 {
-	IMG->execZ();
+	
 	_crono->render();
 	_lucca->render();
 	_frog->render();

@@ -26,8 +26,7 @@ public:
 	void battleSwitch();
 
 	void setLinkPl(player* pl) { _pl = pl; }
-	void setPt(POINT pt) { _ChaSet.pt = pt; }
-	POINT getPt() { return _ChaSet.pt; }
+
 
 };
 

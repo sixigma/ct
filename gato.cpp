@@ -20,7 +20,8 @@ HRESULT gato::init()
 	_Status.atk = 7;
 	_Status.magic = 8;
 	_Status.speed = 8;
-	
+	_Status.techPoint = 1;
+
 	imgSetting();
 	_ChaSet.img = _Img.idle;
 	aniSetting();
@@ -86,7 +87,7 @@ void gato::aniSetting()
 		_Ani.talk->init(1044, 568, 348, 284);
 		int ani_Tk_arr[] = { 3,4,5,4,3 };
 		_Ani.talk->setPlaylist(ani_Tk_arr, 5, true);
-		_Ani.talk->setFPS(1);
+		_Ani.talk->setFPS(5);
 	}
 	//대기 애니
 	{
@@ -94,7 +95,7 @@ void gato::aniSetting()
 		_Ani.idle_front->init(696, 284, 348, 284);
 		int ani_Id_F_arr[] = { 0,1,0,1,0 };
 		_Ani.idle_front->setPlaylist(ani_Id_F_arr, 5, true);
-		_Ani.idle_front->setFPS(1);
+		_Ani.idle_front->setFPS(5);
 	}
 	//전투시 이동 애니
 	{
@@ -102,25 +103,25 @@ void gato::aniSetting()
 		_Ani.move_front->init(1044, 1036, 348, 284);
 		int mv_F_arr[] = { 0,1,2,1,0, };
 		_Ani.move_front->setPlaylist(mv_F_arr, 5, true);
-		_Ani.move_front->setFPS(1);
+		_Ani.move_front->setFPS(5);
 
 		_Ani.move_back = new animation;
 		_Ani.move_back->init(1044, 1036, 348, 284);
 		int  mv_B_arr[] = { 3,4,5,4,3 };
 		_Ani.move_back->setPlaylist(mv_B_arr, 5, true);
-		_Ani.move_back->setFPS(1);
+		_Ani.move_back->setFPS(5);
 
 		_Ani.move_right = new animation;
 		_Ani.move_right->init(1044, 1036, 348, 284);
 		int  mv_R_arr[] = { 6,7,8,6,7 };
 		_Ani.move_right->setPlaylist(mv_R_arr, 5, true);
-		_Ani.move_right->setFPS(1);
+		_Ani.move_right->setFPS(5);
 
 		_Ani.move_left = new animation;
 		_Ani.move_left->init(1044, 1036, 348, 284);
 		int  mv_L_arr[] = { 9,10,11,10,9 };
 		_Ani.move_left->setPlaylist(mv_L_arr, 5, true);
-		_Ani.move_left->setFPS(1);
+		_Ani.move_left->setFPS(5);
 	}
 	//공격 애니
 	{
@@ -128,57 +129,57 @@ void gato::aniSetting()
 		_Ani.atk_front->init(1392, 1136, 348, 284);
 		int atk_F_arr[] = { 0,1,2,3,2,1,0 };
 		_Ani.atk_front->setPlaylist(atk_F_arr, 7, true);
-		_Ani.atk_front->setFPS(1);
+		_Ani.atk_front->setFPS(5);
 
 		_Ani.atk_back = new animation;
 		_Ani.atk_back->init(1392, 1136, 348, 284);
 		int  atk_B_arr[] = { 4,5,6,7,6,5,4 };
 		_Ani.atk_back->setPlaylist(atk_B_arr, 7, true);
-		_Ani.atk_back->setFPS(1);
+		_Ani.atk_back->setFPS(5);
 
 		_Ani.atk_right = new animation;
 		_Ani.atk_right->init(1392, 1136, 348, 284);
 		int  atk_R_arr[] = { 8,9,10,11,10,9,8 };
 		_Ani.atk_right->setPlaylist(atk_R_arr, 7, true);
-		_Ani.atk_right->setFPS(1);
+		_Ani.atk_right->setFPS(5);
 
 		_Ani.atk_left = new animation;
 		_Ani.atk_left->init(1392, 1136, 348, 284);
 		int  atk_L_arr[] = { 12,13,14,15,14,13,12 };
 		_Ani.atk_left->setPlaylist(atk_L_arr, 7, true);
-		_Ani.atk_left->setFPS(1);
+		_Ani.atk_left->setFPS(5);
 	}
 	//피격 애니
 	{
 		_Ani.hit = new animation;
 		_Ani.hit->init(348, 284, 348, 284);
 		_Ani.hit->setDefPlaylist();
-		_Ani.hit->setFPS(1);
+		_Ani.hit->setFPS(5);
 	}
 	{
 		_Ani.Oth_F = new animation;
 		_Ani.Oth_F->init(1044, 1036, 348, 284);
 		int O_F_arr[] = { 0 };
 		_Ani.Oth_F->setPlaylist(O_F_arr, 1);
-		_Ani.Oth_F->setFPS(1);
+		_Ani.Oth_F->setFPS(5);
 
 		_Ani.Oth_B = new animation;
 		_Ani.Oth_B->init(1044, 1036, 348, 284);
 		int  O_B_arr[] = { 3 };
 		_Ani.Oth_B->setPlaylist(O_B_arr, 1);
-		_Ani.Oth_B->setFPS(1);
+		_Ani.Oth_B->setFPS(5);
 
 		_Ani.Oth_R = new animation;
 		_Ani.Oth_R->init(1044, 1036, 348, 284);
 		int  O_R_arr[] = { 6 };
 		_Ani.Oth_R->setPlaylist(O_R_arr, 1);
-		_Ani.Oth_R->setFPS(1);
+		_Ani.Oth_R->setFPS(5);
 
 		_Ani.Oth_L = new animation;
 		_Ani.Oth_L->init(1044, 1036, 348, 284);
 		int  O_L_arr[] = { 9 };
 		_Ani.Oth_L->setPlaylist(O_L_arr, 1);
-		_Ani.Oth_L->setFPS(1);
+		_Ani.Oth_L->setFPS(5);
 	}
 }
 
@@ -253,7 +254,7 @@ void gato::imgSwitch()
 		//_ChaSet.ani->frameUpdate(TIME->getElapsedTime() * 5);
 		break;
 	}
-	_ChaSet.ani->frameUpdate(TIME->getElapsedTime() * 5);
+	_ChaSet.ani->frameUpdate(TIME->getElapsedTime());
 
 }
 

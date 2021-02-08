@@ -21,6 +21,8 @@ struct tagStatus	//능력치
 	int element;		//속성
 
 	int condition;		//상태이상
+
+	int techPoint;		//기술 숙련도 점수
 };
 enum STATE			//상태이넘
 {
