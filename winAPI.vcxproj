@@ -183,6 +183,7 @@
     <ClInclude Include="marle.h" />
     <ClInclude Include="millennialFair.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerUiScene.h" />
     <ClInclude Include="teleport.h" />
     <ClInclude Include="textManager.h" />
     <ClInclude Include="loadingScene.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="marle.cpp" />
     <ClCompile Include="millennialFair.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="playerUiScene.cpp" />
     <ClCompile Include="teleport.cpp" />
     <ClCompile Include="textManager.cpp" />
     <ClCompile Include="loadingScene.cpp" />

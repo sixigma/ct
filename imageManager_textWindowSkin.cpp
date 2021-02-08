@@ -76,4 +76,30 @@ void imageManager::setAllWindowSkins()
 	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "이름 입력 안내 창 스킨", 896, 192);
 
 
+	//카테고리창
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "카테고리선택", 512, 192);
+	//캐릭터창
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "캐릭터창", 384, 192);//캐릭터 hp mp
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "장비창", 384, 128); //아이템 장비 카테고리 출력
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "목록", 384, 448);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "0번 스텟창 캐릭터", 512, 768);
+	//아이템창
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "아이템창1", 896, 128);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "소지아이템창", 896, 512);
+	//스킬창
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "스킬창1", 448, 576);//왼쪽위
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "스킬창2", 448, 128);//오른쪽위
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "스킬창3", 448, 448);//오른쪽아래
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "스킬창4", 896, 192);//아래
+	//설정창
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "설정창1", 384, 640);//왼쪽
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "설정창2", 512, 640);//오른쪽
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "설정창3", 896, 128);//아래
+	//위치바꾸는창
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "위치창", 512, 192);//1번째
+	//세이브로드
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "세이브번호", 128, 128);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "세이브창", 768, 128);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "내용물1", 6*64, 5*64);
+	IMG->setWindowSkin("글 출력 창 스킨 타일셋", "내용물2", 8*64, 5 * 64);
 }

@@ -1,6 +1,23 @@
 #pragma once
 #include "gameNode.h"
-
+enum equipCategory // 장비 카테고리 equipCategory
+{
+	helmet,
+	armor,
+	accessory,
+	weapon
+};
+enum playerCategory
+{
+	Crono,
+	Marle,
+	Lucca,
+	Robo,
+	Frog,
+	Ayla,
+	Magus,
+	All
+};
 enum category
 {
 	Expendable,			//0 소모품
@@ -12,9 +29,12 @@ enum category
 class item : public gameNode
 {
 protected:
+	equipCategory eC;
+	playerCategory pC;
 	category itemCategory;
 	string itemName;
 	string itemTip;
+	vector<item*> _vItem;
 	int attack;			//장비공격력
 	int defense;		//장비 방어력
 	int power;			//물리공격데미지관련	
@@ -38,7 +58,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-	void itemlist();
+	void itemlist(string _name);
 
 
 	string getName() { return itemName; }

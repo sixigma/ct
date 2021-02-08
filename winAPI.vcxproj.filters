@@ -135,6 +135,8 @@
     <ClCompile Include="gato.cpp" />
     <ClCompile Include="marle.cpp">
       <Filter>Game\GameScene\Character\Players</Filter>
+    <ClCompile Include="playerUiScene.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,6 +286,8 @@
     <ClInclude Include="gato.h" />
     <ClInclude Include="marle.h">
       <Filter>Game\GameScene\Character\Players</Filter>
+    <ClInclude Include="playerUiScene.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@
 #include "battleModeSelectScene.h"
 #include "characterNamingScene.h"
 #include "startScene.h"
+#include "playerUiScene.h"
 #include "gameScene.h"
 #include <process.h> // _beginthreadex
 #include <fstream>
@@ -190,7 +191,42 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	// 화면 배경 그림
 	IMG->add("검은 화면", "res/images/blackBg.bmp", WINW, WINH);
 	++loadingParams->_currentCount;
-
+	//===================================================
+	//카테고리셀렉창
+	IMG->add("카테고리선택", 512, 192);
+	IMG->add("속성", "res/images/ui/type.bmp", 192, 192, true, RGB(255, 0, 255));
+	IMG->add("카테고리아이콘", "res/images/ui/categoryselect.bmp", 384, 128,true,RGB(255,0,255));
+	IMG->addF("아이템아이콘", "res/images/tilesets/tileset0.bmp", 0, 192, 384, 32, 12, 1, true, RGB(255, 0, 255));
+	IMG->addF("지건", "res/images/tilesets/tileset0.bmp", 0, 0, 128, 64, 2, 1, true, RGB(255, 0, 255));
+	//플레이어 스테이터스 창]
+	IMG->add("스텟창 뒷 배경", "res/images/ui/background.bmp", WINW, WINH);
+	IMG->add("가림막", "res/images/ui/가림막.bmp", 1024, 64);
+	//스텟창
+	IMG->add("캐릭터창", 384, 192);//캐릭터 hp mp
+	IMG->add("장비창",384 , 128); //아이템 장비 카테고리 출력
+	IMG->add("목록", 384, 448);
+	IMG->add("0번 스텟창 캐릭터", 512, 768);
+	//아이템창
+	IMG->add("아이템창1", 896, 128);
+	IMG->add("소지아이템창", 896, 512);
+	//스킬창
+	IMG->add("스킬창1", 448, 576);//왼쪽위
+	IMG->add("스킬창2", 448, 128);//오른쪽위
+	IMG->add("스킬창3", 448, 448);//오른쪽아래
+	IMG->add("스킬창4", 896, 192);//아래
+	//설정창
+	IMG->add("설정창1", 384, 640);//왼쪽
+	IMG->add("설정창2", 512, 640);//오른쪽
+	IMG->add("설정창3", 896, 128);//아래
+	//위치바꾸는창
+	IMG->add("위치창", 512, 192);//1번째
+	//세이브로드
+	IMG->add("세이브번호", 128, 128);
+	IMG->add("세이브창", 768, 128);
+	IMG->add("내용물1", 6 * 64, 5 * 64);
+	IMG->add("내용물2", 8 * 64, 5 * 64);
+	++loadingParams->_currentCount;
+	//====================================================================
 	// 기타 그림
 	IMG->addF("글 출력 창 스킨 타일셋", "res/images/tilesets/skinTileset.bmp", 256, 1024, 8, 32);
 	IMG->addF("m", "res/images/tilesets/밀레니얼타일.bmp", 1152, 3648, 18, 57, true, RGB(179, 38, 189));
@@ -202,11 +238,16 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("이름 입력 창 1 스킨", 572, 252); // 초기 빈 비트맵
 	IMG->add("이름 입력 창 2 스킨", 768, 572); // 초기 빈 비트맵
 	IMG->add("이름 입력 안내 창 스킨", 896, 192); // 초기 빈 비트맵
+
 	IMG->add("전투 윈도우 용 빈 비트맵", WINW, 192);
 	IMG->add("전투 창 스킨", 225, 192);
 	IMG->add("전투 스탯 창 스킨", 640, 192);
 	IMG->add("전투 적 목록 창 스킨", WINW / 2, 192);
 	IMG->setAllWindowSkins(); ++loadingParams->_currentCount;
+
+	IMG->setAllWindowSkins();
+	
+
 	IMG->addF("흰색 타일셋0", "res/images/tilesets/tileset0.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
 	IMG->addF("위치 표시 타일셋", "res/images/tilesets/tileset0.bmp", 0, 0, 256, 128, 4, 2, TRUE, RGB(255, 0, 255)); // 삼각형, 손 모양 출력 전용(위 타일셋과 동일 파일을 사용하지만 초기화를 달리한다.)
 	IMG->addF("비활성 타일셋0", "res/images/tilesets/tileset0Inactive.bmp", 384, 256, 12, 8, TRUE, RGB(255, 0, 255));
@@ -315,6 +356,7 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	SC->addScene("전투 모드 선택 화면", new battleModeSelectScene);
 	SC->addScene("이름 변경 화면", new characterNamingScene(0)); // Crono
 	SC->addScene("게임 장면", new gameScene(0));
+	SC->addScene("스텟 창", new playerUiScene);
 	++loadingParams->_currentCount;
 
 	while (loadingParams->_currentCount != MAX_SLEEP_CALLS)
