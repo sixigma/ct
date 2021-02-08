@@ -8,11 +8,13 @@
 #include "chronoHome.h"
 #include "chronoHome2.h"
 #include "mapManager.h"
+#include "playerUiScene.h"
 
 
 int gameScene::_countForReEnablingKeyInput;
 
 player* gameScene::_p;
+playerUiScene* gameScene::_ui;
 vector<shared_ptr<mapManager>> gameScene::_mapList;
 shared_ptr<mapManager> gameScene::_currMap;
 int gameScene::_prevMapNum, gameScene::_mapNum;
@@ -26,6 +28,9 @@ gameScene::gameScene(int anyNum)
 
 	_p = new player;
 	_p->init();
+
+	_ui = new playerUiScene;
+	_ui->init();
 
 	_mapList.emplace_back(new millennialFair);		//0
 	_mapList.emplace_back(new leeneSquare);			//1
@@ -41,10 +46,11 @@ gameScene::gameScene(int anyNum)
 	//_totRegion = { 0 , 0 , WINW, WINH };
 	//_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
 	//_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
-
+	
 	_currMap = _mapList[4];
 	_currMap->setLinkTo(_p);
 	_currMap->init();
+	
 }
 
 gameScene::~gameScene() // 주의: 중복 호출이 되어도 문제가 발생하지 않을 것만 나열하여야 한다.
@@ -65,13 +71,21 @@ gameScene::~gameScene() // 주의: 중복 호출이 되어도 문제가 발생�
 HRESULT gameScene::init() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
 {
 	SC->delScene("이름 변경 화면");
+
 	return S_OK;
 }
 void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
-{ }
+{
+}
 
 void gameScene::update()
 {
+	if (KEY->down('S'))
+	{
+		_ui->setLinkTo(_p);
+		SC->changeScene("스텟 창");
+	}
+	
 	if (TXT->getTextWindowState1() != TEXT_WINDOW_STATE::INVISIBLE
 		|| TXT->getTextWindowState2() != TEXT_WINDOW_STATE::INVISIBLE || _isInBattle)
 	{

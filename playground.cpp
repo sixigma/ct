@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "playground.h"
 #include "loadingScene.h"
+#include "playerUiScene.h"
+#include "item.h"
 
 playground::playground()
 {
