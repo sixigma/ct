@@ -701,6 +701,7 @@ void textManager::renderL(HDC hDC, int fontIdx, int colorIdx)
 				}
 			}
 		}
+		IMG->resetClipRgn(_hTextWindowDC);
 		_shouldRenderUsingWindowCoords = _prevRenderMode;
 	}
 }

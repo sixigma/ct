@@ -48,7 +48,8 @@ private:
 
 	int arrowPointer;
 	int preArrowPointer;
-	int _blinkCount[3];
+	int _msgIntervalCount;
+	int _blinkCount[3]; // HP 10 이하일 때 사용하는 변수
 
 	int _yOffset;
 

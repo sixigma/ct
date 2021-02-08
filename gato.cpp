@@ -34,7 +34,7 @@ HRESULT gato::init()
 
 	_ChaSet.Bimg = _Img.hit;
 	_ChaSet.Bani = _Ani.hit;
-
+	_ChaSet.triggerTime = 0;
 
 
 	return S_OK;

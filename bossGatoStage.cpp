@@ -106,11 +106,20 @@ void bossGatoStage::release()
 
 	//_tile.clear();
 
+
+	exit.clear();
+
+	_PlBattleStartPos.clear();
+	_EmBattleStartPos.clear();
+	_playerVector.clear();
+	_enemyVector.clear();
+
 	_battle.reset();
 	_gato->release();
 	_gato.reset();
 	_ChkDialogueEnd = false;
 	_isInBattle = false;
+
 }
 
 void bossGatoStage::render()

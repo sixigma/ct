@@ -54,7 +54,7 @@ protected:
 	tagChaSet _ChaSet;
 	tagEnemyImg _Img;
 	tagEnemyAni _Ani;
-	ATTACK_STATE _AtkState;
+	ATTACK_STATE _AtkState = ATTACK_STATE::INIT;
 private:
 
 
@@ -140,6 +140,10 @@ inline bool enemy::atkSingleTarget(T * atkTarget, enemy * attacker)
 				if (_atkAniStateCnt == 20)
 				{
 					atkTarget->hitDamage(RNG->getIntFromTo(9, 11));
+					if (atkTarget->getHP() < 0)
+					{
+						atkTarget->hitDamage(atkTarget->getHP());
+					}
 				}
 				
 			}

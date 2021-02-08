@@ -173,10 +173,14 @@ void battle::update()
 				switch (tempTargetPlayNum)
 				{
 					case 0:
+						if (_crono->getHP() > 0)
 						_actionQueue.push([this]()->bool {return (*_enemyVector)[0]->atkSingleTarget(_crono, (*_enemyVector)[0]); });
+						(*_enemyVector)[0]->setTriggerTime(0);
 						break;
 					case 1:
+						if (_lucca->getHP() > 0)
 						_actionQueue.push([this]()->bool {return (*_enemyVector)[0]->atkSingleTarget(_lucca, (*_enemyVector)[0]); });
+						(*_enemyVector)[0]->setTriggerTime(0);
 						break;
 				}
 			}
@@ -209,7 +213,7 @@ void battle::update()
 						case 0: // 일반 공격
 						{
 							enemyDown = (*_enemyVector)[0]->hitDamage(999999);
-
+							_shouldPopUpAction[0] = false;
 							break;
 						}
 
@@ -231,35 +235,32 @@ void battle::update()
 			}
 			preArrowPointer = arrowPointer; // 어디에 필요한지 확인 필요
 
-			if (_crono->getState() == BATTLE_HELP) _crono->setTriggerTime(0);
-			if (_lucca->getState() == BATTLE_HELP) _lucca->setTriggerTime(0);
-			
-			
-
 
 
 			// 게이지 갱신
 			_plTurnBar[0]->setGauge(_crono->getTriggerTime(), maxTriggerTime);
 			_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), maxTriggerTime);
 
-			if (_crono->getHP() == 0)
+			if(!_actionQueue.empty())
 			{
-				_crono->setTriggerTime(0);
+				if (_actionQueue.front()()) _actionQueue.pop();
 			}
 
-			if (_lucca->getHP() == 0)
+			if (_crono->getHP() <= 0)
+			{
+				_crono->setTriggerTime(0);
+				if (_crono->getState() != BATTLE_HELP) _crono->setState(BATTLE_HELP);
+			}
+
+			if (_lucca->getHP() <= 0)
 			{
 				_lucca->setTriggerTime(0);
+				if (_lucca->getState() != BATTLE_HELP) _lucca->setState(BATTLE_HELP);
 			}
 
 			if ((*_enemyVector)[0]->getEnemyHP() == 0)
 			{
 				(*_enemyVector)[0]->setTriggerTime(0);
-			}
-
-			if(!_actionQueue.empty())
-			{
-				if (_actionQueue.front()()) _actionQueue.pop();
 			}
 
 			if (_enemyRemainingCnt == 0)
@@ -311,12 +312,19 @@ void battle::update()
 			{
 				if (!_msgQueue.empty())
 				{
-					TXT->enqueueBM(_msgQueue.front());
-				
-					_msgQueue.pop();
+					++_msgIntervalCount;
+					if (_msgIntervalCount > 10)
+					{
+						_msgIntervalCount = 0;
+						TXT->enqueueBM(_msgQueue.front());
+						_msgQueue.pop();
+					}
 				}
-
-				else _battleState = BATTLE_STATE::BATTLE_UI_CLOSE;
+				else
+				{
+					_battleState = BATTLE_STATE::BATTLE_UI_CLOSE;
+					_msgIntervalCount = 0;
+				}
 			}
 
 			updateBattleWindow();
@@ -324,11 +332,11 @@ void battle::update()
 		}
 		case BATTLE_STATE::BATTLE_UI_CLOSE:
 		{
+
 				if (_textWindowState == TEXT_WINDOW_STATE::VISIBLE)
 				{
 					_textWindowState = TEXT_WINDOW_STATE::CLOSING;
 				}
-
 				else if (_textWindowState == TEXT_WINDOW_STATE::CLOSING)
 				{
 					_battleWindowClipCount--;
@@ -524,7 +532,7 @@ void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector
 
 	_textWindowState = TEXT_WINDOW_STATE::INVISIBLE;
 
-
+	_msgIntervalCount = 0;
 	_battleWindowOpeningCnt = _battleWindowClipCount = 0;
 	_enemyRemainingCnt = this->_enemyVector->size();
 
