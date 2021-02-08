@@ -4,31 +4,31 @@
 HRESULT marle::init()
 {
 	imgSetting();//이미지
-	_marSet.img = im.idle;//이미지는 맨처음 idle로
-	_marSet.Bimg = im.hit;
+	_chaSet.img = im.idle;//이미지는 맨처음 idle로
+	_chaSet.Bimg = im.hit;
 	aniSetting();
-	_marSet.ani = an.idle_0;
-	_marSet.ani->start();
+	_chaSet.ani = an.idle_0;
+	_chaSet.ani->start();
 	Cleft = _run = false;
 	Cc = _T = 0;
 
-	_marSet.pt = { WINW / 2 + 100, WINH / 2 + 100 };
+	_chaSet.pt = { WINW / 2 + 100, WINH / 2 + 100 };
 
-	_marSet.rc = MakeRct(_marSet.pt.x - ((220) / 2), _marSet.pt.y - 192, (220), (224));
+	_chaSet.rc = MakeRct(_chaSet.pt.x - ((220) / 2), _chaSet.pt.y - 192, (220), (224));
 
 	//마루 기본 스탯
-	_marSt.Lv = 1;					//마루 초기 레벨
-	_marSt.hp = _marSt.maxHp = 65;	//마루 초기 현재/최대HP
-	_marSt.mp = _marSt.maxMp = 12;	//마루 초기 현재/최대MP
-	_marSt.power = 2;				//마루 초기 힘
-	_marSt.hit = 9;					//마루 초기 명중
-	_marSt.magic = 8;				//마루 초기 마력
-	_marSt.speed = 8;				//마루 초기 속도
-	_marSt.evasion = 8;				//마루 초기 회피
-	_marSt.stamina = 6;				//마루 초기 체력
-	_marSt.Mdef = 8;				//마루 초기 마법방어력
+	_status.Lv = 1;					//마루 초기 레벨
+	_status.hp = _status.maxHp = 65;	//마루 초기 현재/최대HP
+	_status.mp = _status.maxMp = 12;	//마루 초기 현재/최대MP
+	_status.power = 2;				//마루 초기 힘
+	_status.hit = 9;					//마루 초기 명중
+	_status.magic = 8;				//마루 초기 마력
+	_status.speed = 8;				//마루 초기 속도
+	_status.evasion = 8;				//마루 초기 회피
+	_status.stamina = 6;				//마루 초기 체력
+	_status.Mdef = 8;				//마루 초기 마법방어력
 	//마루 기본 스탯 위까지
-	rad = 10;
+	dia = 10;
 	return S_OK;
 }
 
@@ -63,28 +63,28 @@ void marle::render()
 	if (KEY->isToggledOn(VK_TAB))
 	{
 		char str[256];
-		//sprintf_s(str, "현재 플레이 인덱스 : %d", _marSet.ani->getCurrPlaylistIdx());
+		//sprintf_s(str, "현재 플레이 인덱스 : %d", _chaSet.ani->getCurrPlaylistIdx());
 		sprintf_s(str, "Cc : %d", Cc);
 		TextOut(getMemDC(), WINW - 200, 0, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "캐릭터 포인트 : %d, %d", _marSet.pt.x, _marSet.pt.y);
+		sprintf_s(str, "캐릭터 포인트 : %d, %d", _chaSet.pt.x, _chaSet.pt.y);
 		TextOut(getMemDC(), WINW - 200, 20, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "어택 포인트 : %d, %d", _marSet.atk.x, _marSet.atk.y);
+		sprintf_s(str, "어택 포인트 : %d, %d", _chaSet.atk.x, _chaSet.atk.y);
 		TextOut(getMemDC(), WINW - 200, 40, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "시작 포인트 : %d, %d", _marSet.atkS.x, _marSet.atkS.y);
+		sprintf_s(str, "시작 포인트 : %d, %d", _chaSet.atkS.x, _chaSet.atkS.y);
 		TextOut(getMemDC(), WINW - 200, 60, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "각도 = %f", _marSet.angle);
+		sprintf_s(str, "각도 = %f", _chaSet.angle);
 		TextOut(getMemDC(), WINW - 200, 80, str, static_cast<int>(strlen(str)));
 
-		//DrawRct(getMemDC(), _marSet.rc);
-		DrawElpC(getMemDC(), _marSet.pt.x, _marSet.pt.y, rad, rad);
-		DrawElpC(getMemDC(), _marSet.atk.x, _marSet.atk.y, rad, rad);
-		DrawElpC(getMemDC(), _marSet.atkS.x, _marSet.atkS.y, rad, rad);
+		//DrawRct(getMemDC(), _chaSet.rc);
+		DrawElpC(getMemDC(), _chaSet.pt.x, _chaSet.pt.y, dia, dia);
+		DrawElpC(getMemDC(), _chaSet.atk.x, _chaSet.atk.y, dia, dia);
+		DrawElpC(getMemDC(), _chaSet.atkS.x, _chaSet.atkS.y, dia, dia);
 	}
-	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_marSet.pt.y), _marSet.img, getMemDC(), _marSet.rc.left, _marSet.rc.top, _marSet.ani);
-	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_marSet.pt.y), _marSet.img, getMemDC(), _marSet.rc.left, _marSet.rc.top, _marSet.ani);
-	if (!Cleft && white() == true)		IMG->animRenderZ(static_cast<int>(_marSet.pt.y), _marSet.Bimg, getMemDC(), _marSet.rc.left, _marSet.rc.top, _marSet.ani);
-	else if (Cleft && white() == true)	IMG->animRenderHZ(static_cast<int>(_marSet.pt.y), _marSet.Bimg, getMemDC(), _marSet.rc.left, _marSet.rc.top, _marSet.ani);
-	_marSet.Bimg->changeAllColors(RGB(255, 255, 255), RGB(255, 0, 255));
+	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	if (!Cleft && white() == true)		IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft && white() == true)	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	_chaSet.Bimg->changeAllColors(RGB(255, 255, 255), RGB(255, 0, 255));
 
 }
 
@@ -379,202 +379,195 @@ void marle::aniSetting()
 
 void marle::imgSwitch()
 {
-	switch (_marSet.state)
+	switch (_chaSet.state)
 	{
 	case NORMAL_IDLE:
-		_marSet.img = im.idle;
+		_chaSet.img = im.idle;
 
 		switch (_T)
 		{
 		case 0:
-			_marSet.ani = an.idle_0;
+			_chaSet.ani = an.idle_0;
 			break;
 		case 1:
-			_marSet.ani = an.idle_1;
+			_chaSet.ani = an.idle_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.idle_2;
+			_chaSet.ani = an.idle_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_marSet.ani = an.idle_2;
+			_chaSet.ani = an.idle_2;
 			break;
 		}
-		if (Cc > 50 && _marSet.ani->isPlay() == FALSE)
+		if (Cc > 50 && _chaSet.ani->isPlay() == FALSE)
 		{
-			_marSet.ani->start();
+			_chaSet.ani->start();
 			Cc = 0;
 		}
-		if (_marSet.ani->isPlay() == FALSE && _T != 1)Cc++;
-		else if (_marSet.ani->getCurrPlaylistIdx() != 4 && _marSet.ani->getCurrPlaylistIdx() != 0)Cc = 0;
+		if (_chaSet.ani->isPlay() == FALSE && _T != 1)Cc++;
+		else if (_chaSet.ani->getCurrPlaylistIdx() != 4 && _chaSet.ani->getCurrPlaylistIdx() != 0)Cc = 0;
 
 		break;
 
 	case NORMAL_WALK:
-		_marSet.img = im.walk;
+		_chaSet.img = im.walk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.walk_0;
+			_chaSet.ani = an.walk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.walk_1;
+			_chaSet.ani = an.walk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_marSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		}
-		_marSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_marSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
 	case NORMAL_RUN:
-		_marSet.img = im.run;
+		_chaSet.img = im.run;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.run_0;
+			_chaSet.ani = an.run_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.run_1;
+			_chaSet.ani = an.run_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_marSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		}
-		_marSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_marSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
-	case NORMAL_EVENT:
-		if (Cleft)Cleft = false;
-		_marSet.img = im.win;
-		_marSet.ani = an.win;
-		_marSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		if (_marSet.ani->isPlay() == FALSE)_marSet.ani->start();
-		break;
 	case GETTING_READY:
-		_marSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.Bready_0;
+			_chaSet.ani = an.Bready_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.Bready_1;
+			_chaSet.ani = an.Bready_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_marSet.ani = an.Bready_2;
+			_chaSet.ani = an.Bready_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_marSet.ani = an.Bready_2;
+			_chaSet.ani = an.Bready_2;
 			break;
 		}
-		_marSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
 	case BATTLE_READY:
-		_marSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.SB_0;
+			_chaSet.ani = an.SB_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.SB_1;
+			_chaSet.ani = an.SB_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_marSet.ani = an.SB_2;
+			_chaSet.ani = an.SB_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_marSet.ani = an.SB_2;
+			_chaSet.ani = an.SB_2;
 			break;
 		}
-		_marSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
 		break;
 
 		//근거리 공격시 움직이는 모션이 있긴 한데, 너무 짧은 거리라 확실하지 않아보임, 의논 후 결정
 
 		/*case BATTLE_MOVE:
-			_marSet.img = im.walk;
+			_chaSet.img = im.walk;
 			if (Cc != 0)Cc = 0;
 			switch (_T)
 			{
 			case 0:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.walk_0;
+				_chaSet.ani = an.walk_0;
 				break;
 			case 1:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.walk_1;
+				_chaSet.ani = an.walk_1;
 				break;
 			case 2:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.walk_2;
+				_chaSet.ani = an.walk_2;
 				break;
 			case 3:
 				if (!Cleft)Cleft = true;
-				_marSet.ani = an.walk_2;
+				_chaSet.ani = an.walk_2;
 				break;
 			}
-			_marSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-			_marSet.ani->resume();
+			_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+			_chaSet.ani->resume();
 
 			break;
 		case BATTLE_RUSH:
-			//_marSet.img = im.rush;
+			//_chaSet.img = im.rush;
 
 			if (Cc != 0)Cc = 0;
 			switch (_T)
 			{
 			case 0:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.oneArr_0;
+				_chaSet.ani = an.oneArr_0;
 				break;
 			case 1:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.oneArr_1;
+				_chaSet.ani = an.oneArr_1;
 				break;
 			case 2:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.oneArr_2;
+				_chaSet.ani = an.oneArr_2;
 				break;
 			case 3:
 				if (!Cleft)Cleft = true;
-				_marSet.ani = an.oneArr_2;
+				_chaSet.ani = an.oneArr_2;
 				break;
 			}
 
 			break;
 		case BATTLE_RETURN:
-			//_marSet.img = im.rush;
+			//_chaSet.img = im.rush;
 
 			if (Cc != 0)Cc = 0;
 
@@ -582,19 +575,19 @@ void marle::imgSwitch()
 			{
 			case 0:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.oneArr_0;
+				_chaSet.ani = an.oneArr_0;
 				break;
 			case 1:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.oneArr_1;
+				_chaSet.ani = an.oneArr_1;
 				break;
 			case 2:
 				if (!Cleft)Cleft = false;
-				_marSet.ani = an.oneArr_2;
+				_chaSet.ani = an.oneArr_2;
 				break;
 			case 3:
 				if (Cleft)Cleft = true;
-				_marSet.ani = an.oneArr_2;
+				_chaSet.ani = an.oneArr_2;
 				break;
 			}
 			break;*/
@@ -602,189 +595,189 @@ void marle::imgSwitch()
 	case BATTLE_ATK:
 		if (!Latk)
 		{
-			_marSet.img = im.atk;
+			_chaSet.img = im.atk;
 			switch (_T)
 			{
 			case 0:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.atk_0;
+				_chaSet.ani = an.atk_0;
 				break;
 			case 1:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.atk_1;
+				_chaSet.ani = an.atk_1;
 				break;
 			case 2:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.atk_2;
+				_chaSet.ani = an.atk_2;
 				break;
 			case 3:
 				if (!Cleft)Cleft = true;
-				_marSet.ani = an.atk_2;
+				_chaSet.ani = an.atk_2;
 				break;
 			}
 		}
 		if (Latk)
 		{
-			_marSet.img = im.atk2;
+			_chaSet.img = im.atk2;
 			switch (_T)
 			{
 			case 0:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.atk2_0;
+				_chaSet.ani = an.atk2_0;
 				break;
 			case 1:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.atk2_1;
+				_chaSet.ani = an.atk2_1;
 				break;
 			case 2:
 				if (Cleft)Cleft = false;
-				_marSet.ani = an.atk2_2;
+				_chaSet.ani = an.atk2_2;
 				break;
 			case 3:
 				if (!Cleft)Cleft = true;
-				_marSet.ani = an.atk2_2;
+				_chaSet.ani = an.atk2_2;
 				break;
 			}
 		}
 
-		_marSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
 		break;
 	case BATTLE_HELP:
-		_marSet.img = im.downs;
+		_chaSet.img = im.downs;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.twoArrF_0;
+			_chaSet.ani = an.twoArrF_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.twoArrF_1;
+			_chaSet.ani = an.twoArrF_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.twoArrF_2;
+			_chaSet.ani = an.twoArrF_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_marSet.ani = an.twoArrF_2;
+			_chaSet.ani = an.twoArrF_2;
 			break;
 		}
 		break;
 	case BATTLE_LOSE:
-		_marSet.img = im.down;
-		_marSet.ani = an.oneArr_0;
+		_chaSet.img = im.down;
+		_chaSet.ani = an.oneArr_0;
 		break;
 
 	case BATTLE_WIN:
 
-		_marSet.img = im.Bwin;
+		_chaSet.img = im.Bwin;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.Bwin_0;
+			_chaSet.ani = an.Bwin_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.Bwin_1;
+			_chaSet.ani = an.Bwin_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_marSet.ani = an.Bwin_2;
+			_chaSet.ani = an.Bwin_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_marSet.ani = an.Bwin_2;
+			_chaSet.ani = an.Bwin_2;
 			break;
 		}
 
-		_marSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
 		break;
 
 	}
-	_marSet.rc = MakeRct(_marSet.pt.x - ((220) / 2), _marSet.pt.y - 192, (220), (224));
+	_chaSet.rc = MakeRct(_chaSet.pt.x - ((220) / 2), _chaSet.pt.y - 192, (220), (224));
 
 }
 
 void marle::keySetting()
 {
-	if (KEY->press(VK_LEFT) && 0 < _marSet.pt.x)
+	if (KEY->press(VK_LEFT) && 0 < _chaSet.pt.x)
 	{
 		if (_T != 3)_T = 3;
 		if (_run)
 		{
-			_marSet.state = NORMAL_RUN;
-			_marSet.pt.x -= 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.x -= 8;
 		}
 		if (!_run)
 		{
-			_marSet.state = NORMAL_WALK;
-			_marSet.pt.x -= 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.x -= 5;
 		}
 	}
 	else if (KEY->up(VK_LEFT))
 	{
-		if (_marSet.state != NORMAL_IDLE)_marSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
 	if (KEY->press(VK_RIGHT))
 	{
 		if (_T != 2)_T = 2;
 		if (_run)
 		{
-			_marSet.state = NORMAL_RUN;
-			_marSet.pt.x += 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.x += 8;
 		}
 		if (!_run)
 		{
-			_marSet.state = NORMAL_WALK;
-			_marSet.pt.x += 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.x += 5;
 		}
 
 	}
 	else if (KEY->up(VK_RIGHT))
 	{
-		if (_marSet.state != NORMAL_IDLE)_marSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_UP) && _marSet.pt.y > 0)
+	if (KEY->press(VK_UP) && _chaSet.pt.y > 0)
 	{
 		if (_T != 1)_T = 1;
 		if (_run)
 		{
-			_marSet.state = NORMAL_RUN;
-			_marSet.pt.y -= 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.y -= 8;
 		}
 		if (!_run)
 		{
-			_marSet.pt.y -= 5;
-			_marSet.state = NORMAL_WALK;
+			_chaSet.pt.y -= 5;
+			_chaSet.state = NORMAL_WALK;
 		}
 	}
 	else if (KEY->up(VK_UP))
 	{
-		if (_marSet.state != NORMAL_IDLE)_marSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
 	if (KEY->press(VK_DOWN))
 	{
 		if (_T != 0)_T = 0;
 		if (_run)
 		{
-			_marSet.pt.y += 8;
-			_marSet.state = NORMAL_RUN;
+			_chaSet.pt.y += 8;
+			_chaSet.state = NORMAL_RUN;
 		}
 		if (!_run)
 		{
-			_marSet.pt.y += 5;
-			_marSet.state = NORMAL_WALK;
+			_chaSet.pt.y += 5;
+			_chaSet.state = NORMAL_WALK;
 		}
 	}
 	else if (KEY->up(VK_DOWN))
 	{
-		if (_marSet.state != NORMAL_IDLE)_marSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_LEFT) && KEY->press(VK_RIGHT)) { if (_marSet.state != NORMAL_IDLE)_marSet.state = NORMAL_IDLE; }
-	if (KEY->press(VK_UP) && KEY->press(VK_DOWN)) { if (_marSet.state != NORMAL_IDLE)_marSet.state = NORMAL_IDLE; }
+	if (KEY->press(VK_LEFT) && KEY->press(VK_RIGHT)) { if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE; }
+	if (KEY->press(VK_UP) && KEY->press(VK_DOWN)) { if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE; }
 
 	if (KEY->press('C'))
 	{
@@ -794,23 +787,23 @@ void marle::keySetting()
 
 	if (KEY->down(VK_SPACE))
 	{
-		if (_marSet.state == NORMAL_IDLE ||
-			_marSet.state == NORMAL_WALK ||
-			_marSet.state == NORMAL_RUN)
+		if (_chaSet.state == NORMAL_IDLE ||
+			_chaSet.state == NORMAL_WALK ||
+			_chaSet.state == NORMAL_RUN)
 		{
-			_marSet.state = GETTING_READY;
+			_chaSet.state = GETTING_READY;
 		}
-		else if (_marSet.state == BATTLE_READY)
+		else if (_chaSet.state == BATTLE_READY)
 		{
-			_marSet.state = BATTLE_WIN;
+			_chaSet.state = BATTLE_WIN;
 		}
 	}
-	if (KEY->down(VK_LBUTTON) && _marSet.state == BATTLE_READY)
+	if (KEY->down(VK_LBUTTON) && _chaSet.state == BATTLE_READY)
 	{
-		_marSet.atk = _mouse;
-		_marSet.atkS = _marSet.pt;
-		float tAngle = Angle(static_cast<float>(_marSet.atkS.x), static_cast<float>(_marSet.atkS.y), static_cast<float>(_marSet.atk.x), static_cast<float>(_marSet.atk.y));
-		float tDis = Distance(static_cast<float>(_marSet.atkS.x), static_cast<float>(_marSet.atkS.y), static_cast<float>(_marSet.atk.x), static_cast<float>(_marSet.atk.y));
+		_chaSet.atk = _mouse;
+		_chaSet.atkS = _chaSet.pt;
+		float tAngle = Angle(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
+		float tDis = Distance(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 		float _pi = PI / 9;
 		if (_pi * 3 < tAngle && tAngle <= _pi * 6) { _T = 1; }//위쪽보기
 		else if (-_pi * 3 < tAngle && tAngle <= _pi * 3) { _T = 2; }//오른쪽보기
@@ -820,26 +813,22 @@ void marle::keySetting()
 		if (tDis >= 32 * 3)Latk = true;
 		else Latk = false;
 
-		_marSet.state = BATTLE_ATK;
-	}
-	else if (KEY->down(VK_LBUTTON))
-	{
-		_marSet.state = NORMAL_EVENT;
+		_chaSet.state = BATTLE_ATK;
 	}
 }
 
 void marle::battleSwitch()
 {
-	switch (_marSet.state)
+	switch (_chaSet.state)
 	{
 	case GETTING_READY:
 
-		if (_marSet.ani->getCurrPlaylistIdx() != 0 && _marSet.ani->isPlay() == FALSE)_marSet.state = BATTLE_READY;
-		else if (_marSet.ani->getCurrPlaylistIdx() == 0 && _marSet.ani->isPlay() == FALSE)_marSet.ani->start();
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = BATTLE_READY;
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 		break;
 	case BATTLE_READY:
 
-		if (_marSet.ani->isPlay() == FALSE)_marSet.ani->start();
+		if (_chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 
 		break;
 		// 근거리 공격을 위한 이동은 의논 후 결정
@@ -848,40 +837,40 @@ void marle::battleSwitch()
 		break;
 
 	case BATTLE_RUSH:
-		_marSet.angle = Angle(static_cast<float> (_marSet.pt.x), static_cast<float>(_marSet.pt.y), static_cast<float>(_marSet.atk.x), static_cast<float>(_marSet.atk.y));
-		_marSet.Dis = Distance(static_cast<float>(_marSet.pt.x), static_cast<float>(_marSet.pt.y), static_cast<float>(_marSet.atk.x), static_cast<float>(_marSet.atk.y));
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 
-		if (_marSet.ani->getCurrPlaylistIdx() != 0)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0)
 		{
-			_marSet.pt.x += static_cast<int>(cosf(_marSet.angle) * 15);
-			_marSet.pt.y += -static_cast<int>(sinf(_marSet.angle) * 15);
+			_chaSet.pt.x += static_cast<int>(cosf(_chaSet.angle) * 15);
+			_chaSet.pt.y += -static_cast<int>(sinf(_chaSet.angle) * 15);
 		}
 
-		if (_marSet.Dis <= rad)
+		if (_chaSet.Dis <= dia)
 		{
-			_marSet.ani->stop();
-			_marSet.state = BATTLE_ATK;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_ATK;
 		}
-		else if (_marSet.ani->getCurrPlaylistIdx() == 0 && _marSet.ani->isPlay() == FALSE) { _marSet.ani->start(); }
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 		break;
 
 	case BATTLE_RETURN:
-		_marSet.angle = Angle(static_cast<float> (_marSet.atkS.x), static_cast<float>(_marSet.atkS.y), static_cast<float>(_marSet.pt.x), static_cast<float>(_marSet.pt.y));
-		_marSet.Dis = Distance(static_cast<float>(_marSet.atkS.x), static_cast<float>(_marSet.atkS.y), static_cast<float>(_marSet.pt.x), static_cast<float>(_marSet.pt.y));
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
 
-		if (_marSet.ani->getCurrPlaylistIdx() != 0)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0)
 		{
-			_marSet.pt.x -= static_cast<int>(cosf(_marSet.angle) * 15);
-			_marSet.pt.y -= -static_cast<int>(sinf(_marSet.angle) * 15);
+			_chaSet.pt.x -= static_cast<int>(cosf(_chaSet.angle) * 15);
+			_chaSet.pt.y -= -static_cast<int>(sinf(_chaSet.angle) * 15);
 		}
 
-		if (rad >= _marSet.Dis)
+		if (dia >= _chaSet.Dis)
 		{
-			_marSet.ani->stop();
-			_marSet.state = BATTLE_READY;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_READY;
 		}
 
-		else if (_marSet.Dis > rad &&_marSet.ani->getCurrPlaylistIdx() == 0 && _marSet.ani->isPlay() == FALSE) { _marSet.ani->start(); }
+		else if (_chaSet.Dis > dia &&_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 
 		break;*/
 
@@ -890,35 +879,23 @@ void marle::battleSwitch()
 		//공격시 이미지에 맞춰 적의 이미지를 설정, 효과음을 설정한다
 
 		//공격 모션이 시작되어야 할 때 시작 / 끝났을 때 돌아가는 것을 설정한다
-		if (_marSet.ani->getCurrPlaylistIdx() != 0 && _marSet.ani->isPlay() == FALSE)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)
 		{
-			_marSet.ani->stop();
-			_marSet.state = BATTLE_READY;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_READY;
 		}
-		else if (_marSet.ani->getCurrPlaylistIdx() == 0 && _marSet.ani->isPlay() == FALSE) { _marSet.ani->start(); }
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 
 		break;
 	case BATTLE_HIT:
 		++hitCol;
 		if (hitCol % 4 == 0)hitCol = 0;
 		break;
-	case BATTLE_HELP:
-		if (Dcheck < 3 && _marSet.ani->isPlay() == FALSE)
-		{
-			_marSet.ani->start();
-			Dcheck++;
-		}
-		else if (Dcheck >= 3 && _marSet.ani->isPlay() == FALSE)
-		{
-			_marSet.state = BATTLE_LOSE;
-		}
-		break;
-
 	case BATTLE_WIN:
 		//노말_레디는 전투 후 크로노(1번째 플레이어)쪽으로 모인다, 임시로 idle로 바로 바뀌게 했다
-		//if (_marSet.ani->getCurrPlaylistIdx() != 0 && _marSet.ani->isPlay() == FALSE)_marSet.state = NORMAL_READY;
-		if (_marSet.ani->getCurrPlaylistIdx() != 0 && _marSet.ani->isPlay() == FALSE)_marSet.state = NORMAL_IDLE;
-		else if (_marSet.ani->getCurrPlaylistIdx() == 0 && _marSet.ani->isPlay() == FALSE)_marSet.ani->start();
+		//if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = NORMAL_READY;
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = NORMAL_IDLE;
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 
 		break;
 	}

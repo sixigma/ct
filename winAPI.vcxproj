@@ -209,6 +209,7 @@
     <ClCompile Include="battle.cpp" />
     <ClCompile Include="battleModeSelectScene.cpp" />
     <ClCompile Include="bossGatoStage.cpp" />
+    <ClCompile Include="character.cpp" />
     <ClCompile Include="characterNamingScene.cpp" />
     <ClCompile Include="chronoHome.cpp" />
     <ClCompile Include="chronoHome2.cpp" />

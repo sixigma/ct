@@ -4,31 +4,30 @@
 HRESULT frog::init()
 {
 	imgSetting();//이미지
-	_frogSet.img = im.idle;//이미지는 맨처음 idle로
-
+	_chaSet.img = im.idle;//이미지는 맨처음 idle로
+	_chaSet.Bimg = im.hit;
 	aniSetting();
-	_frogSet.ani = an.oneArr_0;
-	_frogSet.ani->start();
+	_chaSet.ani = an.oneArr_0;
 	Cleft = _run = false;
 	Cc = _T = 0;
 
-	_frogSet.pt = { WINW / 2 - 100, WINH / 2 - 100 };
+	_chaSet.pt = { WINW / 2 - 100, WINH / 2 - 100 };
 
-	_frogSet.rc = MakeRct(_frogSet.pt.x - (224 / 2), _frogSet.pt.y - 192, (224), (224));
+	_chaSet.rc = MakeRct(_chaSet.pt.x - (224 / 2), _chaSet.pt.y - 192, (224), (224));
 
 	//개구리 기본 스탯
-	_frogSt.Lv = 5;						//개구리 초기 레벨
-	_frogSt.hp = _frogSt.maxHp = 128;	//개구리 초기 현재/최대HP
-	_frogSt.mp = _frogSt.maxMp = 17;	//개구리 초기 현재/최대MP
-	_frogSt.power = 9;					//개구리 초기 힘
-	_frogSt.hit = 9;					//개구리 초기 명중
-	_frogSt.magic = 8;					//개구리 초기 마력
-	_frogSt.speed = 11;					//개구리 초기 속도
-	_frogSt.evasion = 9;				//개구리 초기 회피
-	_frogSt.stamina = 14;				//개구리 초기 체력
-	_frogSt.Mdef = 9;					//개구리 초기 마법방어력
+	_status.Lv = 5;						//개구리 초기 레벨
+	_status.hp = _status.maxHp = 128;	//개구리 초기 현재/최대HP
+	_status.mp = _status.maxMp = 17;	//개구리 초기 현재/최대MP
+	_status.power = 9;					//개구리 초기 힘
+	_status.hit = 9;					//개구리 초기 명중
+	_status.magic = 8;					//개구리 초기 마력
+	_status.speed = 11;					//개구리 초기 속도
+	_status.evasion = 9;				//개구리 초기 회피
+	_status.stamina = 14;				//개구리 초기 체력
+	_status.Mdef = 9;					//개구리 초기 마법방어력
 	//개구리 기본 스탯 위까지
-	rad = 10;
+	dia = 10;
 	return S_OK;
 }
 
@@ -58,8 +57,11 @@ void frog::update()
 
 void frog::render()
 {
-	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_frogSet.pt.y), _frogSet.img, getMemDC(), _frogSet.rc.left, _frogSet.rc.top, _frogSet.ani);
-	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_frogSet.pt.y), _frogSet.img, getMemDC(), _frogSet.rc.left, _frogSet.rc.top, _frogSet.ani);
+	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	if (!Cleft	  &&white())	IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft&&white())	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	_chaSet.Bimg->changeAllColors(RGB(255, 255, 255), RGB(255, 0, 255));
 }
 
 void frog::imgSetting()
@@ -306,212 +308,212 @@ void frog::aniSetting()
 
 void frog::imgSwitch()
 {
-	switch (_frogSet.state)
+	switch (_chaSet.state)
 	{
 	case NORMAL_IDLE:
 
-		_frogSet.img = im.idle;
+		_chaSet.img = im.idle;
 
 		switch (_T)
 		{
 		case 0:
-			_frogSet.ani = an.oneArr_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
-			_frogSet.ani = an.oneArr_1;
+			_chaSet.ani = an.oneArr_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_frogSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		}
 
 		break;
 
 	case NORMAL_WALK:
-		_frogSet.img = im.walk;
+		_chaSet.img = im.walk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.walk_0;
+			_chaSet.ani = an.walk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.walk_1;
+			_chaSet.ani = an.walk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_frogSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_frogSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
 	case NORMAL_RUN:
-		_frogSet.img = im.run;
+		_chaSet.img = im.run;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.run_0;
+			_chaSet.ani = an.run_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.run_1;
+			_chaSet.ani = an.run_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_frogSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_frogSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
 	case GETTING_READY:
-		_frogSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.Bready_0;
+			_chaSet.ani = an.Bready_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.Bready_1;
+			_chaSet.ani = an.Bready_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = true;
-			_frogSet.ani = an.Bready_2;
+			_chaSet.ani = an.Bready_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.Bready_2;
+			_chaSet.ani = an.Bready_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
 	case BATTLE_READY:
-		_frogSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.SB_0;
+			_chaSet.ani = an.SB_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.SB_1;
+			_chaSet.ani = an.SB_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_frogSet.ani = an.SB_2;
+			_chaSet.ani = an.SB_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_frogSet.ani = an.SB_2;
+			_chaSet.ani = an.SB_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
 		break;
 
 	case BATTLE_MOVE:
-		_frogSet.img = im.walk;
+		_chaSet.img = im.walk;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.walk_0;
+			_chaSet.ani = an.walk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.walk_1;
+			_chaSet.ani = an.walk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_frogSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_frogSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 
 		break;
 	case BATTLE_RUSH:
-		_frogSet.img = im.rush;
+		_chaSet.img = im.rush;
 
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.twoArrF_0;
+			_chaSet.ani = an.twoArrF_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.twoArrF_1;
+			_chaSet.ani = an.twoArrF_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.twoArrF_2;
+			_chaSet.ani = an.twoArrF_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_frogSet.ani = an.twoArrF_2;
+			_chaSet.ani = an.twoArrF_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
 		break;
 
 	case BATTLE_ATK:
-		_frogSet.img = im.atk;
+		_chaSet.img = im.atk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.atk_0;
+			_chaSet.ani = an.atk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.atk_1;
+			_chaSet.ani = an.atk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.atk_2;
+			_chaSet.ani = an.atk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_frogSet.ani = an.atk_2;
+			_chaSet.ani = an.atk_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
 		break;
 
 	case BATTLE_RETURN:
-		_frogSet.img = im.rush;
+		_chaSet.img = im.rush;
 
 		if (Cc != 0)Cc = 0;
 
@@ -519,134 +521,202 @@ void frog::imgSwitch()
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.twoArrF_0;
+			_chaSet.ani = an.twoArrF_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.twoArrF_1;
+			_chaSet.ani = an.twoArrF_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_frogSet.ani = an.twoArrF_2;
+			_chaSet.ani = an.twoArrF_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_frogSet.ani = an.twoArrF_2;
+			_chaSet.ani = an.twoArrF_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
 		break;
-	case BATTLE_WIN:
-		_frogSet.img = im.Bwin;
+	case BATTLE_HIT:
+		_chaSet.img = im.hit;
+		_chaSet.Bimg = im.hit;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.Bwin_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_frogSet.ani = an.Bwin_1;
+			_chaSet.ani = an.oneArr_1;
+			break;
+		case 2:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		case 3:
+			if (!Cleft)Cleft = true;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		}
+		break;
+	case BATTLE_HELP:
+		_chaSet.img = im.downs;
+		switch (_T)
+		{
+		case 0:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_0;
+			break;
+		case 1:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_1;
+			break;
+		case 2:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_2;
+			break;
+		case 3:
+			if (!Cleft)Cleft = true;
+			_chaSet.ani = an.twoArrF_2;
+			break;
+		}
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		break;
+	case BATTLE_LOSE:
+		_chaSet.img = im.down;
+		switch (_T)
+		{
+		case 0:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_0;
+			break;
+		case 1:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_1;
+			break;
+		case 2:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		case 3:
+			if (!Cleft)Cleft = true;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		}
+		break;
+	case BATTLE_WIN:
+		_chaSet.img = im.Bwin;
+		switch (_T)
+		{
+		case 0:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.Bwin_0;
+			break;
+		case 1:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.Bwin_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = true;
-			_frogSet.ani = an.Bwin_2;
+			_chaSet.ani = an.Bwin_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = false;
-			_frogSet.ani = an.Bwin_2;
+			_chaSet.ani = an.Bwin_2;
 			break;
 		}
-		_frogSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
 	}
-	if (_frogSet.state == BATTLE_ATK)
+	if (_chaSet.state == BATTLE_ATK)
 	{
-		_frogSet.rc = MakeRct(_frogSet.pt.x - ((224) / 2), _frogSet.pt.y - (284 - 64), (224), (284));
+		_chaSet.rc = MakeRct(_chaSet.pt.x - ((224) / 2), _chaSet.pt.y - (284 - 64), (224), (284));
 	}
-	else { _frogSet.rc = MakeRct(_frogSet.pt.x - ((224) / 2), _frogSet.pt.y - 224, (224), (224)); }
+	else { _chaSet.rc = MakeRct(_chaSet.pt.x - ((224) / 2), _chaSet.pt.y - 224, (224), (224)); }
 
 }
 
 void frog::keySetting()
 {
-	if (KEY->press(VK_LEFT) && 0 < _frogSet.pt.x)
+	if (KEY->press(VK_LEFT) && 0 < _chaSet.pt.x)
 	{
 		if (_T != 3)_T = 3;
 		if (_run)
 		{
-			if (_frogSet.state != NORMAL_RUN) { _frogSet.state = NORMAL_RUN; an.run_2->stop(); }
+			if (_chaSet.state != NORMAL_RUN) { _chaSet.state = NORMAL_RUN; an.run_2->stop(); }
 
-			_frogSet.pt.x -= 8;
+			_chaSet.pt.x -= 8;
 		}
 		if (!_run)
 		{
-			if (_frogSet.state != NORMAL_WALK) { _frogSet.state = NORMAL_WALK;  an.walk_2->stop(); }
-			_frogSet.pt.x -= 5;
+			if (_chaSet.state != NORMAL_WALK) { _chaSet.state = NORMAL_WALK;  an.walk_2->stop(); }
+			_chaSet.pt.x -= 5;
 		}
 	}
 	else if (KEY->up(VK_LEFT))
 	{
-		if (_frogSet.state != NORMAL_IDLE)_frogSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
 	if (KEY->press(VK_RIGHT) )
 	{
 		if (_T != 2)_T = 2;
 		if (_run)
 		{
-			if (_frogSet.state != NORMAL_RUN) { _frogSet.state = NORMAL_RUN; an.run_2->stop(); }
-			_frogSet.pt.x += 8;
+			if (_chaSet.state != NORMAL_RUN) { _chaSet.state = NORMAL_RUN; an.run_2->stop(); }
+			_chaSet.pt.x += 8;
 		}
 		if (!_run)
 		{
-			if (_frogSet.state != NORMAL_WALK) { _frogSet.state = NORMAL_WALK;  an.walk_2->stop(); }
-			_frogSet.pt.x += 5;
+			if (_chaSet.state != NORMAL_WALK) { _chaSet.state = NORMAL_WALK;  an.walk_2->stop(); }
+			_chaSet.pt.x += 5;
 		}
 
 	}
 	else if (KEY->up(VK_RIGHT))
 	{
-		if (_frogSet.state != NORMAL_IDLE)_frogSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_UP) && _frogSet.pt.y > 0)
+	if (KEY->press(VK_UP) && _chaSet.pt.y > 0)
 	{
 		if (_T != 1)_T = 1;
 		if (_run)
 		{
-			if (_frogSet.state != NORMAL_RUN) { _frogSet.state = NORMAL_RUN; an.run_1->stop(); }
-			_frogSet.pt.y -= 8;
+			if (_chaSet.state != NORMAL_RUN) { _chaSet.state = NORMAL_RUN; an.run_1->stop(); }
+			_chaSet.pt.y -= 8;
 		}
 		if (!_run)
 		{
-			if (_frogSet.state != NORMAL_WALK) { _frogSet.state = NORMAL_WALK;  an.walk_1->stop(); }
-			_frogSet.pt.y -= 5;
+			if (_chaSet.state != NORMAL_WALK) { _chaSet.state = NORMAL_WALK;  an.walk_1->stop(); }
+			_chaSet.pt.y -= 5;
 		}
 	}
 	else if (KEY->up(VK_UP))
 	{
-		if (_frogSet.state != NORMAL_IDLE)_frogSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
 	if (KEY->press(VK_DOWN))
 	{
 		if (_T != 0)_T = 0;
 		if (_run)
 		{
-			if (_frogSet.state != NORMAL_RUN) { _frogSet.state = NORMAL_RUN; an.run_0->stop(); }
-			_frogSet.pt.y += 8;
+			if (_chaSet.state != NORMAL_RUN) { _chaSet.state = NORMAL_RUN; an.run_0->stop(); }
+			_chaSet.pt.y += 8;
 		}
 		if (!_run)
 		{
-			if (_frogSet.state != NORMAL_WALK) { _frogSet.state = NORMAL_WALK; an.walk_0->stop(); }
-			_frogSet.pt.y += 5;
+			if (_chaSet.state != NORMAL_WALK) { _chaSet.state = NORMAL_WALK; an.walk_0->stop(); }
+			_chaSet.pt.y += 5;
 		}
 	}
 	else if (KEY->up(VK_DOWN))
 	{
-		if (_frogSet.state != NORMAL_IDLE)_frogSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_LEFT) && KEY->press(VK_RIGHT)) { if (_frogSet.state != NORMAL_IDLE)_frogSet.state = NORMAL_IDLE; }
-	if (KEY->press(VK_UP) && KEY->press(VK_DOWN)) { if (_frogSet.state != NORMAL_IDLE)_frogSet.state = NORMAL_IDLE; }
+	if (KEY->press(VK_LEFT) && KEY->press(VK_RIGHT)) { if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE; }
+	if (KEY->press(VK_UP) && KEY->press(VK_DOWN)) { if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE; }
 
 	if (KEY->press('C'))
 	{
@@ -655,50 +725,50 @@ void frog::keySetting()
 	else if (KEY->up('C')) { if (_run == true)_run = false; }
 	if (KEY->down(VK_SPACE))
 	{
-		if (_frogSet.state == NORMAL_IDLE ||
-			_frogSet.state == NORMAL_WALK ||
-			_frogSet.state == NORMAL_RUN)
+		if (_chaSet.state == NORMAL_IDLE ||
+			_chaSet.state == NORMAL_WALK ||
+			_chaSet.state == NORMAL_RUN)
 		{
-			_frogSet.state = GETTING_READY;
+			_chaSet.state = GETTING_READY;
 		}
-		else if (_frogSet.state == BATTLE_READY)
+		else if (_chaSet.state == BATTLE_READY)
 		{
-			_frogSet.state = BATTLE_WIN;
+			_chaSet.state = BATTLE_WIN;
 		}
 	}
-	if (KEY->down(VK_LBUTTON) && _frogSet.state == BATTLE_READY)
+	if (KEY->down(VK_LBUTTON) && _chaSet.state == BATTLE_READY)
 	{
-		_frogSet.atk = _mouse;
-		_frogSet.atkS = _frogSet.pt;
-		float tAngle = Angle(static_cast<float>(_frogSet.atkS.x), static_cast<float>(_frogSet.atkS.y), static_cast<float>(_frogSet.atk.x), static_cast<float>(_frogSet.atk.y));
+		_chaSet.atk = _mouse;
+		_chaSet.atkS = _chaSet.pt;
+		float tAngle = Angle(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 		float _pi = PI / 9;
 		if (_pi * 3 < tAngle && tAngle <= _pi * 6) { _T = 1; }//위쪽보기
 		else if (-_pi * 3 < tAngle && tAngle <= _pi * 3) { _T = 2; }//오른쪽보기
 		else if (-_pi * 3 >= tAngle && tAngle > -_pi * 6) { _T = 0; }//아래쪽보기
 		else { _T = 3; }//왼쪽 보기
 
-		_frogSet.state = BATTLE_RUSH;
+		_chaSet.state = BATTLE_RUSH;
 	}
 
 }
 
 void frog::battleSwitch()
 {
-	switch (_frogSet.state)
+	switch (_chaSet.state)
 	{
 	case GETTING_READY:
 		//시작 시 start / 끝났을 때 STACDBY 상태가 되는 것을 설정한다
-		if (_frogSet.ani->getCurrPlaylistIdx() != 0 && _frogSet.ani->isPlay() == FALSE)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)
 		{
-			_frogSet.state = BATTLE_READY;
-			_frogSet.ani->stop();
+			_chaSet.state = BATTLE_READY;
+			_chaSet.ani->stop();
 		}
-		else if (_frogSet.ani->getCurrPlaylistIdx() == 0 && _frogSet.ani->isPlay() == FALSE)_frogSet.ani->start();
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 		break;
 	case BATTLE_READY:
 		//배틀 행동 선택 가능할 때 움직일 수 있다
 		//임시로 stop 상태일 때 움직이게 해놨음
-		if (_frogSet.ani->isPlay() == FALSE)_frogSet.ani->start();
+		if (_chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 
 		break;
 	case BATTLE_MOVE:
@@ -707,22 +777,22 @@ void frog::battleSwitch()
 		break;
 	case BATTLE_RUSH:
 		//적의 방향으로 Angle을 통해 움직인다
-		//if (_frogSet.ani->getCurrPlaylistIdx() != 0)
-		_frogSet.angle = Angle(static_cast<float> (_frogSet.pt.x), static_cast<float>(_frogSet.pt.y), static_cast<float>(_frogSet.atk.x), static_cast<float>(_frogSet.atk.y));
-		_frogSet.Dis = Distance(static_cast<float>(_frogSet.pt.x), static_cast<float>(_frogSet.pt.y), static_cast<float>(_frogSet.atk.x), static_cast<float>(_frogSet.atk.y));
+		//if (_chaSet.ani->getCurrPlaylistIdx() != 0)
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 
-		if (_frogSet.ani->getCurrPlaylistIdx() != 0)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0)
 		{
-			_frogSet.pt.x += static_cast<int>(cosf(_frogSet.angle) * 15);
-			_frogSet.pt.y += -static_cast<int>(sinf(_frogSet.angle) * 15);
+			_chaSet.pt.x += static_cast<int>(cosf(_chaSet.angle) * 15);
+			_chaSet.pt.y += -static_cast<int>(sinf(_chaSet.angle) * 15);
 		}
 
-		if (_frogSet.Dis <= rad)
+		if (_chaSet.Dis <= dia)
 		{
-			_frogSet.ani->stop();
-			_frogSet.state = BATTLE_ATK;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_ATK;
 		}
-		else if (_frogSet.ani->getCurrPlaylistIdx() == 0 && _frogSet.ani->isPlay() == FALSE) { _frogSet.ani->start(); }
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 
 		//스킬과 공격을 결정짓는 인트변수 등을 설정해야 한다
 
@@ -732,36 +802,36 @@ void frog::battleSwitch()
 		//공격시 이미지에 맞춰 적의 이미지를 설정, 효과음을 설정한다
 
 		//공격 모션이 시작되어야 할 때 시작 / 끝났을 때 돌아가는 것을 설정한다
-		if (_frogSet.ani->getCurrPlaylistIdx() != 0 && _frogSet.ani->isPlay() == FALSE)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)
 		{
-			_frogSet.ani->stop();
-			_frogSet.state = BATTLE_RETURN;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_RETURN;
 		}
-		else if (_frogSet.ani->getCurrPlaylistIdx() == 0 && _frogSet.ani->isPlay() == FALSE) { _frogSet.ani->start(); }
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 		break;
 	case BATTLE_RETURN:
 		//시작 위치로 Angle을 통해 움직인다
-		_frogSet.angle = Angle(static_cast<float> (_frogSet.atkS.x), static_cast<float>(_frogSet.atkS.y), static_cast<float>(_frogSet.pt.x), static_cast<float>(_frogSet.pt.y));
-		_frogSet.Dis = Distance(static_cast<float>(_frogSet.atkS.x), static_cast<float>(_frogSet.atkS.y), static_cast<float>(_frogSet.pt.x), static_cast<float>(_frogSet.pt.y));
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
 
-		if (_frogSet.ani->getCurrPlaylistIdx() != 0)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0)
 		{
-			_frogSet.pt.x -= static_cast<int>(cosf(_frogSet.angle) * 15);
-			_frogSet.pt.y -= -static_cast<int>(sinf(_frogSet.angle) * 15);
+			_chaSet.pt.x -= static_cast<int>(cosf(_chaSet.angle) * 15);
+			_chaSet.pt.y -= -static_cast<int>(sinf(_chaSet.angle) * 15);
 		}
 
-		if (rad >= _frogSet.Dis)
+		if (dia >= _chaSet.Dis)
 		{
-			_frogSet.ani->stop();
-			_frogSet.state = BATTLE_READY;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_READY;
 		}
 
-		else if (_frogSet.Dis > rad &&_frogSet.ani->getCurrPlaylistIdx() == 0 && _frogSet.ani->isPlay() == FALSE) { _frogSet.ani->start(); }
+		else if (_chaSet.Dis > dia &&_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 		break;
 	case BATTLE_WIN:
 		//노말_레디는 전투 후 크로노(1번째 플레이어)쪽으로 모인다, 임시로 idle로 바로 바뀌게 했다
-		if (_frogSet.ani->getCurrPlaylistIdx() != 0 && _frogSet.ani->isPlay() == FALSE)_frogSet.state = NORMAL_IDLE;
-		else if (_frogSet.ani->getCurrPlaylistIdx() == 0 && _frogSet.ani->isPlay() == FALSE)_frogSet.ani->start();
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = NORMAL_IDLE;
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 
 		break;
 	}

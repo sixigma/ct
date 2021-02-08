@@ -37,6 +37,10 @@ void player::update()
 	if (_cha == 0)_crono->keySetting();
 	else if (_cha == 1)_lucca->keySetting();
 	else if (_cha == 2)_frog->keySetting();
+
+	if (_crono->atkCheck()) { _frog->setState(BATTLE_HIT); }
+	else if (_frog->getState() == BATTLE_HIT && !_crono->atkCheck()) { _frog->setState(NORMAL_IDLE); }
+
 }
 
 void player::render()

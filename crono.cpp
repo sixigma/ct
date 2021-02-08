@@ -4,33 +4,33 @@
 HRESULT crono::init()
 {
 	imgSetting();//이미지
-	_croSet.img = im.idle;//이미지는 맨처음 idle로
-
+	_chaSet.img = im.idle;//이미지는 맨처음 idle로
+	_chaSet.Bimg = im.hit;
 	aniSetting();
-	_croSet.ani = an.idle_0;
-	_croSet.ani->start();
+	_chaSet.ani = an.idle_0;
+	_chaSet.ani->start();
 	Cleft = _run = false;
 	Cc = _T = 0;
 
-	_croSet.pt = { WINW / 2, WINH / 2 };
+	_chaSet.pt = { WINW / 2, WINH / 2 };
 
 	_rcW = 220;
 	_rcH = 224;
-	_croSet.rc = MakeRct(_croSet.pt.x - (_rcW / 2), _croSet.pt.y - (_rcH - 32), _rcW, _rcH);
+	_chaSet.rc = MakeRct(_chaSet.pt.x - (_rcW / 2), _chaSet.pt.y - (_rcH - 32), _rcW, _rcH);
 
-	_croSt.Lv = 1;					//크로노 초기 레벨
-	_croSt.hp = _croSt.maxHp = 70;	//크로노 초기 현재/최대HP
-	_croSt.mp = _croSt.maxMp = 8;	//크로노 초기 현재/최대HP
-	_croSt.power = 5;				//크로노 초기 힘
-	_croSt.hit = 12;				//크로노 초기 명중
-	_croSt.magic = 8;				//크로노 초기 마력
-	_croSt.speed = 12;				//크로노 초기 속도
-	_croSt.evasion = 5;				//크로노 초기 회피
-	_croSt.stamina = 8;				//크로노 초기 체력
-	_croSt.Mdef = 2;				//크로노 초기 마법방어력
+	_status.Lv = 1;					//크로노 초기 레벨
+	_status.hp = _status.maxHp = 70;	//크로노 초기 현재/최대HP
+	_status.mp = _status.maxMp = 8;	//크로노 초기 현재/최대HP
+	_status.power = 5;				//크로노 초기 힘
+	_status.hit = 12;				//크로노 초기 명중
+	_status.magic = 8;				//크로노 초기 마력
+	_status.speed = 12;				//크로노 초기 속도
+	_status.evasion = 5;				//크로노 초기 회피
+	_status.stamina = 8;				//크로노 초기 체력
+	_status.Mdef = 2;				//크로노 초기 마법방어력
 
 
-	rad = 20;
+	dia = 20;
 	return S_OK;
 }
 
@@ -66,25 +66,29 @@ void crono::render()
 	if (KEY->isToggledOn(VK_TAB))
 	{
 		char str[256];
-		sprintf_s(str, "현재 플레이 인덱스 : %d", _croSet.ani->getCurrPlaylistIdx());
+		sprintf_s(str, "현재 플레이 인덱스 : %d", _chaSet.ani->getCurrPlaylistIdx());
 		TextOut(getMemDC(), WINW - 200, 0, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "캐릭터 포인트 : %d, %d", _croSet.pt.x, _croSet.pt.y);
+		sprintf_s(str, "캐릭터 포인트 : %d, %d", _chaSet.pt.x, _chaSet.pt.y);
 		TextOut(getMemDC(), WINW - 200, 20, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "어택 포인트 : %d, %d", _croSet.atk.x, _croSet.atk.y);
+		sprintf_s(str, "어택 포인트 : %d, %d", _chaSet.atk.x, _chaSet.atk.y);
 		TextOut(getMemDC(), WINW - 200, 40, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "시작 포인트 : %d, %d", _croSet.atkS.x, _croSet.atkS.y);
+		sprintf_s(str, "시작 포인트 : %d, %d", _chaSet.atkS.x, _chaSet.atkS.y);
 		TextOut(getMemDC(), WINW - 200, 60, str, static_cast<int>(strlen(str)));
-		sprintf_s(str, "각도 = %f", _croSet.angle);
+		sprintf_s(str, "각도 = %f", _chaSet.angle);
 		TextOut(getMemDC(), WINW - 200, 80, str, static_cast<int>(strlen(str)));
 
-		//DrawRct(getMemDC(), _croSet.rc);
-		DrawElpC(getMemDC(), _croSet.pt.x, _croSet.pt.y, rad, rad);
-		DrawElpC(getMemDC(), _croSet.atk.x, _croSet.atk.y, rad, rad);
-		DrawElpC(getMemDC(), _croSet.atkS.x, _croSet.atkS.y, rad, rad);
+		//DrawRct(getMemDC(), _chaSet.rc);
+		DrawElpC(getMemDC(), _chaSet.pt.x, _chaSet.pt.y, dia, dia);
+		DrawElpC(getMemDC(), _chaSet.atk.x, _chaSet.atk.y, dia, dia);
+		DrawElpC(getMemDC(), _chaSet.atkS.x, _chaSet.atkS.y, dia, dia);
 	}
 
-	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_croSet.pt.y), _croSet.img, getMemDC(), _croSet.rc.left, _croSet.rc.top, _croSet.ani);
-	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_croSet.pt.y), _croSet.img, getMemDC(), _croSet.rc.left, _croSet.rc.top, _croSet.ani);
+	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	if (!Cleft	  &&white())	IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft&&white())	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	_chaSet.Bimg->changeAllColors(RGB(255, 255, 255), RGB(255, 0, 255));
+
 }
 
 void crono::imgSetting()
@@ -384,223 +388,223 @@ void crono::aniSetting()
 
 void crono::imgSwitch()
 {
-	switch (_croSet.state)
+	switch (_chaSet.state)
 	{
 	case NORMAL_IDLE:
-		_croSet.img = im.idle;
+		_chaSet.img = im.idle;
 
 		switch (_T)
 		{
 		case 0:
-			_croSet.ani = an.idle_0;
+			_chaSet.ani = an.idle_0;
 			break;
 		case 1:
-			_croSet.ani = an.idle_1;
+			_chaSet.ani = an.idle_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.idle_2;
+			_chaSet.ani = an.idle_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.idle_2;
+			_chaSet.ani = an.idle_2;
 			break;
 		}
 
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
-		if (Cc > 50 && _croSet.ani->isPlay() == FALSE)
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		if (Cc > 50 && _chaSet.ani->isPlay() == FALSE)
 		{
-			_croSet.ani->start();
+			_chaSet.ani->start();
 			Cc = 0;
 		}
-		if (_croSet.ani->isPlay() == FALSE && _T != 1)Cc++;
-		else if (_croSet.ani->getCurrPlaylistIdx() != 4 && _croSet.ani->getCurrPlaylistIdx() != 0)Cc = 0;
+		if (_chaSet.ani->isPlay() == FALSE && _T != 1)Cc++;
+		else if (_chaSet.ani->getCurrPlaylistIdx() != 4 && _chaSet.ani->getCurrPlaylistIdx() != 0)Cc = 0;
 
 		break;
 
 	case NORMAL_WALK:
-		_croSet.img = im.walk;
+		_chaSet.img = im.walk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.walk_0;
+			_chaSet.ani = an.walk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.walk_1;
+			_chaSet.ani = an.walk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		}
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_croSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
 	case NORMAL_RUN:
-		_croSet.img = im.run;
+		_chaSet.img = im.run;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.run_0;
+			_chaSet.ani = an.run_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.run_1;
+			_chaSet.ani = an.run_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		}
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_croSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
 	case GETTING_READY:
-		_croSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.Bready_0;
+			_chaSet.ani = an.Bready_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.Bready_1;
+			_chaSet.ani = an.Bready_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.Bready_3;
+			_chaSet.ani = an.Bready_3;
 			break;
 		case 3:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.Bready_3;
+			_chaSet.ani = an.Bready_3;
 			break;
 		}
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
 	case BATTLE_READY:
-		_croSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.SB_0;
+			_chaSet.ani = an.SB_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.SB_1;
+			_chaSet.ani = an.SB_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.SB_3;
+			_chaSet.ani = an.SB_3;
 			break;
 		case 3:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.SB_3;
+			_chaSet.ani = an.SB_3;
 			break;
 		}
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
 		break;
 
 	case BATTLE_MOVE:
-		_croSet.img = im.walk;
+		_chaSet.img = im.walk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.walk_0;
+			_chaSet.ani = an.walk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.walk_1;
+			_chaSet.ani = an.walk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		}
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_croSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 
 		break;
 	case BATTLE_RUSH:
-		_croSet.img = im.rush;
+		_chaSet.img = im.rush;
 
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.oneArr_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.oneArr_1;
+			_chaSet.ani = an.oneArr_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		}
 
 		break;
 
 	case BATTLE_ATK:
-		_croSet.img = im.atk;
+		_chaSet.img = im.atk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.atk_0;
+			_chaSet.ani = an.atk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.atk_1;
+			_chaSet.ani = an.atk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.atk_2;
+			_chaSet.ani = an.atk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_croSet.ani = an.atk_2;
+			_chaSet.ani = an.atk_2;
 			break;
 		}
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
 		break;
 
 	case BATTLE_RETURN:
-		_croSet.img = im.rush;
+		_chaSet.img = im.rush;
 
 		if (Cc != 0)Cc = 0;
 
@@ -608,127 +612,177 @@ void crono::imgSwitch()
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.oneArr_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.oneArr_1;
+			_chaSet.ani = an.oneArr_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_croSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_croSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		}
 		break;
-	case BATTLE_WIN:
-		_croSet.img = im.Bwin;
+	case BATTLE_HIT:
+		_chaSet.img = im.hit;
+		_chaSet.Bimg = im.hit;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.Bwin_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_croSet.ani = an.Bwin_1;
+			_chaSet.ani = an.oneArr_1;
+			break;
+		case 2:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		case 3:
+			if (!Cleft)Cleft = true;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		}
+		break;
+	case BATTLE_HELP:
+		_chaSet.img = im.downs;
+		switch (_T)
+		{
+		case 0:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_0;
+			break;
+		case 1:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_1;
+			break;
+		case 2:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_2;
+			break;
+		case 3:
+			if (!Cleft)Cleft = true;
+			_chaSet.ani = an.twoArrF_2;
+			break;
+		}
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		break;
+	case BATTLE_LOSE:
+		_chaSet.img = im.down;
+		_chaSet.ani = an.oneArr_0;
+		break;
+	case BATTLE_WIN:
+		_chaSet.img = im.Bwin;
+		switch (_T)
+		{
+		case 0:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.Bwin_0;
+			break;
+		case 1:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.Bwin_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = true;
-			_croSet.ani = an.Bwin_3;
+			_chaSet.ani = an.Bwin_3;
 			break;
 		case 3:
 			if (!Cleft)Cleft = false;
-			_croSet.ani = an.Bwin_3;
+			_chaSet.ani = an.Bwin_3;
 			break;
 		}
-		_croSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
 	}
 
-	_croSet.rc = MakeRct(_croSet.pt.x - (_rcW / 2), _croSet.pt.y - (_rcH - 32), _rcW, _rcH);
+	_chaSet.rc = MakeRct(_chaSet.pt.x - (_rcW / 2), _chaSet.pt.y - (_rcH - 32), _rcW, _rcH);
 
 }
 
 void crono::keySetting()
 {
 	if (_isChrUnmovable) return;
-	if (KEY->press(VK_LEFT) && 0 < _croSet.pt.x)
+	if (KEY->press(VK_LEFT) && 0 < _chaSet.pt.x)
 	{
 		if (_T != 3)_T = 3;
 		if (_run)
 		{
-			_croSet.state = NORMAL_RUN;
-			_croSet.pt.x -= 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.x -= 8;
 		}
 		if (!_run)
 		{
-			_croSet.state = NORMAL_WALK;
-			_croSet.pt.x -= 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.x -= 5;
 		}
 	}
 	else if (KEY->up(VK_LEFT))
 	{
-		if (_croSet.state != NORMAL_IDLE) { _croSet.state = NORMAL_IDLE;  _croSet.ani->stop(); }
+		if (_chaSet.state != NORMAL_IDLE) { _chaSet.state = NORMAL_IDLE;  _chaSet.ani->stop(); }
 	}
 	if (KEY->press(VK_RIGHT))
 	{
 		if (_T != 2)_T = 2;
 		if (_run)
 		{
-			_croSet.state = NORMAL_RUN;
-			_croSet.pt.x += 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.x += 8;
 		}
 		if (!_run)
 		{
-			_croSet.state = NORMAL_WALK;
-			_croSet.pt.x += 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.x += 5;
 		}
 
 	}
 	else if (KEY->up(VK_RIGHT))
 	{
-		if (_croSet.state != NORMAL_IDLE) { _croSet.state = NORMAL_IDLE;  _croSet.ani->stop(); }
+		if (_chaSet.state != NORMAL_IDLE) { _chaSet.state = NORMAL_IDLE;  _chaSet.ani->stop(); }
 	}
-	if (KEY->press(VK_UP) && _croSet.pt.y > 0)
+	if (KEY->press(VK_UP) && _chaSet.pt.y > 0)
 	{
 		if (_T != 1)_T = 1;
 		if (_run)
 		{
-			_croSet.state = NORMAL_RUN;
-			_croSet.pt.y -= 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.y -= 8;
 		}
 		if (!_run)
 		{
-			_croSet.state = NORMAL_WALK;
-			_croSet.pt.y -= 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.y -= 5;
 		}
 	}
 	else if (KEY->up(VK_UP))
 	{
-		if (_croSet.state != NORMAL_IDLE) { _croSet.state = NORMAL_IDLE;  _croSet.ani->stop(); }
+		if (_chaSet.state != NORMAL_IDLE) { _chaSet.state = NORMAL_IDLE;  _chaSet.ani->stop(); }
 	}
 	if (KEY->press(VK_DOWN))
 	{
 		if (_T != 0)_T = 0;
 		if (_run)
 		{
-			_croSet.state = NORMAL_RUN;
-			_croSet.pt.y += 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.y += 8;
 		}
 		if (!_run)
 		{
-			_croSet.state = NORMAL_WALK;
-			_croSet.pt.y += 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.y += 5;
 		}
 	}
 	else if (KEY->up(VK_DOWN))
 	{
-		if (_croSet.state != NORMAL_IDLE) { _croSet.state = NORMAL_IDLE;  _croSet.ani->stop(); }
+		if (_chaSet.state != NORMAL_IDLE) { _chaSet.state = NORMAL_IDLE;  _chaSet.ani->stop(); }
 	}
 	if (KEY->press('C'))
 	{
@@ -737,29 +791,29 @@ void crono::keySetting()
 	else if (KEY->up('C')) { if (_run == true)_run = false; }
 	if (KEY->down(VK_SPACE))
 	{
-		if (_croSet.state == NORMAL_IDLE ||
-			_croSet.state == NORMAL_WALK ||
-			_croSet.state == NORMAL_RUN)
+		if (_chaSet.state == NORMAL_IDLE ||
+			_chaSet.state == NORMAL_WALK ||
+			_chaSet.state == NORMAL_RUN)
 		{
-			_croSet.state = GETTING_READY;
+			_chaSet.state = GETTING_READY;
 		}
-		else if (_croSet.state == BATTLE_READY)
+		else if (_chaSet.state == BATTLE_READY)
 		{
-			_croSet.state = BATTLE_WIN;
+			_chaSet.state = BATTLE_WIN;
 		}
 	}
-	if (KEY->down(VK_LBUTTON) && _croSet.state == BATTLE_READY)
+	if (KEY->down(VK_LBUTTON) && _chaSet.state == BATTLE_READY)
 	{
-		_croSet.atk = _mouse;
-		_croSet.atkS = _croSet.pt;
-		float tAngle = Angle(static_cast<float>(_croSet.atkS.x), static_cast<float>(_croSet.atkS.y), static_cast<float>(_croSet.atk.x), static_cast<float>(_croSet.atk.y));
+		_chaSet.atk = _mouse;
+		_chaSet.atkS = _chaSet.pt;
+		float tAngle = Angle(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 		float _pi = PI / 9;
 		if (_pi * 3 < tAngle && tAngle <= _pi * 6) { _T = 1; }//위쪽보기
 		else if (-_pi * 3 < tAngle && tAngle <= _pi * 3) { _T = 2; }//오른쪽보기
 		else if (-_pi * 3 >= tAngle && tAngle > -_pi * 6) { _T = 0; }//아래쪽보기
 		else { _T = 3; }//왼쪽 보기
 
-		_croSet.state = BATTLE_RUSH;
+		_chaSet.state = BATTLE_RUSH;
 	}
 
 
@@ -767,20 +821,20 @@ void crono::keySetting()
 
 void crono::battleSwitch()
 {
-	switch (_croSet.state)
+	switch (_chaSet.state)
 	{
 	case GETTING_READY:
 		//시작 시 start / 끝났을 때 STACDBY 상태가 되는 것을 설정한다
-		if (_croSet.ani->getCurrPlaylistIdx() != 0 && _croSet.ani->isPlay() == FALSE)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)
 		{
-			_croSet.state = BATTLE_READY;
-			_croSet.ani->stop();
+			_chaSet.state = BATTLE_READY;
+			_chaSet.ani->stop();
 		}
-		else if (_croSet.ani->getCurrPlaylistIdx() == 0 && _croSet.ani->isPlay() == FALSE)_croSet.ani->start();
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 		break;
 	case BATTLE_READY:
 		//멈춤 상태라면 start
-		if (_croSet.ani->isPlay() == FALSE)_croSet.ani->start();
+		if (_chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 		break;
 	case BATTLE_MOVE:
 		//적의 방향으로 A*를 이용해서 움직인다
@@ -789,43 +843,58 @@ void crono::battleSwitch()
 	case BATTLE_RUSH:
 		//적의 방향으로 Angle을 통해 움직인다
 
-		_croSet.angle = Angle(static_cast<float> (_croSet.pt.x), static_cast<float>(_croSet.pt.y), static_cast<float>(_croSet.atk.x), static_cast<float>(_croSet.atk.y));
-		_croSet.Dis = Distance(static_cast<float>(_croSet.pt.x), static_cast<float>(_croSet.pt.y), static_cast<float>(_croSet.atk.x), static_cast<float>(_croSet.atk.y));
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 
-		_croSet.pt.x += static_cast<int>(cosf(_croSet.angle) * 15);
-		_croSet.pt.y += -static_cast<int>(sinf(_croSet.angle) * 15);
+		_chaSet.pt.x += static_cast<int>(cosf(_chaSet.angle) * 15);
+		_chaSet.pt.y += -static_cast<int>(sinf(_chaSet.angle) * 15);
 		//스킬과 공격을 결정짓는 인트변수 등을 설정해야 한다
-		if (_croSet.Dis <= rad) { _croSet.state = BATTLE_ATK; }
+		if (_chaSet.Dis <= dia) { _chaSet.state = BATTLE_ATK; }
 
 		break;
 	case BATTLE_ATK:
 		//공격시 이미지에 맞춰 적의 이미지를 설정, 효과음을 설정한다
 
 		//공격 모션이 시작되어야 할 때 시작 / 끝났을 때 돌아가는 것을 설정한다
-		if (_croSet.ani->getCurrPlaylistIdx() == 0 && _croSet.ani->isPlay() == FALSE) { _croSet.ani->start(); }
-		else if (_croSet.ani->getCurrPlaylistIdx() != 0 && _croSet.ani->isPlay() == FALSE)
+		if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
+		else if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)
 		{
 
-			_croSet.state = BATTLE_RETURN;
-			_croSet.ani->stop();
+			_chaSet.state = BATTLE_RETURN;
+			_chaSet.ani->stop();
 		}
 
 		break;
 	case BATTLE_RETURN:
 		//시작 위치로 Angle을 통해 움직인다
-		_croSet.angle = Angle(static_cast<float> (_croSet.atkS.x), static_cast<float>(_croSet.atkS.y), static_cast<float>(_croSet.pt.x), static_cast<float>(_croSet.pt.y));
-		_croSet.Dis = Distance(static_cast<float>(_croSet.atkS.x), static_cast<float>(_croSet.atkS.y), static_cast<float>(_croSet.pt.x), static_cast<float>(_croSet.pt.y));
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
 
-		_croSet.pt.x -= static_cast<int>(cosf(_croSet.angle) * 15);
-		_croSet.pt.y -= -static_cast<int>(sinf(_croSet.angle) * 15);
-		//if (rad >= Distance(static_cast<float>(_croSet.pt.x), static_cast<float>(_croSet.pt.y), static_cast<float>(_croSet.atkS.x), static_cast<float>(_croSet.atkS.y))) { _croSet.state = BATTLE_READY; }
+		_chaSet.pt.x -= static_cast<int>(cosf(_chaSet.angle) * 15);
+		_chaSet.pt.y -= -static_cast<int>(sinf(_chaSet.angle) * 15);
+		//if (dia >= Distance(static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y))) { _chaSet.state = BATTLE_READY; }
 
-		if (rad >= _croSet.Dis) { _croSet.state = BATTLE_READY; }
+		if (dia >= _chaSet.Dis) { _chaSet.state = BATTLE_READY; }
+		break;
+	case BATTLE_HIT:
+		++hitCol;
+		if (hitCol % 4 == 0)hitCol = 0;
+		break;
+	case BATTLE_HELP:
+		if (Dcheck < 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.ani->start();
+			Dcheck++;
+		}
+		else if (Dcheck >= 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.state = BATTLE_LOSE;
+		}
 		break;
 	case BATTLE_WIN:
 		//노말_레디는 전투 후 크로노(1번째 플레이어)쪽으로 모인다, 임시로 idle로 바로 바뀌게 했다
-		if (_croSet.ani->getCurrPlaylistIdx() != 0 && _croSet.ani->isPlay() == FALSE)_croSet.state = NORMAL_IDLE;
-		else if (_croSet.ani->getCurrPlaylistIdx() == 0 && _croSet.ani->isPlay() == FALSE)_croSet.ani->start();
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = NORMAL_IDLE;
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 
 		break;
 	}
