@@ -1,5 +1,5 @@
 #pragma once
-
+#include "gameNode.h"
 struct tagStatus	//능력치
 {
 	int power;			//힘(근접무기공격력 + )	(최대 100)
@@ -150,4 +150,280 @@ struct tagAni
 	animation* twoArrT_0, *twoArrT_1, *twoArrT_2;	//두장의 애니일 때 / 반복할 때
 	animation* twoArrF_0, *twoArrF_1, *twoArrF_2;	//두장의 애니일 때 / 반복 안할 때
 };
+enum class STATE_BATTLE
+{
+	INIT,	//배틀 준비
+	READY,	//게이지 다찼을 때
+	MOVE,	//근거리 공격시 이동
+	ATK,	//근거리/원거리 이동
+	HIT,	//피격
+	RETURN,	//돌아가기(후 READY)
+	END		//종료(승리)
+};
+class character : public gameNode
+{
+protected:
+	tagStatus _status;		//능력치
+	tagStatus _itemSt;	//아이템 능력치
+	tagChaSet _chaSet;		//셋팅
 
+	tagImage im;
+	tagAni an;
+
+	bool Cleft, _run;	//좌우반전, 달리기
+	int _T;		//방향전환용 int(turn) / 0:front , 1:back , 2:right , 3:left
+	int Cc;		//idle 상태의 눈깜빡임 카운트
+	int _rcW, _rcH;	//캐릭터 렉트용 x,y축 갈이
+	int hitCol;		//피격시 하얗게 될 때를 보이는 int
+	int Dcheck;		//다운 체크용 int
+	bool aniReset;	//애니메이션 스탑용 bool
+	bool Latk;		//원거리 공격 체크용 bool
+	int dia;		//(임시)포인트 확인용 지름
+
+	STATE_BATTLE state_b = STATE_BATTLE::INIT;
+public:
+	virtual HRESULT init();
+	virtual void release();
+	virtual void update();
+	virtual void render();
+
+	//setter
+
+//공격력 setter
+	void plusAtk(int atk) { _status.atk += atk; }
+	void setAtk(int atk) { _status.atk = atk; }
+	//마력 +
+	void plusMagic(int magic) { _status.magic += magic; }
+	void setMagic(int magic) { _status.magic = magic; }//마력 setter
+	//힘 +
+	void plusPower(int power) { _status.power += power; }
+	void setPower(int power) { _status.power = power; }//힘 setter
+	//스피드 +
+	void plusSpeed(int speed) { _status.speed += speed; }
+	void setSpeed(int speed) { _status.speed = speed; }//스피드 setter
+	//체력 +
+	void plusStamina(int stamina) { _status.stamina += stamina; }
+	void setStamina(int stamina) { _status.stamina = stamina; }//체력 setter
+	//민첩 +
+	void plusHit(int hit) { _status.hit += hit; }
+	void setHit(int hit) { _status.hit = hit; }//민첩 setter
+	//회피 +
+	void plusEvasion(int evasion) { _status.evasion += evasion; }
+	void setEvasion(int evasion) { _status.evasion = evasion; }//회피 setter
+
+	//컨디션(느려짐 등 상태이상) setter
+	void setCondition(int condition) { _status.condition = condition; }
+
+	//데미지(hp) -
+	void hitDamage(int damage) { _status.hp -= damage; }
+	//최대hp +
+	void plusMaxHP(int maxHP) { _status.maxHp += maxHP; }
+	void setMaxHP(int maxHP) { _status.maxHp = maxHP; }//최대 hp setter
+
+	//mp -
+	void minusMP(int mp) { _status.mp -= mp; }
+	//최대mp +
+	void plusMaxMP(int maxMP) { _status.maxMp += maxMP; }
+	void setMaxMP(int maxMP) { _status.maxMp = maxMP; }//최대 mp setter
+
+	//소지금 +
+	void plusMoney(int money) { _status.money += money; }
+	void setMoney(int money) { _status.money = money; }//소지금 setter
+
+	//경험치 +
+	void plusExp(int exp) { _status.exp += exp; }
+	//최대경험치 setter
+	void setMaxExp(int maxExp) { _status.maxExp = maxExp; }
+
+
+	//피격 등에 설정시킬 STATE setter
+	void setState(STATE state) { _chaSet.state = state; }
+
+	//방향전환 T setter
+	void setT(int T) { _T = T; }
+
+	//트리거타임 setter
+	void setTriggerTime(int triggerTime) { _chaSet.triggerTime = triggerTime; }
+
+	//아이템 공격력 setter
+	void setItemAtk(int atk) { _itemSt.atk = atk; }
+	//아이템 마력 setter
+	void setItemMagic(int magic) { _itemSt.magic = magic; }
+	//아이템 힘 setter
+	void setItemPower(int power) { _itemSt.power = power; }
+	//아이템 스피드 setter
+	void setItemSpeed(int speed) { _itemSt.speed = speed; }
+	//아이템 체력 setter
+	void setItemStamina(int stamina) { _itemSt.stamina = stamina; }
+	//아이템 민첩 setter
+	void setItemHit(int hit) { _itemSt.hit = hit; }
+	//아이템 회피 setter
+	void setItemEvasion(int evasion) { _itemSt.evasion = evasion; }
+	//아이템 최대 hp setter
+	void setItemMaxHP(int maxHP) { _itemSt.maxHp = maxHP; }
+	//아이템 최대 mp setter
+	void setItemMaxMP(int maxMP) { _itemSt.maxMp = maxMP; }
+	//아이템 특수능력 setter
+	void setItemAbility(int ability) { _itemSt.ability = ability; }
+
+	//getter
+
+	//트리거타임 getter
+	int getTriggerTime() { return _chaSet.triggerTime; }
+
+	//현재 공격력
+	int getAtk() { return _status.atk; }
+	//현재 마력
+	int getMagic() { return _status.magic; }
+	//현재 힘
+	int getPower() { return _status.power; }
+	//현재 스피드
+	int getSpeed() { return _status.speed; }
+	//현재 체력
+	int getStamina() { return _status.stamina; }
+	//현재 명중
+	int getHit() { return _status.hit; }
+	//현재 회피
+	int getEvasion() { return _status.evasion; }
+
+	//현재 컨디션
+	int getCondition() { return _status.condition; }
+
+	//현재 hp
+	int getHP() { return _status.hp; }
+	//현재 maxHP
+	int getMaxHP() { return _status.maxHp; }
+
+	//현재 mp
+	int getMP() { return _status.mp; }
+	//현재 maxMP
+	int getMaxMP() { return _status.maxMp; }
+
+	//현재 소지금
+	int getMoney() { return _status.money; }
+
+	//현재 경험치
+	int getExp() { return _status.exp; }
+	//현재 최대경험치
+	int getMaxExp() { return _status.maxExp; }
+	//현재 레벨
+	int getLV() { return _status.Lv; }
+
+	//피격 등을 확인할 STATE getter
+	STATE getState() { return _chaSet.state; }
+
+	//방향확인용 T getter
+	int getT() { return _T; }
+
+	//아이템 공격력 setter
+	int getItemAtk() { return _itemSt.atk; }
+	//아이템 마력 setter
+	int getItemMagic() { return _itemSt.magic; }
+	//아이템 힘 setter
+	int getItemPower() { return _itemSt.power; }
+	//아이템 스피드 setter
+	int getItemSpeed() { return  _itemSt.speed; }
+	//아이템 체력 setter
+	int getItemStamina() { return _itemSt.stamina; }
+	//아이템 민첩 setter
+	int getItemHit() { return  _itemSt.hit; }
+	//아이템 회피 setter
+	int getItemEvasion() { return  _itemSt.evasion; }
+	//아이템 최대 hp setter
+	int getItemMaxHP() { return  _itemSt.maxHp; }
+	//아이템 최대 mp setter
+	int getItemMaxMP() { return  _itemSt.maxMp; }
+	//아이템 특수능력 setter
+	int getItemAbility() { return _itemSt.ability; }
+
+	POINT& getPos() { return _chaSet.pt; }
+	POINT& getAtkPos() { return _chaSet.atk; }
+	POINT& getAtkSPos() { return _chaSet.atkS; }
+
+	bool atkCheck()
+	{
+		if (_chaSet.state == BATTLE_ATK)
+		{
+			if (_chaSet.ani->getCurrPlaylistIdx() == 1 || _chaSet.ani->getCurrPlaylistIdx() == 2)return true;
+			else return false;
+		}
+		else return false;
+	}
+	bool white()
+	{
+		if (_chaSet.state == BATTLE_HIT && hitCol % 10 == 0)return true;
+		else return false;
+	}
+	//0번 아니면서 false면 애니 스탑 상태
+	bool aniPlayCheck()
+	{
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)return false;//애니메이션 번호가 0번이 아니고 멈춰있다면 false를 리턴해라
+		else return true;//그 외는 true를 리턴해라
+	}
+	//0번이면서 false면 애니 스탑 상태
+	bool aniZeroCheck()
+	{
+		if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)return false;//애니메이션 번호가 0번이고 멈춰있다면 false를 리턴해라
+		else return true;//그 외는 true를 리턴해라
+	}
+	//atkTarget : 상대방 / attacker : 플레이어 / 행동 int등
+	template <class T>
+	bool atkSingleTarget(T* atkTarget, character* attacker);
+};
+template<class T>
+inline bool character::atkSingleTarget(T * atkTarget, character * attacker)
+{
+	//처음,중간에계속,끝 상태
+	if (attacker->getHP() <= 0) return true;
+	switch (state_b)
+	{
+	case STATE_BATTLE::INIT:
+
+		if (attacker->getState() == BATTLE_READY)state_b = STATE_BATTLE::READY;
+		return false;
+		break;
+	case STATE_BATTLE::READY:
+		*attacker->getAtkPos() = atkTarget->getPt();	//공격 지점 = 상대 포인트
+		*attacker->getAtkSPos() = attacker->getPos();	//공격 시작 지점 = 공격자 포인트
+
+		float tAngle = Angle(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
+		float tDis = Distance(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
+		float _pi = PI / 9;
+		if (_pi * 3 < tAngle && tAngle <= _pi * 6) { _T = 1; }//위쪽보기
+		else if (-_pi * 3 < tAngle && tAngle <= _pi * 3) { _T = 2; }//오른쪽보기
+		else if (-_pi * 3 >= tAngle && tAngle > -_pi * 6) { _T = 0; }//아래쪽보기
+		else { _T = 3; }//왼쪽 보기
+
+		if (attacker->getState() == BATTLE_MOVE || attacker->getState()==BATTLE_RUSH)state_b = STATE_BATTLE::MOVE;
+		else if (attacker->getState() == BATTLE_ATK)STATE_BATTLE::ATK;
+		else if (attacker->getState() == BATTLE_HIT)STATE_BATTLE::HIT;
+		else if (attacker->getState() == BATTLE_WIN)STATE_BATTLE::END;
+		return false;
+		break;
+	case STATE_BATTLE::MOVE:
+		if (attacker->getState() == BATTLE_ATK)state_b = STATE_BATTLE::ATK;
+		return false;
+		break;
+	case STATE_BATTLE::ATK:
+		if (attacker->getState() == BATTLE_READY)state_b = STATE_BATTLE::READY;
+		else if (attacker->getState() == BATTLE_RETURN)state_b = STATE_BATTLE::RETURN;
+
+		return false;
+		break;
+	case STATE_BATTLE::HIT:
+		if (attacker->getState() == BATTLE_READY)state_b = STATE_BATTLE::READY;
+
+		return false;
+		break;
+	case STATE_BATTLE::RETURN:
+		if (attacker->getState() == BATTLE_READY)state_b = STATE_BATTLE::READY;
+
+		return false;
+		break;
+	case STATE_BATTLE::END:
+		if (attacker->getState() != BATTLE_WIN)STATE_BATTLE::INIT;
+		return false;
+		break;
+	}
+	return true;
+}

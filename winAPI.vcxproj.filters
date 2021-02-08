@@ -139,6 +139,9 @@
     <ClCompile Include="playerUiScene.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="character.cpp">
+      <Filter>Game\GameScene\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="playground.h">

@@ -4,31 +4,30 @@
 HRESULT lucca::init()
 {
 	imgSetting();//이미지
-	_lucSet.img = im.idle;//이미지는 맨처음 idle로
-
+	_chaSet.img = im.idle;//이미지는 맨처음 idle로
+	_chaSet.Bimg = im.hit;
 	aniSetting();
-	_lucSet.ani = an.oneArr_0;
-	//_lucSet.ani->start();
+	_chaSet.ani = an.oneArr_0;
 	Cleft = _run = false;
 	Cc = _T = 0;
 
-	_lucSet.pt = { WINW / 2 + 100, WINH / 2 + 100 };
+	_chaSet.pt = { WINW / 2 + 100, WINH / 2 + 100 };
 
-	_lucSet.rc = MakeRct(_lucSet.pt.x - ((220) / 2), _lucSet.pt.y - 192, (220), (224));
+	_chaSet.rc = MakeRct(_chaSet.pt.x - ((220) / 2), _chaSet.pt.y - 192, (220), (224));
 
 	//루카 기본 스탯
-	_lucSt.Lv = 2;					//루카 초기 레벨
-	_lucSt.hp = _lucSt.maxHp = 75;	//루카 초기 현재/최대HP
-	_lucSt.mp = _lucSt.maxMp = 14;	//루카 초기 현재/최대MP
-	_lucSt.power = 2;				//루카 초기 힘
-	_lucSt.hit = 8;					//루카 초기 명중
-	_lucSt.magic = 8;				//루카 초기 마력
-	_lucSt.speed = 6;				//루카 초기 속도
-	_lucSt.evasion = 8;				//루카 초기 회피
-	_lucSt.stamina = 6;				//루카 초기 체력
-	_lucSt.Mdef = 10;				//루카 초기 마법방어력
+	_status.Lv = 2;					//루카 초기 레벨
+	_status.hp = _status.maxHp = 75;	//루카 초기 현재/최대HP
+	_status.mp = _status.maxMp = 14;	//루카 초기 현재/최대MP
+	_status.power = 2;				//루카 초기 힘
+	_status.hit = 8;					//루카 초기 명중
+	_status.magic = 8;				//루카 초기 마력
+	_status.speed = 6;				//루카 초기 속도
+	_status.evasion = 8;				//루카 초기 회피
+	_status.stamina = 6;				//루카 초기 체력
+	_status.Mdef = 10;				//루카 초기 마법방어력
 	//루카 기본 스탯 위까지
-	rad = 10;
+	dia = 10;
 	return S_OK;
 }
 
@@ -58,8 +57,12 @@ void lucca::update()
 
 void lucca::render()
 {
-	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_lucSet.pt.y), _lucSet.img, getMemDC(), _lucSet.rc.left, _lucSet.rc.top, _lucSet.ani);
-	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_lucSet.pt.y), _lucSet.img, getMemDC(), _lucSet.rc.left, _lucSet.rc.top, _lucSet.ani);
+	if (!Cleft)		IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft)	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.img, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	if (!Cleft	  &&white())	IMG->animRenderZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	else if (Cleft&&white())	IMG->animRenderHZ(static_cast<int>(_chaSet.pt.y), _chaSet.Bimg, getMemDC(), _chaSet.rc.left, _chaSet.rc.top, _chaSet.ani);
+	_chaSet.Bimg->changeAllColors(RGB(255, 255, 255), RGB(255, 0, 255));
+
 }
 
 void lucca::imgSetting()
@@ -315,7 +318,7 @@ void lucca::aniSetting()
 
 void lucca::imgSwitch()
 {
-	if (_lucSet.img != im.Bready)
+	if (_chaSet.img != im.Bready)
 	{
 		an.Bready_0->stop();
 		an.Bready_1->stop();
@@ -324,199 +327,199 @@ void lucca::imgSwitch()
 		an.SB_1->stop();
 		an.SB_2->stop();
 	}
-	if (_lucSet.img != im.atk)
+	if (_chaSet.img != im.atk)
 	{
 		an.atk_0->stop();
 		an.atk_1->stop();
 		an.atk_2->stop();
 	}
-	if (_lucSet.img != im.Bwin)
+	if (_chaSet.img != im.Bwin)
 	{
 		an.Bwin->stop();
 	}
-	switch (_lucSet.state)
+	switch (_chaSet.state)
 	{
 	case NORMAL_IDLE:
-		_lucSet.img = im.idle;
+		_chaSet.img = im.idle;
 
 		switch (_T)
 		{
 		case 0:
-			_lucSet.ani = an.oneArr_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
-			_lucSet.ani = an.oneArr_1;
+			_chaSet.ani = an.oneArr_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_lucSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		}
 
 		break;
 
 	case NORMAL_WALK:
-		_lucSet.img = im.walk;
+		_chaSet.img = im.walk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.walk_0;
+			_chaSet.ani = an.walk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.walk_1;
+			_chaSet.ani = an.walk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_lucSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		}
-		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_lucSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
 	case NORMAL_RUN:
-		_lucSet.img = im.run;
+		_chaSet.img = im.run;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.run_0;
+			_chaSet.ani = an.run_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.run_1;
+			_chaSet.ani = an.run_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_lucSet.ani = an.run_2;
+			_chaSet.ani = an.run_2;
 			break;
 		}
-		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_lucSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 		break;
 
 	case GETTING_READY:
-		_lucSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.Bready_0;
+			_chaSet.ani = an.Bready_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.Bready_1;
+			_chaSet.ani = an.Bready_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_lucSet.ani = an.Bready_2;
+			_chaSet.ani = an.Bready_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_lucSet.ani = an.Bready_2;
+			_chaSet.ani = an.Bready_2;
 			break;
 		}
-		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 		break;
 
 	case BATTLE_READY:
-		_lucSet.img = im.Bready;
+		_chaSet.img = im.Bready;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.SB_0;
+			_chaSet.ani = an.SB_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.SB_1;
+			_chaSet.ani = an.SB_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_lucSet.ani = an.SB_2;
+			_chaSet.ani = an.SB_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_lucSet.ani = an.SB_2;
+			_chaSet.ani = an.SB_2;
 			break;
 		}
-		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
 		break;
 
 	//근거리 공격시 움직이는 모션이 있긴 한데, 너무 짧은 거리라 확실하지 않아보임, 의논 후 결정
 
 	/*case BATTLE_MOVE:
-		_lucSet.img = im.walk;
+		_chaSet.img = im.walk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.walk_0;
+			_chaSet.ani = an.walk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.walk_1;
+			_chaSet.ani = an.walk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_lucSet.ani = an.walk_2;
+			_chaSet.ani = an.walk_2;
 			break;
 		}
-		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
-		_lucSet.ani->resume();
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 6);
+		_chaSet.ani->resume();
 
 		break;
 	case BATTLE_RUSH:
-		//_lucSet.img = im.rush;
+		//_chaSet.img = im.rush;
 
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.oneArr_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.oneArr_1;
+			_chaSet.ani = an.oneArr_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_lucSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		}
 
 		break;
 	case BATTLE_RETURN:
-		//_lucSet.img = im.rush;
+		//_chaSet.img = im.rush;
 
 		if (Cc != 0)Cc = 0;
 
@@ -524,139 +527,189 @@ void lucca::imgSwitch()
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.oneArr_0;
+			_chaSet.ani = an.oneArr_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.oneArr_1;
+			_chaSet.ani = an.oneArr_1;
 			break;
 		case 2:
 			if (!Cleft)Cleft = false;
-			_lucSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		case 3:
 			if (Cleft)Cleft = true;
-			_lucSet.ani = an.oneArr_2;
+			_chaSet.ani = an.oneArr_2;
 			break;
 		}
 		break;*/
 		
 	case BATTLE_ATK:
-		_lucSet.img = im.atk;
+		_chaSet.img = im.atk;
 		if (Cc != 0)Cc = 0;
 		switch (_T)
 		{
 		case 0:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.atk_0;
+			_chaSet.ani = an.atk_0;
 			break;
 		case 1:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.atk_1;
+			_chaSet.ani = an.atk_1;
 			break;
 		case 2:
 			if (Cleft)Cleft = false;
-			_lucSet.ani = an.atk_2;
+			_chaSet.ani = an.atk_2;
 			break;
 		case 3:
 			if (!Cleft)Cleft = true;
-			_lucSet.ani = an.atk_2;
+			_chaSet.ani = an.atk_2;
 			break;
 		}
-		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
 
+		break;
+	case BATTLE_HIT:
+		_chaSet.img = im.hit;
+		_chaSet.Bimg = im.hit;
+		switch (_T)
+		{
+		case 0:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_0;
+			break;
+		case 1:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_1;
+			break;
+		case 2:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		case 3:
+			if (!Cleft)Cleft = true;
+			_chaSet.ani = an.oneArr_2;
+			break;
+		}
+		break;
+	case BATTLE_HELP:
+		_chaSet.img = im.downs;
+		switch (_T)
+		{
+		case 0:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_0;
+			break;
+		case 1:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_1;
+			break;
+		case 2:
+			if (Cleft)Cleft = false;
+			_chaSet.ani = an.twoArrF_2;
+			break;
+		case 3:
+			if (!Cleft)Cleft = true;
+			_chaSet.ani = an.twoArrF_2;
+			break;
+		}
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 4);
+		break;
+	case BATTLE_LOSE:
+		_chaSet.img = im.down;
+		_chaSet.ani = an.oneArr_0;
 		break;
 
 	case BATTLE_WIN:
 
-		_lucSet.img = im.Bwin;
-		_lucSet.ani = an.Bwin;
+		_chaSet.img = im.Bwin;
+		_chaSet.ani = an.Bwin;
 
-		_lucSet.ani->frameUpdate(TIME->getElapsedTime() * 8);
+		_chaSet.ani->frameUpdate(TIME->getElapsedTime() * 8);
 		break;
 
 	}
-	_lucSet.rc = MakeRct(_lucSet.pt.x - ((220) / 2), _lucSet.pt.y - 192, (220), (224));
+	_chaSet.rc = MakeRct(_chaSet.pt.x - ((220) / 2), _chaSet.pt.y - 192, (220), (224));
 
 }
 
 void lucca::keySetting()
 {
-	if (KEY->press(VK_LEFT) && 0 < _lucSet.pt.x)
+	if (KEY->press(VK_LEFT) && 0 < _chaSet.pt.x)
 	{
 		if (_T != 3)_T = 3;
 		if (_run)
 		{
-			_lucSet.state = NORMAL_RUN;
-			_lucSet.pt.x -= 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.x -= 8;
 		}
 		if (!_run)
 		{
-			_lucSet.state = NORMAL_WALK;
-			_lucSet.pt.x -= 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.x -= 5;
 		}
 	}
 	else if (KEY->up(VK_LEFT))
 	{
-		if (_lucSet.state != NORMAL_IDLE)_lucSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
 	if (KEY->press(VK_RIGHT))
 	{
 		if (_T != 2)_T = 2;
 		if (_run)
 		{
-			_lucSet.state = NORMAL_RUN;
-			_lucSet.pt.x += 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.x += 8;
 		}
 		if (!_run)
 		{
-			_lucSet.state = NORMAL_WALK;
-			_lucSet.pt.x += 5;
+			_chaSet.state = NORMAL_WALK;
+			_chaSet.pt.x += 5;
 		}
 
 	}
 	else if (KEY->up(VK_RIGHT))
 	{
-		if (_lucSet.state != NORMAL_IDLE)_lucSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_UP) && _lucSet.pt.y > 0)
+	if (KEY->press(VK_UP) && _chaSet.pt.y > 0)
 	{
 		if (_T != 1)_T = 1;
 		if (_run)
 		{
-			_lucSet.state = NORMAL_RUN;
-			_lucSet.pt.y -= 8;
+			_chaSet.state = NORMAL_RUN;
+			_chaSet.pt.y -= 8;
 		}
 		if (!_run)
 		{
-			_lucSet.pt.y -= 5;
-			_lucSet.state = NORMAL_WALK;
+			_chaSet.pt.y -= 5;
+			_chaSet.state = NORMAL_WALK;
 		}
 	}
 	else if (KEY->up(VK_UP))
 	{
-		if (_lucSet.state != NORMAL_IDLE)_lucSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
 	if (KEY->press(VK_DOWN))
 	{
 		if (_T != 0)_T = 0;
 		if (_run)
 		{
-			_lucSet.pt.y += 8;
-			_lucSet.state = NORMAL_RUN;
+			_chaSet.pt.y += 8;
+			_chaSet.state = NORMAL_RUN;
 		}
 		if (!_run)
 		{
-			_lucSet.pt.y += 5;
-			_lucSet.state = NORMAL_WALK;
+			_chaSet.pt.y += 5;
+			_chaSet.state = NORMAL_WALK;
 		}
 	}
 	else if (KEY->up(VK_DOWN))
 	{
-		if (_lucSet.state != NORMAL_IDLE)_lucSet.state = NORMAL_IDLE;
+		if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE;
 	}
-	if (KEY->press(VK_LEFT) && KEY->press(VK_RIGHT)) { if (_lucSet.state != NORMAL_IDLE)_lucSet.state = NORMAL_IDLE; }
-	if (KEY->press(VK_UP) && KEY->press(VK_DOWN)) { if (_lucSet.state != NORMAL_IDLE)_lucSet.state = NORMAL_IDLE; }
+	if (KEY->press(VK_LEFT) && KEY->press(VK_RIGHT)) { if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE; }
+	if (KEY->press(VK_UP) && KEY->press(VK_DOWN)) { if (_chaSet.state != NORMAL_IDLE)_chaSet.state = NORMAL_IDLE; }
 
 	if (KEY->press('C'))
 	{
@@ -666,45 +719,45 @@ void lucca::keySetting()
 
 	if (KEY->down(VK_SPACE))
 	{
-		if (_lucSet.state == NORMAL_IDLE ||
-			_lucSet.state == NORMAL_WALK ||
-			_lucSet.state == NORMAL_RUN)
+		if (_chaSet.state == NORMAL_IDLE ||
+			_chaSet.state == NORMAL_WALK ||
+			_chaSet.state == NORMAL_RUN)
 		{
-			_lucSet.state = GETTING_READY;
+			_chaSet.state = GETTING_READY;
 		}
-		else if (_lucSet.state == BATTLE_READY)
+		else if (_chaSet.state == BATTLE_READY)
 		{
-			_lucSet.state = BATTLE_WIN;
+			_chaSet.state = BATTLE_WIN;
 		}
 	}
-	if (KEY->down(VK_LBUTTON) && _lucSet.state == BATTLE_READY)
+	if (KEY->down(VK_LBUTTON) && _chaSet.state == BATTLE_READY)
 	{
-		_lucSet.atk = _mouse;
-		_lucSet.atkS = _lucSet.pt;
-		float tAngle = Angle(static_cast<float>(_lucSet.atkS.x), static_cast<float>(_lucSet.atkS.y), static_cast<float>(_lucSet.atk.x), static_cast<float>(_lucSet.atk.y));
+		_chaSet.atk = _mouse;
+		_chaSet.atkS = _chaSet.pt;
+		float tAngle = Angle(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 		float _pi = PI / 9;
 		if (_pi * 3 < tAngle && tAngle <= _pi * 6) { _T = 1; }//위쪽보기
 		else if (-_pi * 3 < tAngle && tAngle <= _pi * 3) { _T = 2; }//오른쪽보기
 		else if (-_pi * 3 >= tAngle && tAngle > -_pi * 6) { _T = 0; }//아래쪽보기
 		else { _T = 3; }//왼쪽 보기
 
-		_lucSet.state = BATTLE_ATK;
+		_chaSet.state = BATTLE_ATK;
 	}
 
 }
 
 void lucca::battleSwitch()
 {
-	switch (_lucSet.state)
+	switch (_chaSet.state)
 	{
 	case GETTING_READY:
 
-		if (_lucSet.ani->getCurrPlaylistIdx() != 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.state = BATTLE_READY;
-		else if (_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.ani->start();
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = BATTLE_READY;
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 		break;
 	case BATTLE_READY:
 
-		if (_lucSet.ani->isPlay() == FALSE)_lucSet.ani->start();
+		if (_chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 
 		break;
 		// 근거리 공격을 위한 이동은 의논 후 결정
@@ -713,40 +766,40 @@ void lucca::battleSwitch()
 		break;
 
 	case BATTLE_RUSH:
-		_lucSet.angle = Angle(static_cast<float> (_lucSet.pt.x), static_cast<float>(_lucSet.pt.y), static_cast<float>(_lucSet.atk.x), static_cast<float>(_lucSet.atk.y));
-		_lucSet.Dis = Distance(static_cast<float>(_lucSet.pt.x), static_cast<float>(_lucSet.pt.y), static_cast<float>(_lucSet.atk.x), static_cast<float>(_lucSet.atk.y));
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y), static_cast<float>(_chaSet.atk.x), static_cast<float>(_chaSet.atk.y));
 
-		if (_lucSet.ani->getCurrPlaylistIdx() != 0)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0)
 		{
-			_lucSet.pt.x += static_cast<int>(cosf(_lucSet.angle) * 15);
-			_lucSet.pt.y += -static_cast<int>(sinf(_lucSet.angle) * 15);
+			_chaSet.pt.x += static_cast<int>(cosf(_chaSet.angle) * 15);
+			_chaSet.pt.y += -static_cast<int>(sinf(_chaSet.angle) * 15);
 		}
 
-		if (_lucSet.Dis <= rad)
+		if (_chaSet.Dis <= dia)
 		{
-			_lucSet.ani->stop();
-			_lucSet.state = BATTLE_ATK;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_ATK;
 		}
-		else if (_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE) { _lucSet.ani->start(); }
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 		break;
 
 	case BATTLE_RETURN:
-		_lucSet.angle = Angle(static_cast<float> (_lucSet.atkS.x), static_cast<float>(_lucSet.atkS.y), static_cast<float>(_lucSet.pt.x), static_cast<float>(_lucSet.pt.y));
-		_lucSet.Dis = Distance(static_cast<float>(_lucSet.atkS.x), static_cast<float>(_lucSet.atkS.y), static_cast<float>(_lucSet.pt.x), static_cast<float>(_lucSet.pt.y));
+		_chaSet.angle = Angle(static_cast<float> (_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
+		_chaSet.Dis = Distance(static_cast<float>(_chaSet.atkS.x), static_cast<float>(_chaSet.atkS.y), static_cast<float>(_chaSet.pt.x), static_cast<float>(_chaSet.pt.y));
 
-		if (_lucSet.ani->getCurrPlaylistIdx() != 0)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0)
 		{
-			_lucSet.pt.x -= static_cast<int>(cosf(_lucSet.angle) * 15);
-			_lucSet.pt.y -= -static_cast<int>(sinf(_lucSet.angle) * 15);
+			_chaSet.pt.x -= static_cast<int>(cosf(_chaSet.angle) * 15);
+			_chaSet.pt.y -= -static_cast<int>(sinf(_chaSet.angle) * 15);
 		}
 
-		if (rad >= _lucSet.Dis)
+		if (dia >= _chaSet.Dis)
 		{
-			_lucSet.ani->stop();
-			_lucSet.state = BATTLE_READY;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_READY;
 		}
 
-		else if (_lucSet.Dis > rad &&_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE) { _lucSet.ani->start(); }
+		else if (_chaSet.Dis > dia &&_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 
 		break;*/
 
@@ -755,20 +808,20 @@ void lucca::battleSwitch()
 		//공격시 이미지에 맞춰 적의 이미지를 설정, 효과음을 설정한다
 
 		//공격 모션이 시작되어야 할 때 시작 / 끝났을 때 돌아가는 것을 설정한다
-		if (_lucSet.ani->getCurrPlaylistIdx() != 0 && _lucSet.ani->isPlay() == FALSE)
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)
 		{
-			_lucSet.ani->stop();
-			_lucSet.state = BATTLE_READY;
+			_chaSet.ani->stop();
+			_chaSet.state = BATTLE_READY;
 		}
-		else if (_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE) { _lucSet.ani->start(); }
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 
 		break;
 
 	case BATTLE_WIN:
 		//노말_레디는 전투 후 크로노(1번째 플레이어)쪽으로 모인다, 임시로 idle로 바로 바뀌게 했다
-		//if (_lucSet.ani->getCurrPlaylistIdx() != 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.state = NORMAL_READY;
-		if (_lucSet.ani->getCurrPlaylistIdx() != 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.state = NORMAL_IDLE;
-		else if (_lucSet.ani->getCurrPlaylistIdx() == 0 && _lucSet.ani->isPlay() == FALSE)_lucSet.ani->start();
+		//if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = NORMAL_READY;
+		if (_chaSet.ani->getCurrPlaylistIdx() != 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.state = NORMAL_IDLE;
+		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE)_chaSet.ani->start();
 
 		break;
 	}
