@@ -1,9 +1,9 @@
 #pragma once
 #include "gameNode.h"
 
-
 class player;
 class item;
+
 struct equip
 {
 	string weapon;

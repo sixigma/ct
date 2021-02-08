@@ -14,7 +14,6 @@
 int gameScene::_countForReEnablingKeyInput;
 
 player* gameScene::_p;
-playerUiScene* gameScene::_ui;
 vector<shared_ptr<mapManager>> gameScene::_mapList;
 shared_ptr<mapManager> gameScene::_currMap;
 int gameScene::_prevMapNum, gameScene::_mapNum;
@@ -24,13 +23,13 @@ gameScene::gameScene(int anyNum)
 {
 	UNREFERENCED_PARAMETER(anyNum);
 
+	
 	_currOrg = _newOrg = { 0, 0 };
 
 	_p = new player;
 	_p->init();
+	//setViewport(_p->getCrono()->getPos().x, _p->getCrono()->getPos().y);
 
-	_ui = new playerUiScene;
-	_ui->init();
 
 	_mapList.emplace_back(new millennialFair);		//0
 	_mapList.emplace_back(new leeneSquare);			//1
@@ -71,7 +70,6 @@ gameScene::~gameScene() // 주의: 중복 호출이 되어도 문제가 발생�
 HRESULT gameScene::init() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
 {
 	SC->delScene("이름 변경 화면");
-
 	return S_OK;
 }
 void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
@@ -80,9 +78,9 @@ void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 
 
 void gameScene::update()
 {
-	if (KEY->down('S'))
+
+	if (KEY->down('D'))
 	{
-		_ui->setLinkTo(_p);
 		SC->changeScene("스텟 창");
 	}
 	
