@@ -50,7 +50,6 @@ class enemy : public gameNode
 protected:
 	STATE _State;
 	tagStatus _Status;
-	tagItemStatus _ItemStatus;
 	tagChaSet _ChaSet;
 	tagEnemyImg _Img;
 	tagEnemyAni _Ani;

@@ -180,6 +180,7 @@
     <ClInclude Include="leeneSquare.h" />
     <ClInclude Include="lucca.h" />
     <ClInclude Include="mapManager.h" />
+    <ClInclude Include="marle.h" />
     <ClInclude Include="millennialFair.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="teleport.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="leeneSquare.cpp" />
     <ClCompile Include="lucca.cpp" />
     <ClCompile Include="mapManager.cpp" />
+    <ClCompile Include="marle.cpp" />
     <ClCompile Include="millennialFair.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="teleport.cpp" />
