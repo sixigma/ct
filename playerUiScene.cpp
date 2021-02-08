@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "playerUiScene.h"
+#include "gameScene.h"
 #include "player.h"
 #include "item.h"
 
@@ -21,9 +22,18 @@ HRESULT playerUiScene::init()
 
 	_item = new item;
 	_item->itemlist("Wooden Sword");
-	_shouldRenderUsingWindowCoords = FALSE;
-
 	_vItem.push_back(_item);
+
+	_item = new item;
+	_item->itemlist("IronBlade");
+	_vItem.push_back(_item);
+	
+	_item = new item;
+	_item->itemlist("BronzeBow");
+	_vItem.push_back(_item);
+
+	_shouldRenderUsingWindowCoords = FALSE;
+	
 	one1 = MakeRct(64, 64, 64 * 6, 64 * 3);
 	pos = { 64, WINH - 64 };
 	sT = false;
@@ -102,12 +112,12 @@ HRESULT playerUiScene::init()
 
 void playerUiScene::release()
 {
+	_vItem.clear();
 }
 
 void playerUiScene::update()
 {
-	
-	if (KEY->down('S'))
+	if (KEY->down('D'))
 	{
 		SC->changeScene("게임 장면");
 	}
@@ -160,7 +170,7 @@ void playerUiScene::render()
 		IMG->frameRender("위치 표시 타일셋", getMemDC(), 5 * T + (csn*T), 6 * T, 2, 1);
 		IMG->frameRender("위치 표시 타일셋", getMemDC(), 5 * T + (csn*T), 8 * T, 2, 0);
 	}
-	
+	_shouldRenderUsingWindowCoords = FALSE;
 }
 
 void playerUiScene::categoryList(int num)
@@ -222,7 +232,10 @@ void playerUiScene::categoryList(int num)
 			IMG->render("장비창", getMemDC(), pos.x, pos.y);
 			IMG->render("목록", getMemDC(), pos.x, pos.y + 128);
 			TXT->render(getMemDC(), itemCategory, pos.x+(T)+E, pos.y+(T));
-			TXT->render(getMemDC(), "fuckyou", pos.x + (T)+32, pos.y + 160);
+			for(int i = 0; i<_vItem.size(); i++)
+			{
+			TXT->render(getMemDC(), _vItem[i]->getName(), pos.x + (T)+32, pos.y + 160);
+			}
 			IMG->frameRender("지건", getMemDC(), (8 * T) - E, gun, 0, 0);
 		}
 		IMG->render("가림막", getMemDC(), 0, WINH - 64);
@@ -236,7 +249,7 @@ void playerUiScene::categoryList(int num)
 		IMG->render("소지아이템창", getMemDC(),T, 5 * T);
 		for (int i = 0; i < _vItem.size(); i++)
 		{
-			TXT->render(getMemDC(), _vItem[i]->getName(), T + T / 4, 5 * T + T / 4);
+			TXT->render(getMemDC(), _vItem[i]->getName(), T + T / 4, 5 * T + T / 4 + (i*T));
 		}
 	break;
 
@@ -269,9 +282,7 @@ void playerUiScene::categoryList(int num)
 		IMG->render("세이브창", getMemDC(), 3 * T, 5 * T);
 		IMG->render("내용물1", getMemDC(), T, 8 * T);
 		IMG->render("내용물2", getMemDC(), 7* T, 8 * T);
-		break;
-		
-
+	break;
 	}
 }
 
@@ -291,7 +302,9 @@ void playerUiScene::cateControl()
 
 		if (KEY->down('C'))
 		{
+			
 			SC->changeScene("게임 장면");
+			
 		}
 		if (KEY->down('V'))
 		{
