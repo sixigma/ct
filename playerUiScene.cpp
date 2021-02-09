@@ -112,6 +112,9 @@ HRESULT playerUiScene::init()
 
 void playerUiScene::release()
 {
+	pl->release();
+	SAFE_DEL(pl);
+	for (size_t i = 0; i < _vItem.size(); ++i) SAFE_DEL(_vItem[i]);
 	_vItem.clear();
 }
 
