@@ -266,6 +266,7 @@ public:
 	//아이템 특수능력 setter
 	void setItemAbility(int ability) { _itemSt.ability = ability; }
 
+	void setAniIndex(int aniIndex) { _chaSet.ani->setCurrPlaylistIdx(aniIndex); }
 	//getter
 
 	//트리거타임 getter
@@ -335,6 +336,8 @@ public:
 	int getItemMaxMP() { return  _itemSt.maxMp; }
 	//아이템 특수능력 setter
 	int getItemAbility() { return _itemSt.ability; }
+
+	int getAniIndex() { return _chaSet.ani->getCurrPlaylistIdx(); }
 
 	POINT& getPos() { return _chaSet.pt; }
 	POINT& getAtkPos() { return _chaSet.atk; }

@@ -73,8 +73,8 @@ void frog::imgSetting()
 	im.rush = IMG->addF("개구리-달려들기", "res/images/character/frog/rush.bmp", 448, 672, 2, 3, true, RGB(255, 0, 255));
 	im.atk = IMG->addF("개구리-공격", "res/images/character/frog/atkcri.bmp", 1792, 852, 8, 3, true, RGB(255, 0, 255));//크리티컬까지 있음
 	im.Bwin = IMG->addF("개구리-배틀승리", "res/images/character/frog/Bwin.bmp", 672, 896, 3, 4, true, RGB(255, 0, 255));
-	im.down = IMG->addF("개구리-쓰러짐", "res/images/character/frog/downs.bmp", 224, 672, 1, 3, true, RGB(255, 0, 255));
-	im.downs = IMG->addF("개구리-쓰러질때", "res/images/character/frog/down.bmp", 448, 672, 2, 3, true, RGB(255, 0, 255));
+	im.down = IMG->addF("개구리-쓰러짐", "res/images/character/frog/down.bmp", 224, 672, 1, 3, true, RGB(255, 0, 255));
+	im.downs = IMG->addF("개구리-쓰러질때", "res/images/character/frog/downs.bmp", 448, 672, 2, 3, true, RGB(255, 0, 255));
 	im.hit = IMG->addF("개구리-피격", "res/images/character/frog/hit.bmp", 224, 672, 1, 3, true, RGB(255, 0, 255));
 	im.hit2 = IMG->addF("개구리-피격2", "res/images/character/frog/hit2.bmp", 224, 448, 1, 2, true, RGB(255, 0, 255));
 	im.ladder = IMG->addF("개구리-사다리", "res/images/character/frog/labber.bmp", 896, 224, 4, 1, true, RGB(255, 0, 255));
@@ -827,6 +827,21 @@ void frog::battleSwitch()
 		}
 
 		else if (_chaSet.Dis > dia &&_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
+		break;
+	case BATTLE_HIT:
+		++hitCol;
+		if (hitCol % 4 == 0)hitCol = 0;
+		break;
+	case BATTLE_HELP:
+		if (Dcheck < 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.ani->start();
+			Dcheck++;
+		}
+		else if (Dcheck >= 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.state = BATTLE_LOSE;
+		}
 		break;
 	case BATTLE_WIN:
 		//노말_레디는 전투 후 크로노(1번째 플레이어)쪽으로 모인다, 임시로 idle로 바로 바뀌게 했다
