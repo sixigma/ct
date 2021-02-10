@@ -629,7 +629,7 @@ void animation::frameUpdate(float elapsedTime)
 			_elapsedSec -= _frameUpdateSec;
 			++_currPlayIndex;
 
-			if (_currPlayIndex == _playlist.size())
+			if (_currPlayIndex >= _playlist.size())
 			{
 				if (_loop) _currPlayIndex = 0;
 				else

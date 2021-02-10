@@ -13,6 +13,8 @@ gato::~gato()
 
 HRESULT gato::init()
 {
+	_id = 0;
+
 	_Status.hp = 76;
 	_Status.def = 127;
 	_Status.Mdef = 50;
