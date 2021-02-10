@@ -75,8 +75,8 @@ void lucca::imgSetting()
 	im.atk2 = IMG->addF("루카-원거리공격", "res/images/character/lucca/Latk.bmp", 880, 672, 4, 3, true, RGB(255, 0, 255));
 	im.Bwin = IMG->addF("루카-배틀승리", "res/images/character/lucca/Bwin.bmp", 1540, 224, 7, 1, true, RGB(255, 0, 255));
 	im.cantRun = IMG->addF("루카-못달림", "res/images/character/lucca/cantRun.bmp", 660, 672, 3, 3, true, RGB(255, 0, 255));
-	im.down = IMG->addF("루카-쓰러짐", "res/images/character/lucca/downs.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
-	im.downs = IMG->addF("루카-쓰러질때", "res/images/character/lucca/down.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
+	im.down = IMG->addF("루카-쓰러짐", "res/images/character/lucca/down.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
+	im.downs = IMG->addF("루카-쓰러질때", "res/images/character/lucca/downs.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
 	im.hit = IMG->addF("루카-피격", "res/images/character/lucca/hit.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
 	im.hit2 = IMG->addF("루카-피격2", "res/images/character/lucca/hit2.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
 	im.ladder = IMG->addF("루카-사다리", "res/images/character/lucca/labber.bmp", 880, 224, 4, 1, true, RGB(255, 0, 255));
@@ -119,19 +119,19 @@ void lucca::aniSetting()
 	// 노말 - 승리 포즈		: 1 - 2 (아이템샾 등)
 	{
 		an.twoArrT_0 = new animation;
-		an.twoArrT_0->init(220, 672, 220, 224);
+		an.twoArrT_0->init(440, 672, 220, 224);
 		int twoT_1_arr[] = { 0,1 };
 		an.twoArrT_0->setPlaylist(twoT_1_arr, 2, true);
 		an.twoArrT_0->setFPS(1);
 
 		an.twoArrT_1 = new animation;
-		an.twoArrT_1->init(220, 672, 220, 224);
+		an.twoArrT_1->init(440, 672, 220, 224);
 		int twoT_2_arr[] = { 2,3 };
 		an.twoArrT_1->setPlaylist(twoT_2_arr, 2, true);
 		an.twoArrT_1->setFPS(1);
 
 		an.twoArrT_2 = new animation;
-		an.twoArrT_2->init(220, 672, 220, 224);
+		an.twoArrT_2->init(440, 672, 220, 224);
 		int twoT_3_arr[] = { 4,5 };
 		an.twoArrT_2->setPlaylist(twoT_3_arr, 2, true);
 		an.twoArrT_2->setFPS(1);
@@ -140,19 +140,19 @@ void lucca::aniSetting()
 	// 노말 - 승리 포즈		: 1 - 2 
 	{
 		an.twoArrF_0 = new animation;
-		an.twoArrF_0->init(220, 672, 220, 224);
+		an.twoArrF_0->init(440, 672, 220, 224);
 		int twoF_1_arr[] = { 0,1 };
 		an.twoArrF_0->setPlaylist(twoF_1_arr, 2, false);
 		an.twoArrF_0->setFPS(1);
 
 		an.twoArrF_1 = new animation;
-		an.twoArrF_1->init(220, 672, 220, 224);
+		an.twoArrF_1->init(440, 672, 220, 224);
 		int twoF_2_arr[] = { 2,3 };
 		an.twoArrF_1->setPlaylist(twoF_2_arr, 2, false);
 		an.twoArrF_1->setFPS(1);
 
 		an.twoArrF_2 = new animation;
-		an.twoArrF_2->init(220, 672, 220, 224);
+		an.twoArrF_2->init(440, 672, 220, 224);
 		int twoF_3_arr[] = { 4,5 };
 		an.twoArrF_2->setPlaylist(twoF_3_arr, 2, false);
 		an.twoArrF_2->setFPS(1);
@@ -815,6 +815,21 @@ void lucca::battleSwitch()
 		}
 		else if (_chaSet.ani->getCurrPlaylistIdx() == 0 && _chaSet.ani->isPlay() == FALSE) { _chaSet.ani->start(); }
 
+		break;
+	case BATTLE_HIT:
+		++hitCol;
+		if (hitCol % 4 == 0)hitCol = 0;
+		break;
+	case BATTLE_HELP:
+		if (Dcheck < 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.ani->start();
+			Dcheck++;
+		}
+		else if (Dcheck >= 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.state = BATTLE_LOSE;
+		}
 		break;
 
 	case BATTLE_WIN:

@@ -98,8 +98,8 @@ void marle::imgSetting()
 	im.atk2 =		IMG->addF("마루-원거리공격", "res/images/character/marle/Latk.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
 	im.Bwin =		IMG->addF("마루-배틀승리", "res/images/character/marle/Bwin.bmp", 660, 896, 3, 4, true, RGB(255, 0, 255));
 	im.cantRun =	IMG->addF("마루-못달림", "res/images/character/marle/cantRun.bmp", 660, 672, 3, 3, true, RGB(255, 0, 255));
-	im.down =		IMG->addF("마루-쓰러짐", "res/images/character/marle/downs.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
-	im.downs =		IMG->addF("마루-쓰러질때", "res/images/character/marle/down.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
+	im.down =		IMG->addF("마루-쓰러짐", "res/images/character/marle/down.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
+	im.downs =		IMG->addF("마루-쓰러질때", "res/images/character/marle/downs.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
 	im.hit =		IMG->addF("마루-피격", "res/images/character/marle/hit.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
 	im.hit2 =		IMG->addF("마루-피격2", "res/images/character/marle/hit2.bmp", 220, 448, 1, 2, true, RGB(255, 0, 255));
 	im.ladder =		IMG->addF("마루-사다리", "res/images/character/marle/labber.bmp", 880, 224, 4, 1, true, RGB(255, 0, 255));
@@ -890,6 +890,17 @@ void marle::battleSwitch()
 	case BATTLE_HIT:
 		++hitCol;
 		if (hitCol % 4 == 0)hitCol = 0;
+		break;
+	case BATTLE_HELP:
+		if (Dcheck < 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.ani->start();
+			Dcheck++;
+		}
+		else if (Dcheck >= 3 && _chaSet.ani->isPlay() == FALSE)
+		{
+			_chaSet.state = BATTLE_LOSE;
+		}
 		break;
 	case BATTLE_WIN:
 		//노말_레디는 전투 후 크로노(1번째 플레이어)쪽으로 모인다, 임시로 idle로 바로 바뀌게 했다

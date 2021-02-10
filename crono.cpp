@@ -101,8 +101,8 @@ void crono::imgSetting()
 	im.atk = IMG->addF("크로노-공격", "res/images/character/chrono/atk.bmp", 1100, 672, 5, 3, true, RGB(255, 0, 255));
 	im.Bwin = IMG->addF("크로노-배틀승리", "res/images/character/chrono/Bwin.bmp", 660, 896, 3, 4, true, RGB(255, 0, 255));
 	im.cantRun = IMG->addF("크로노-못달림", "res/images/character/chrono/cantRun.bmp", 660, 672, 3, 3, true, RGB(255, 0, 255));
-	im.down = IMG->addF("크로노-쓰러짐", "res/images/character/chrono/downs.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
-	im.downs = IMG->addF("크로노-쓰러질때", "res/images/character/chrono/down.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
+	im.down = IMG->addF("크로노-쓰러짐", "res/images/character/chrono/down.bmp", 220, 224, 1, 1, true, RGB(255, 0, 255));
+	im.downs = IMG->addF("크로노-쓰러질때", "res/images/character/chrono/downs.bmp", 440, 672, 2, 3, true, RGB(255, 0, 255));
 	im.drink = IMG->addF("크로노-마심", "res/images/character/chrono/drink.bmp", 440, 224, 2, 1, true, RGB(255, 0, 255));
 	im.handsUp = IMG->addF("크로노-손들기", "res/images/character/chrono/handsUp.bmp", 220, 448, 1, 2, true, RGB(255, 0, 255));
 	im.hit = IMG->addF("크로노-피격", "res/images/character/chrono/hit.bmp", 220, 672, 1, 3, true, RGB(255, 0, 255));
@@ -150,19 +150,19 @@ void crono::aniSetting()
 	// 노말 - 묶임(이벤트)	: 3 - 2 (front / back / right)
 	{
 		an.twoArrT_0 = new animation;
-		an.twoArrT_0->init(220, 672, 220, 224);
+		an.twoArrT_0->init(440, 672, 220, 224);
 		int twoT_1_arr[] = { 0,1 };
 		an.twoArrT_0->setPlaylist(twoT_1_arr, 2, true);
 		an.twoArrT_0->setFPS(1);
 
 		an.twoArrT_1 = new animation;
-		an.twoArrT_1->init(220, 672, 220, 224);
+		an.twoArrT_1->init(440, 672, 220, 224);
 		int twoT_2_arr[] = { 2,3 };
 		an.twoArrT_1->setPlaylist(twoT_2_arr, 2, true);
 		an.twoArrT_1->setFPS(1);
 
 		an.twoArrT_2 = new animation;
-		an.twoArrT_2->init(220, 672, 220, 224);
+		an.twoArrT_2->init(440, 672, 220, 224);
 		int twoT_3_arr[] = { 4,5 };
 		an.twoArrT_2->setPlaylist(twoT_3_arr, 2, true);
 		an.twoArrT_2->setFPS(1);
@@ -172,19 +172,19 @@ void crono::aniSetting()
 	// 노말 - 승리 포즈		: 1 - 2
 	{
 		an.twoArrF_0 = new animation;
-		an.twoArrF_0->init(220, 672, 220, 224);
+		an.twoArrF_0->init(440, 672, 220, 224);
 		int twoF_1_arr[] = { 0,1 };
 		an.twoArrF_0->setPlaylist(twoF_1_arr, 2, false);
 		an.twoArrF_0->setFPS(1);
 
 		an.twoArrF_1 = new animation;
-		an.twoArrF_1->init(220, 672, 220, 224);
+		an.twoArrF_1->init(440, 672, 220, 224);
 		int twoF_2_arr[] = { 2,3 };
 		an.twoArrF_1->setPlaylist(twoF_2_arr, 2, false);
 		an.twoArrF_1->setFPS(1);
 
 		an.twoArrF_2 = new animation;
-		an.twoArrF_2->init(220, 672, 220, 224);
+		an.twoArrF_2->init(440, 672, 220, 224);
 		int twoF_3_arr[] = { 4,5 };
 		an.twoArrF_2->setPlaylist(twoF_3_arr, 2, false);
 		an.twoArrF_2->setFPS(1);
