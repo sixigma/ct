@@ -180,6 +180,8 @@ protected:
 	bool Latk;		//원거리 공격 체크용 bool
 	int dia;		//(임시)포인트 확인용 지름
 
+	int _id; // 캐릭터 ID
+
 	STATE_BATTLE state_b = STATE_BATTLE::INIT;
 public:
 	virtual HRESULT init();
@@ -268,6 +270,8 @@ public:
 
 	void setAniIndex(int aniIndex) { _chaSet.ani->setCurrPlaylistIdx(aniIndex); }
 	//getter
+	// 캐릭터 ID getter
+	int getID() { return _id; }
 
 	//트리거타임 getter
 	int getTriggerTime() { return _chaSet.triggerTime; }

@@ -4,7 +4,6 @@
 //#include "gameNode.h"
 #include "gameScene.h"
 #include "mapManager.h"
-#include "player.h"
 #include "gato.h"
 #include <memory>
 
@@ -21,13 +20,13 @@ private:
 	shared_ptr<battle> _battle;
 	shared_ptr<gato> _gato;
 
-	vector<gameNode*> _playerVector;
+	vector<character*> _playerVector;
 	vector<enemy*>	_enemyVector;
 	vector<POINT> _PlBattleStartPos;
 	vector<POINT> _EmBattleStartPos;
 
 	int _yOffset;
-	bool _ChkDialogueEnd;
+	int _dialogueStateNum;
 
 
 protected:

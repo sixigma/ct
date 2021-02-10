@@ -130,9 +130,6 @@
     <ClCompile Include="Astar.cpp">
       <Filter>Framework\Astar</Filter>
     </ClCompile>
-    <ClCompile Include="battle.cpp" />
-    <ClCompile Include="enemy.cpp" />
-    <ClCompile Include="gato.cpp" />
     <ClCompile Include="marle.cpp">
       <Filter>Game\GameScene\Character\Players</Filter>
     </ClCompile>
@@ -141,6 +138,15 @@
     </ClCompile>
     <ClCompile Include="character.cpp">
       <Filter>Game\GameScene\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>Game\GameScene\Character\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="gato.cpp">
+      <Filter>Game\GameScene\Character\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="battle.cpp">
+      <Filter>Game\GameScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,14 +291,20 @@
     <ClInclude Include="Astar.h">
       <Filter>Framework\Astar</Filter>
     </ClInclude>
-    <ClInclude Include="battle.h" />
-    <ClInclude Include="enemy.h" />
-    <ClInclude Include="gato.h" />
     <ClInclude Include="marle.h">
       <Filter>Game\GameScene\Character\Players</Filter>
     </ClInclude>
     <ClInclude Include="playerUiScene.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>Game\GameScene\Character\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="gato.h">
+      <Filter>Game\GameScene\Character\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="battle.h">
+      <Filter>Game\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

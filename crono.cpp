@@ -3,6 +3,8 @@
 
 HRESULT crono::init()
 {
+	_id = 0;
+
 	imgSetting();//이미지
 	_chaSet.img = im.idle;//이미지는 맨처음 idle로
 	_chaSet.Bimg = im.hit;

@@ -383,5 +383,13 @@ void loadingScene::playerImgs()
 
 void loadingScene::enemyImgs()
 {
+	// 가토
+	IMG->addF("가토-대화", "res/images/enemy/gato/talk.bmp", 1044, 568, 3, 2, true, RGB(255, 0, 255));
+	IMG->addF("가토-대기", "res/images/enemy/gato/idle.bmp", 696, 284, 2, 1, true, RGB(255, 0, 255));
+	IMG->addF("가토-이동", "res/images/enemy/gato/move.bmp", 1044, 1136, 4, 4, true, RGB(255, 0, 255));
+	IMG->addF("가토-공격", "res/images/enemy/gato/atk.bmp", 1392, 1136, 4, 4, true, RGB(255, 0, 255));
+	IMG->addF("가토-피격", "res/images/enemy/gato/hit.bmp", 348, 284, 1, 1, true, RGB(255, 0, 255));
+	IMG->addF("가토-허밍1", "res/images/enemy/gato/humming1.bmp", 56, 70, 1, 1, true, RGB(255, 0, 255));
+	IMG->addF("가토-허밍2", "res/images/enemy/gato/humming2.bmp", 56, 74, 1, 1, true, RGB(255, 0, 255));
 
 }

@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include "battle.h"
-#include "player.h"
+#include "character.h"
 #include "enemy.h"
 #include "bossGatoStage.h"
-#include "crono.h"
-#include "lucca.h"
 
 battle::battle()
 {
@@ -14,14 +12,7 @@ battle::~battle()
 {
 }
 
-HRESULT battle::init()
-{
-
-
-	return S_OK;
-}
-
-
+HRESULT battle::init() { return S_OK; }
 
 void battle::release()
 {
@@ -31,18 +22,19 @@ void battle::update()
 {
 	switch (_battleState)
 	{
-		case BATTLE_STATE::BATTLE_NOT_START_YET:
+		case BATTLE_STATE::NOT_START_YET:
 		{
 			if (_isInBattle)
 			{
-				_battleState = BATTLE_STATE::BATTLE_POS_RDY;
+				_battleState = BATTLE_STATE::PLAYERS_POS;
 			}
 			break;
 		}
-		case BATTLE_STATE::BATTLE_POS_RDY:
+		case BATTLE_STATE::PLAYERS_POS:
 		{
-			POINT& _cronoPos =_crono->getPos();
-			POINT& _luccaPos = _lucca->getPos();
+
+			POINT& _cronoPos = _pl[0]->getPos();
+			POINT& _luccaPos = _pl[1]->getPos();
 
 			POINT _cronoStartPos = (*_PlBattleStartPos)[0];
 			POINT _luccaStartPos = (*_PlBattleStartPos)[1];
@@ -59,7 +51,7 @@ void battle::update()
 
 			else if (Distance(_cronoPos.x, _cronoPos.y, _cronoStartPos.x, _cronoStartPos.y) <= FLT_EPSILON)
 			{
-				_crono->setT(1);
+				_pl[0]->setT(1);
 			}
 
 			if (Distance(_luccaPos.x, _luccaPos.y, _luccaStartPos.x, _luccaStartPos.y) > FLT_EPSILON)
@@ -71,33 +63,34 @@ void battle::update()
 
 			else if (Distance(_luccaPos.x, _luccaPos.y, _luccaStartPos.x, _luccaStartPos.y) <= FLT_EPSILON)
 			{
-				_lucca->setT(3);
+				_pl[1]->setT(3);
 			}
 			
 			if (_ChkMove)
 			{
-				_battleState = BATTLE_STATE::BATTLE_UI_SHOWUP;
+				_battleState = BATTLE_STATE::UI_SHOWUP;
 			}
 			break;
 		}
-		case BATTLE_STATE::BATTLE_UI_SHOWUP:
+		case BATTLE_STATE::UI_SHOWUP:
 		{
 			if (_textWindowState == TEXT_WINDOW_STATE::INVISIBLE)
 			{
 				_battleWindowOpeningCnt++;
 				if (_battleWindowOpeningCnt >= 30)
 				{
-					_crono->setTriggerTime(50);
-					_lucca->setTriggerTime(0);
+					for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
+					{
+						if (plIndex == 0)
+						{
+							_pl[plIndex]->setTriggerTime(1000);
+						}
+						else _pl[plIndex]->setTriggerTime(0);
 
-					_plTurnBar[0] = make_shared<progressBar>();
-					_plTurnBar[1] = make_shared<progressBar>();
-
-					_plTurnBar[0]->init(387 + 433, 44, 160, 32);
-					_plTurnBar[1]->init(387 + 433, 44 + 48, 160, 32);
-
-					_plTurnBar[0]->setGauge(_crono->getTriggerTime(), maxTriggerTime);
-					_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), maxTriggerTime);
+						_plTurnBar[plIndex] = make_shared<progressBar>();
+						_plTurnBar[plIndex]->init(817, 44 + 48 * plIndex, 160, 32);
+						_plTurnBar[plIndex]->setGauge(_pl[plIndex]->getTriggerTime(), maxTriggerTime);
+					}
 
 					_textWindowState = TEXT_WINDOW_STATE::OPENING;
 				}
@@ -109,7 +102,7 @@ void battle::update()
 				if (_battleWindowClipCount == 9)
 				{
 					_textWindowState = TEXT_WINDOW_STATE::VISIBLE;
-					_battleState = BATTLE_STATE::BATTLE_ATK_RDY;
+					_battleState = BATTLE_STATE::ATK_RDY;
 				}
 
 				updateBattleWindow();
@@ -117,196 +110,280 @@ void battle::update()
 
 			break;
 		}
-		case BATTLE_STATE::BATTLE_ATK_RDY:
+		case BATTLE_STATE::ATK_RDY:
 		{
 			bool _chkForState = true;
-
-			if (_crono->getState() != BATTLE_READY)
-				
-			{
-				_chkForState = false;
-				if (_crono->getState() != GETTING_READY)
+			for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
+			{	
+				if (_pl[plIndex]->getState() != BATTLE_READY)
+				{
+					_chkForState = false;
+					if (_pl[plIndex]->getState() != GETTING_READY)
 					{
-						_crono->setState(GETTING_READY);
+						_pl[plIndex]->setState(GETTING_READY);
 					}
+				}
 			}
 
-			if (_lucca->getState() != BATTLE_READY)
-
-			{
-				_chkForState = false;
-					if (_lucca->getState() != GETTING_READY)
-						{
-							_lucca->setState(GETTING_READY);
-						}
-			}
-
-			if (_chkForState)
-			{
-				_battleState = BATTLE_STATE::BATTLE_RUNNING;
-
-			}
+			if (_chkForState) _battleState = BATTLE_STATE::RUNNING;
 
 			updateBattleWindow();
 			break;
 		}
-		case BATTLE_STATE::BATTLE_RUNNING:
+		case BATTLE_STATE::RUNNING:
 		{
-			_crono->setTriggerTime(min(_crono->getTriggerTime() + _crono->getSpeed(), maxTriggerTime));
-			_lucca->setTriggerTime(min(_lucca->getTriggerTime() + _lucca->getSpeed(), maxTriggerTime));
-			(*_enemyVector)[0]->setTriggerTime(min((*_enemyVector)[0]->getTriggerTime() + (*_enemyVector)[0]->getSpeed(), maxTriggerTime));
-
-			if (_crono->getTriggerTime() == maxTriggerTime)
+			if (!_actionQueue.empty())
 			{
-				_shouldPopUpAction[0] = true;
+				if (_actionQueue.front()()) _actionQueue.pop();
 			}
-
-			if (_lucca->getTriggerTime() == maxTriggerTime)
+			else
 			{
-				_shouldPopUpAction[1] = true;
-			}
-
-			if ((*_enemyVector)[0]->getTriggerTime() == maxTriggerTime)
-			{
-				int tempTargetPlayNum;
-				tempTargetPlayNum = RNG->getInt(2);
-				switch (tempTargetPlayNum)
+				for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
 				{
-					case 0:
-						if (_crono->getHP() > 0)
-						_actionQueue.push([this]()->bool {return (*_enemyVector)[0]->atkSingleTarget(_crono, (*_enemyVector)[0]); });
-						(*_enemyVector)[0]->setTriggerTime(0);
-						break;
-					case 1:
-						if (_lucca->getHP() > 0)
-						_actionQueue.push([this]()->bool {return (*_enemyVector)[0]->atkSingleTarget(_lucca, (*_enemyVector)[0]); });
-						(*_enemyVector)[0]->setTriggerTime(0);
-						break;
+					if (_pl[plIndex]->getHP() > 0)
+					{
+						_pl[plIndex]->setTriggerTime(min(_pl[plIndex]->getTriggerTime() + _pl[plIndex]->getSpeed(), maxTriggerTime));
+						if (_pl[plIndex]->getTriggerTime() == maxTriggerTime) _shouldPopUpAction[plIndex] = true;
+					}
+					else _pl[plIndex]->setTriggerTime(0);
+				}
+
+				for (int emIndex = 0; emIndex < static_cast<int>(_enemyVector->size()); ++emIndex)
+				{
+					if (_em[emIndex]->getEnemyHP() > 0)
+					{
+						_em[emIndex]->setTriggerTime(min(_em[emIndex]->getTriggerTime() + _em[emIndex]->getSpeed(), maxTriggerTime));
+						if (_em[emIndex]->getTriggerTime() == maxTriggerTime)
+						{
+							int targetPlIndex = RNG->getInt(static_cast<int>(_playerVector->size()));
+
+							bool isTargetFound = false;
+
+							if (_pl[targetPlIndex]->getHP() == 0)
+							{
+								for (int i = 0; i < static_cast<int>(_playerVector->size()); ++i)
+								{
+									targetPlIndex = i;
+									if (_pl[targetPlIndex]->getHP() != 0)
+									{
+										isTargetFound = true;
+										break;
+									}
+								}
+							}
+							else isTargetFound = true;
+
+							if (isTargetFound)
+							{
+								_actionQueue.push([&em = this->_em[emIndex], &pl = this->_pl[targetPlIndex]]()->bool {return em->atkSingleTarget(pl, em); });
+								_em[emIndex]->setTriggerTime(0);
+							}
+						}
+					}
+					else _em[emIndex]->setTriggerTime(0);
 				}
 			}
 
-			//게이지 다 찼을때
-			if (_shouldPopUpAction[0] || _shouldPopUpAction[1] || _shouldPopUpAction[2])
+			_shouldShowArrowPointer = false;
+			int popUpCount = 0, newArrowPointerX = -1;
+			for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
+			{
+				_shouldShowArrowPointer = _shouldShowArrowPointer || _shouldPopUpAction[plIndex];
+				if (_shouldPopUpAction[plIndex])
+				{
+					popUpCount++; newArrowPointerX = plIndex;
+				}
+			}
+
+			if (popUpCount == 1) _arrowPointer.x = newArrowPointerX;
+			
+			// 게이지가 다 찼을 때
+			if (_shouldShowArrowPointer)
 			{
 				if (KEY->down(VK_DOWN))
 				{
-					if (arrowPointer < 2)
-						arrowPointer++;
+					if (_arrowPointer.y < 2)
+						_arrowPointer.y++;
 				}
-
 				else if (KEY->down(VK_UP))
 				{
-					if (arrowPointer > 0)
-						arrowPointer--;
+					if (_arrowPointer.y > 0)
+						_arrowPointer.y--;
 				}
-
-				// 키 추가 필요
-		
-			
+				else if (KEY->down(VK_RIGHT))
+				{
+					if (_arrowPointer.x < _playerVector->size() - 1)
+					{
+						_arrowPointer.x++;
+					}
+					if (!_shouldPopUpAction[_arrowPointer.x])
+					{
+						if (_arrowPointer.x < _playerVector->size() - 1)
+						{
+							_arrowPointer.x++;
+							if (_arrowPointer.x >= _playerVector->size() - 1 || !_shouldPopUpAction[_arrowPointer.x]) _arrowPointer.x -= 2;
+						}
+						else _arrowPointer.x--;
+					}
+				}
+				else if (KEY->down(VK_LEFT))
+				{
+					if (_arrowPointer.x > 0)
+						_arrowPointer.x--;
+					if (!_shouldPopUpAction[_arrowPointer.x])
+					{
+						if (_arrowPointer.x > 0)
+						{
+							_arrowPointer.x--;
+							if (_arrowPointer.x <= 0 || !_shouldPopUpAction[_arrowPointer.x]) _arrowPointer.x += 2;
+						}
+						else _arrowPointer.x++;
+					}
+				}
 				else if (KEY->down('V'))
 				{
 					bool enemyDown = false;
-					switch (arrowPointer)
+					switch (_arrowPointer.y)
 					{
-						
-
 						case 0: // 일반 공격
-						{
-							enemyDown = (*_enemyVector)[0]->hitDamage(999999);
-							_shouldPopUpAction[0] = false;
-							break;
-						}
+							{
+								enemyDown = _em[0]->hitDamage(10); // 리마인더: 시험용
+								_shouldPopUpAction[_arrowPointer.x] = false;
+								_shouldShowArrowPointer = false;
+								_pl[_arrowPointer.x]->setTriggerTime(0);
+
+								for (int i = 0; i < static_cast<int>(_playerVector->size()); ++i)
+								{
+									if (i == _arrowPointer.x) continue;
+									if (_shouldPopUpAction[i])
+									{
+										_arrowPointer.x = i;
+										break;
+									}
+								}
+								break;
+							}
 
 						case 1: // 스킬
-						{
+							{
 
-							break;
-						}
+								break;
+							}
 
 						case 2: // 아이템
-						{
+							{
 
-							break;
-						}
+								break;
+							}
 					}
+
 
 					if (enemyDown) { _enemyRemainingCnt--; }
 				}
 			}
-			preArrowPointer = arrowPointer; // 어디에 필요한지 확인 필요
 
+			int checkPlayersDown = 0;
 
-
-			// 게이지 갱신
-			_plTurnBar[0]->setGauge(_crono->getTriggerTime(), maxTriggerTime);
-			_plTurnBar[1]->setGauge(_lucca->getTriggerTime(), maxTriggerTime);
-
-			if(!_actionQueue.empty())
+			for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
 			{
-				if (_actionQueue.front()()) _actionQueue.pop();
+				int plHP = _pl[plIndex]->getHP();
+				if (plHP <= 10)
+				{
+
+					if (plHP > 0 && _pl[plIndex]->getState() != BATTLE_HELP)
+					{
+						_pl[plIndex]->setState(BATTLE_HELP);
+						_plTurnBar[plIndex]->setGauge(_pl[plIndex]->getTriggerTime(), maxTriggerTime); // 게이지 갱신
+					}
+					else if (plHP == 0)
+					{
+						if (_pl[plIndex]->getState() != BATTLE_LOSE)
+						{
+							_pl[plIndex]->setState(BATTLE_LOSE);
+						}
+						_shouldPopUpAction[plIndex] = false;
+						_pl[plIndex]->setTriggerTime(0);
+						_plTurnBar[plIndex]->setGauge(0, maxTriggerTime);
+						checkPlayersDown++;
+					}
+				}
+				else _plTurnBar[plIndex]->setGauge(_pl[plIndex]->getTriggerTime(), maxTriggerTime); // 게이지 갱신
 			}
 
-			if (_crono->getHP() <= 0)
+			for (int emIndex = 0; emIndex < static_cast<int>(_enemyVector->size()); ++emIndex)
 			{
-				_crono->setTriggerTime(0);
-				if (_crono->getState() != BATTLE_HELP) _crono->setState(BATTLE_HELP);
-			}
-
-			if (_lucca->getHP() <= 0)
-			{
-				_lucca->setTriggerTime(0);
-				if (_lucca->getState() != BATTLE_HELP) _lucca->setState(BATTLE_HELP);
-			}
-
-			if ((*_enemyVector)[0]->getEnemyHP() == 0)
-			{
-				(*_enemyVector)[0]->setTriggerTime(0);
+				if (_em[emIndex]->getEnemyHP() == 0) _em[emIndex]->setTriggerTime(0);
 			}
 
 			if (_enemyRemainingCnt == 0)
-				_battleState = BATTLE_STATE::BATTLE_ALL_ENEMY_DOWN;
+				_battleState = BATTLE_STATE::ALL_ENEMIES_DOWN;
+
+			if (checkPlayersDown == _playerVector->size())
+			{
+				_shouldShowArrowPointer = false;
+				_battleState = BATTLE_STATE::ALL_PLAYERS_DOWN;
+			}
 
 			updateBattleWindow();
 			break;
 		}
-		case BATTLE_STATE::BATTLE_ALL_ENEMY_DOWN:
+		case BATTLE_STATE::ALL_ENEMIES_DOWN:
 		{
-			_crono->setState(BATTLE_WIN);
-			_lucca->setState(BATTLE_WIN);
-
-			_crono->setT(0);
-			_lucca->setT(0);
+			for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
+			{
+				_pl[plIndex]->setState(BATTLE_WIN);
+				// _pl[plIndex]->setT(0);
+			}
 
 			updateBattleWindow();
 
-			_battleState = BATTLE_STATE::BATTLE_CHECK_REWARD_RDY;
+			_battleState = BATTLE_STATE::CHECK_REWARD_RDY;
+
+			_isPlLost = false;
 			break;
 		}
-		case BATTLE_STATE::BATTLE_CHECK_REWARD_RDY:
+		case BATTLE_STATE::ALL_PLAYERS_DOWN:
+		{
+			if (KEY->down('V')) _battleState = BATTLE_STATE::UI_CLOSE; // 리마인더: 시험용
+			_isPlLost = true;
+			break;
+		}
+		case BATTLE_STATE::CHECK_REWARD_RDY:
 		{
 			if (RNG->getInt(2) == 1)
 			{
 				_msgQueue.push("Got 1x Tonic!");
 			}
-		
-			_msgQueue.push("Got " + to_string((*_enemyVector)[0]->getEnemyExp()) + " experience point(s)!");
-			_msgQueue.push("Got " + to_string((*_enemyVector)[0]->getEnemyTP()) +  " tech point(s)!");
-			// 골드 추가 필요
-			if (_crono->getState() != BATTLE_HELP)
+
+			int expUp = 0;
+			int tpUP = 0;
+
+			for (int emIndex = 0; emIndex < static_cast<int>(_enemyVector->size()); ++emIndex)
 			{
-				_crono->plusExp((*_enemyVector)[0]->getEnemyExp());
+				expUp += _em[emIndex]->getEnemyExp();
+				tpUP += _em[emIndex]->getEnemyTP();
 			}
 
-			if (_lucca->getState() != BATTLE_HELP)
+			_msgQueue.push("Got " + to_string(expUp) + " experience point(s)!");
+			_msgQueue.push("Got " + to_string(tpUP) +  " tech point(s)!");
+
+			// 골드, TP 처리 추가 필요
+
+			for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
 			{
-				_lucca->plusExp((*_enemyVector)[0]->getEnemyExp());
+				if (_pl[plIndex]->getState() != BATTLE_LOSE)
+				{
+					_pl[plIndex]->plusExp(expUp);
+
+
+
+				}
 			}
 			updateBattleWindow();
-			_battleState = BATTLE_STATE::BATTLE_CHECK_REWARD_START;
-
+			_battleState = BATTLE_STATE::CHECK_REWARD_START;
 			break;
 		}
-		case BATTLE_STATE::BATTLE_CHECK_REWARD_START:
+		case BATTLE_STATE::CHECK_REWARD_START:
 		{
 			if (TXT->getTextWindowState2() == TEXT_WINDOW_STATE::INVISIBLE)
 			{
@@ -322,7 +399,7 @@ void battle::update()
 				}
 				else
 				{
-					_battleState = BATTLE_STATE::BATTLE_UI_CLOSE;
+					_battleState = BATTLE_STATE::UI_CLOSE;
 					_msgIntervalCount = 0;
 				}
 			}
@@ -330,7 +407,7 @@ void battle::update()
 			updateBattleWindow();
 			break;
 		}
-		case BATTLE_STATE::BATTLE_UI_CLOSE:
+		case BATTLE_STATE::UI_CLOSE:
 		{
 
 				if (_textWindowState == TEXT_WINDOW_STATE::VISIBLE)
@@ -345,33 +422,27 @@ void battle::update()
 						_textWindowState = TEXT_WINDOW_STATE::INVISIBLE;
 						_battleWindowClipCount = 0;
 
-						_battleState = BATTLE_STATE::BATTLE_RES_PLAYER;
+						_battleState = BATTLE_STATE::RES_PLAYER;
 					}
 				}
 			updateBattleWindow();
 			break;
 		}
-		case BATTLE_STATE::BATTLE_RES_PLAYER:
+		case BATTLE_STATE::RES_PLAYER:
 		{
-			if (_crono->getHP() == 0)
+			for (int plIndex = 0; plIndex < static_cast<int>(_playerVector->size()); ++plIndex)
 			{
-				_crono->hitDamage(-1);
+				if (_pl[plIndex]->getHP() == 0)
+				{
+					_pl[plIndex]->hitDamage(-1);
+				}
+				_pl[plIndex]->setState(NORMAL_IDLE);
 			}
 
-			if (_lucca->getHP() == 0)
-			{
-				_lucca->hitDamage(-1);
-			}
-
-			_crono->setState(NORMAL_IDLE);
-			_lucca->setState(NORMAL_IDLE);
-
-			_isChrUnmovable = false;
-			_battleState = BATTLE_STATE::BATTLE_END;
-
+			_battleState = BATTLE_STATE::END;
 			break;
 		}
-		case BATTLE_STATE::BATTLE_END:
+		case BATTLE_STATE::END:
 		{
 			_isInBattle = false;
 			break;	
@@ -399,100 +470,104 @@ void battle::updateBattleWindow()
 
 		_shouldRenderUsingWindowCoords = TRUE;
 
-		IMG->render("전투 적 목록 창 스킨", hTempDC, 0, 0);
-		IMG->render("전투 스탯 창 스킨", hTempDC, 387, 0);
-		TXT->render(hTempDC, "Gato", 64, 44);			//적 1의 이름 출력
-		//TXT->render(hTempDC, "GreenImp", 64, 92);		//적 2의 이름 출력
-		//TXT->render(hTempDC, "Roly", 64, 140);		//적 3의 이름 출력
-		TXT->render(hTempDC, _playChrNames[0], 416, 45); // 플레이어 1의 캐릭터 이름 출력
-		//TXT->render(hTempDC, _playChrNames[2], 416, 686+44); // 플레이어 2의 캐릭터 이름 출력
+		IMG->render("전투 적 목록 창 스킨", _hTempDC, 0, 0);
+		IMG->render("전투 스탯 창 스킨", _hTempDC, 387, 0);
 
-		IMG->frameRender("흰색 타일셋0", hTempDC, 612, 11, 8, 3); //hp 글자 출력
-		IMG->frameRender("흰색 타일셋0", hTempDC, 641, 11, 10, 3); //hp 글자 출력
-		IMG->frameRender("흰색 타일셋0", hTempDC, 737, 11, 9, 3); //mp 글자 출력
-		IMG->frameRender("흰색 타일셋0", hTempDC, 769, 11, 10, 3); //mp 글자 출력
-
-		//HP10이하 일때 HP,:,MP 12프레임으로 깜빡거림 (타일셋 교체로 표현하기)
-		//플레이어 1의 전투 액션 창, HP,MP,턴바
-
-		int currentHP;
-		currentHP = _crono->getHP();
-		string str1 = to_string(currentHP);
-		string tempstr;
-
-		if (currentHP == 0)
+		for (int emIndex = 0; emIndex < static_cast<int>(_enemyVector->size()); ++emIndex)
 		{
-			_crono->setState(BATTLE_HELP);
-			tempstr = "비활성 타일셋0";
-			_blinkCount[0] = 24;
-		}
-		else if (currentHP <= 10)
-		{
-			if (_blinkCount[0] < 12)
-			{
-				tempstr = "비활성 타일셋0";
-			}
-			else tempstr = "흰색 타일셋0";
-			_blinkCount[0]--;
-			if (_blinkCount[0] == 0)
-				_blinkCount[0] = 24;
-		}
-		else tempstr = "흰색 타일셋0";
-
-		for (int i = 0; i < str1.size(); i++)
-		{
-			if (currentHP < 10)
-			{
-				int frameX = str1[i] - '0';
-				IMG->frameRender(tempstr, hTempDC, 676 + i * 32, 45, frameX, 4);
-			}
-			else if (currentHP < 100)
-			{
-				int frameX = str1[i] - '0';
-				IMG->frameRender(tempstr, hTempDC, 644 + i * 32, 45, frameX, 4);
-			}
-
-			else if (currentHP > 100)
-			{
-				int frameX = str1[i] - '0';
-				IMG->frameRender(tempstr, hTempDC, 612 + i * 32, 45, frameX, 4);
-			}
+			TXT->render(_hTempDC, _emName[emIndex], 64, 44 + emIndex * 48);	// 적 캐릭터 이름
 		}
 
-		IMG->frameRender(tempstr, hTempDC, 710, 45, 11, 3); //hp와 mp사이의 :(콜론)
+		// HP 글자
+		IMG->frameRender("흰색 타일셋0", _hTempDC, 612 - 4, 11, 8, 3);
+		IMG->frameRender("흰색 타일셋0", _hTempDC, 640, 11, 10, 3);
 
-		int currentMP;
-		currentMP = _crono->getMP();
-		string str2 = to_string(currentMP);
+		// MP 글자
+		IMG->frameRender("흰색 타일셋0", _hTempDC, 738, 11, 9, 3);
+		IMG->frameRender("흰색 타일셋0", _hTempDC, 770, 11, 10, 3);
 
-		for (int i = 0; i < str2.size(); i++)
+		for (int plIndex = static_cast<int>(_playerVector->size()) - 1; plIndex >= 0; --plIndex)
 		{
-			if (currentMP < 10)
+			TXT->render(_hTempDC, _plName[plIndex], 416, 44 + plIndex * 48); // 플레이어 캐릭터 이름
+
+			// 플레이어 캐릭터의 전투 액션 창, HP, MP, 턴 게이지
+			int currentHP = _pl[plIndex]->getHP();
+			string str1 = to_string(currentHP);
+			string tileset;
+
+			if (currentHP == 0)
 			{
-				int frameX = str2[i] - '0';
-				IMG->frameRender(tempstr, hTempDC, 776 + i * 32, 45, frameX, 4);
+				_pl[plIndex]->setState(BATTLE_HELP);
+				tileset = "비활성 타일셋0";
+				_blinkCount[plIndex] = 24;
+			}
+			else if (currentHP <= 10)
+			{
+				// HP 10 이하일 때 12 프레임 단위로 타일셋 교체
+				if (_blinkCount[plIndex] < 12)
+				{
+					tileset = "비활성 타일셋0";
+				}
+				else tileset = "흰색 타일셋0";
+				_blinkCount[plIndex]--;
+				if (_blinkCount[plIndex] == 0)
+					_blinkCount[plIndex] = 24;
+			}
+			else tileset = "흰색 타일셋0";
+
+			for (int i = 0; i < str1.size(); i++)
+			{
+				if (currentHP < 10)
+				{
+					int frameX = str1[i] - '0';
+					IMG->frameRender(tileset, _hTempDC, 676 + i * 32, 44 + plIndex * 48, frameX, 4);
+				}
+				else if (currentHP < 100)
+				{
+					int frameX = str1[i] - '0';
+					IMG->frameRender(tileset, _hTempDC, 644 + i * 32, 44 + plIndex * 48, frameX, 4);
+				}
+
+				else if (currentHP > 100)
+				{
+					int frameX = str1[i] - '0';
+					IMG->frameRender(tileset, _hTempDC, 612 + i * 32, 44 + plIndex * 48, frameX, 4);
+				}
 			}
 
-			else if (currentMP < 100)
+			IMG->frameRender(tileset, _hTempDC, 710, 44 + plIndex * 48, 11, 3); // :
+
+			int currentMP = _pl[plIndex]->getMP();
+			string str2 = to_string(currentMP);
+
+			for (int i = 0; i < str2.size(); i++)
 			{
-				int frameX = str2[i] - '0';
-				IMG->frameRender(tempstr, hTempDC, 744 + i * 32, 45, frameX, 4);
+				if (currentMP < 10)
+				{
+					int frameX = str2[i] - '0';
+					IMG->frameRender(tileset, _hTempDC, 772 + i * 32, 44 + plIndex * 48, frameX, 4);
+				}
+
+				else if (currentMP < 100)
+				{
+					int frameX = str2[i] - '0';
+					IMG->frameRender(tileset, _hTempDC, 740 + i * 32, 44 + plIndex * 48, frameX, 4);
+				}
 			}
+
+			if (_shouldPopUpAction[plIndex])
+			{
+				IMG->render("전투 창 스킨", _hTempDC, plIndex * 192, 0);
+				TXT->render(_hTempDC, "Att.", 64 + plIndex * 192, 44);
+				TXT->render(_hTempDC, "Tech", 64 + plIndex * 192, 92);
+				TXT->render(_hTempDC, "Item", 64 + plIndex * 192, 140);
+			}
+
+			_plTurnBar[plIndex]->render(_hTempDC);
 		}
 
-		if (_shouldPopUpAction[0])
-		{
-			IMG->render("전투 창 스킨", hTempDC, 0, 0);
-			TXT->render(hTempDC, "Att.", 64, 44);
-			TXT->render(hTempDC, "Tech", 64, 92);
-			TXT->render(hTempDC, "Item", 64, 140);
-
-			IMG->frameRender("위치 표시 타일셋", hTempDC, 0, 19 + arrowPointer * 48, 0, 1);
-
-		}
-
-		_plTurnBar[0]->render(hTempDC);
-
+		if (_shouldShowArrowPointer)
+			IMG->frameRender("위치 표시 타일셋", _hTempDC, _arrowPointer.x * 192, 19 + _arrowPointer.y * 48, 0, 1);
 
 		_shouldRenderUsingWindowCoords = FALSE;
 
@@ -507,39 +582,54 @@ void battle::renderBattleWindow()
 		IMG->renderZ(5000, IMG->find("전투 윈도우 용 빈 비트맵"), getMemDC(), 0 + _currOrg.x, 641 + _yOffset + _currOrg.y, 0, 0, WINW, 192);
 }
 
-void battle::init(vector<enemy*>* _enemyVector, vector<gameNode*>* _playerVector, vector<POINT>* _PlBattleStartPos, vector<POINT>* _EmBattleStartPos)
+void battle::init(vector<enemy*>* _enemyVector, vector<character*>* _playerVector,
+			  vector<POINT>* _PlBattleStartPos, vector<POINT>* _EmBattleStartPos)
 {
-
-	arrowPointer = 0;
-	preArrowPointer = 0;
-
-	_blinkCount[0] = 24;
-	_blinkCount[1] = 24;
-	_blinkCount[2] = 24;
+	_arrowPointer.x = -1;
+	_arrowPointer.y = 0;
 
 	_yOffset = 0;
+	_isPlLost = true;
 
-	hTempDC = IMG->find("전투 윈도우 용 빈 비트맵")->getMemDC();
+	_hTempDC = IMG->find("전투 윈도우 용 빈 비트맵")->getMemDC();
 
 	this->_playerVector = _playerVector;
 	this->_enemyVector = _enemyVector;
 	this->_PlBattleStartPos = _PlBattleStartPos;
 	this->_EmBattleStartPos = _EmBattleStartPos;
 
-
-
-	_battleState = BATTLE_STATE::BATTLE_NOT_START_YET;
+	_battleState = BATTLE_STATE::NOT_START_YET;
 
 	_textWindowState = TEXT_WINDOW_STATE::INVISIBLE;
 
 	_msgIntervalCount = 0;
 	_battleWindowOpeningCnt = _battleWindowClipCount = 0;
-	_enemyRemainingCnt = this->_enemyVector->size();
+	_shouldShowArrowPointer = false;
 
-	_crono = reinterpret_cast <crono*> ((*_playerVector)[0]);
-	_lucca = reinterpret_cast <lucca*> ((*_playerVector)[1]);
+	for (int i = 0; i < _playerVector->size(); ++i)
+	{
+		_pl[i] = (*_playerVector)[i];
+		_shouldPopUpAction[i] = false;
+		_blinkCount[i] = 24;
+		_plName[i] = _playChrNames[_pl[i]->getID()];
+	}
 
-	 _shouldPopUpAction[0] = false;
-	 _shouldPopUpAction[1] = false;
-	 _shouldPopUpAction[2] = false;
+	_enemyRemainingCnt = 0;
+	for (int i = 0; i < _enemyVector->size(); ++i)
+	{
+		_enemyRemainingCnt++;
+		_em[i] = (*_enemyVector)[i];
+		_emName[i] = findEnemyName(_em[i]->getID());
+	}
+}
+
+string battle::findEnemyName(int id)
+{
+	switch (id)
+	{
+		case 0:
+			return "Gato";
+		default:
+			return " ";
+	}
 }

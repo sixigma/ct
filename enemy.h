@@ -4,7 +4,7 @@
 
 class crono;
 class lucca;
-class player;
+//class player;
 
 enum class ATTACK_STATE
 {
@@ -54,11 +54,11 @@ protected:
 	tagEnemyImg _Img;
 	tagEnemyAni _Ani;
 	ATTACK_STATE _AtkState = ATTACK_STATE::INIT;
+
+	int _id; // 캐릭터 ID
 private:
-
-
 	lucca* _lucca;
-	player* pl;
+	//player* pl;
 
 	int _atkAniStateCnt;
 public:
@@ -74,6 +74,7 @@ public:
 	bool atkSingleTarget(T* atkTarget,  enemy* attacker);
 
 	//getter
+	int getID() { return _id; }
 	int getEnemyExp() { return _Status.exp; }
 	int getEnemyHP() { return _Status.hp; }
 	int getEnemyTP() { return _Status.techPoint; }
@@ -97,7 +98,6 @@ public:
 	}
 	void setPt(POINT pt) { _ChaSet.pt = pt; }
 	void setState(STATE state) { _State = state; }
-	
 };
 
 template<class T>
