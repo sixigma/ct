@@ -14,15 +14,9 @@ public:
 	leeneSquare() {}
 	~leeneSquare() override {}
 
-	int  event1;
-	int  event2;
-
 	HRESULT init() override;
 	virtual void release() override;
 	virtual void update() override;
 	virtual void render() override;
-
-	int getEvent1() { return event1; }
-	int getEvent2() { return event2; }
 };
 

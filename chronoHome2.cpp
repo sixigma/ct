@@ -15,16 +15,24 @@ HRESULT chronoHome2::init()
 	exit.push_back({ 575, 100, 595, 400 });
 	exit.push_back({ 640, 1005, 640 + 200, 1005 + 40 });
 	prevPlPos = *currPlPos;
-	gameScene::setViewport(0, 0);
+	gameScene::setViewport(currPlPos->x, currPlPos->y);
 	return S_OK;
 }
 
 void chronoHome2::update()
 {
-	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(5);
-	else if (PtInRect(&exit[1], *currPlPos)) gameScene::goToMap(1);
-	else zorderUpdate();
-	
+	if (PtInRect(&exit[0], *currPlPos))
+	{
+		gameScene::goToMap(5);
+		return;
+	}
+	else if (PtInRect(&exit[1], *currPlPos))
+	{
+		gameScene::goToMap(1);
+		return;
+	}
+
+	zorderUpdate();
 	mapCollision();
 	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
@@ -34,6 +42,7 @@ void chronoHome2::release()
 {
 	cO.clear();
 	eR.clear();
+	exit.clear();
 	//_tile.clear();
 
 }
@@ -42,8 +51,8 @@ void chronoHome2::render()
 {
 	//IMG->render("크로노집아래", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 
-	IMG->renderZ(zGrid, IMG->find("CronoRoomZ3"), getMemDC(), 0, 0);
-	IMG->renderZ(0, IMG->find("CronoRoom3"), getMemDC(), 0, 0);
+	IMG->renderZ(zGrid, "CronoRoomZ3", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	IMG->renderZ(0, "CronoRoom3", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 
 #ifdef _DEBUG
 	{

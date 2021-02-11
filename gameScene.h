@@ -11,6 +11,7 @@ class gameScene : public gameNode
 {
 private:
 	static int _countForReEnablingKeyInput;
+	static BOOL _mapChangeComplete;
 	static player* _p;
 	static vector<shared_ptr<mapManager>> _mapList;
 	static shared_ptr<mapManager> _currMap;

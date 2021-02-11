@@ -347,6 +347,9 @@ public:
 	POINT& getAtkPos() { return _chaSet.atk; }
 	POINT& getAtkSPos() { return _chaSet.atkS; }
 
+
+	void stopAni() { _chaSet.ani->stop(); }
+
 	bool atkCheck()
 	{
 		if (_chaSet.state == BATTLE_ATK)

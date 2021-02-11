@@ -133,9 +133,6 @@
     <ClCompile Include="marle.cpp">
       <Filter>Game\GameScene\Character\Players</Filter>
     </ClCompile>
-    <ClCompile Include="playerUiScene.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="character.cpp">
       <Filter>Game\GameScene\Character</Filter>
     </ClCompile>
@@ -147,6 +144,9 @@
     </ClCompile>
     <ClCompile Include="battle.cpp">
       <Filter>Game\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="playerUiScene.cpp">
+      <Filter>Game\GameScene\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -294,9 +294,6 @@
     <ClInclude Include="marle.h">
       <Filter>Game\GameScene\Character\Players</Filter>
     </ClInclude>
-    <ClInclude Include="playerUiScene.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>Game\GameScene\Character\Enemies</Filter>
     </ClInclude>
@@ -305,6 +302,9 @@
     </ClInclude>
     <ClInclude Include="battle.h">
       <Filter>Game\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="playerUiScene.h">
+      <Filter>Game\GameScene\Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
