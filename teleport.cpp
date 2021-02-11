@@ -17,15 +17,18 @@ HRESULT teleport::init()
 
 void teleport::release()
 {
-	
+	exit.clear();
 }
 
 void teleport::update()
 {
-	//if (currPlPos->y - 32 > 1024) gameScene::goToMap(2);
 	for (size_t i = 0; i < exit.size(); ++i)
 	{
-		if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(2);
+		if (PtInRect(&exit[0], *currPlPos))
+		{
+			gameScene::goToMap(2);
+			return;
+		}
 	}
 
 	gameScene::updateViewport(currPlPos->x, currPlPos->y);

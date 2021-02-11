@@ -15,16 +15,19 @@ HRESULT chronoHome::init()
 	exit.push_back({ 495, 1005, 495 + 100, 1005 + 100 });
 
 	prevPlPos = *currPlPos;
-	gameScene::setViewport(0, 0);
+	gameScene::setViewport(currPlPos->x, currPlPos->y);
 	return S_OK;
 }
 
 void chronoHome::update()
 {
+	if (PtInRect(&exit[0], *currPlPos))
+	{
+		gameScene::goToMap(6);
+		return;
+	}
 
-	if (PtInRect(&exit[0], *currPlPos)) gameScene::goToMap(6);
-	else zorderUpdate();
-	
+	zorderUpdate();
 	mapCollision();
 	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
@@ -34,14 +37,15 @@ void chronoHome::release()
 {
 	cO.clear();
 	eR.clear();
+	exit.clear();
 	//_tile.clear();
 
 }
 
 void chronoHome::render()
 {
-	IMG->renderZ(zGrid, IMG->find("CronoRoomZ1"), getMemDC(), 0, 0);
-	IMG->renderZ(0, IMG->find("CronoRoom1"), getMemDC(), 0, 0);
+	IMG->renderZ(zGrid,"CronoRoomZ1", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	IMG->renderZ(0, "CronoRoom1", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 
 	//IMG->execZ();
 

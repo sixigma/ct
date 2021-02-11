@@ -206,7 +206,7 @@ void textManager::updateL()
 								try
 								{
 									int count = stoi(tempStr.substr(1));
-									if (count > 0) _waitCount = count; // 정수가 양수이면 그만큼 기다리도록 변숫값을 변경한다.
+									if (count > 0) _waitCount = count - 1; // 정수가 양수이면 그만큼 기다리도록 변숫값을 변경한다.
 									else if (count < -1) // 정수가 -1보다 작은 음수 n이면(바로 다음 -n 개 문자가 함께 출력되는 조건이면)
 									{
 										while (count < 0) // count가 0이 될 때까지
@@ -230,7 +230,7 @@ void textManager::updateL()
 							}
 							else if (tempStr == "acf") // 강제 자동 닫기(시간이 지나야만 닫는다.)이면(즉 <acf>가 있으면)
 							{
-								_waitCount = 60; // 60 프레임 기다리도록 변숫값을 변경한다.
+								_waitCount = 60 - 1; // 60 프레임 기다리도록 변숫값을 변경한다.
 								_isGoingToBeAutoClosed = TRUE;
 								_shouldBeAutoClosed = TRUE;
 							}
@@ -239,7 +239,7 @@ void textManager::updateL()
 								try
 								{
 									int count = stoi(tempStr.substr(3));
-									if (count > 0) _waitCount = count;
+									if (count > 0) _waitCount = count - 1;
 									_isGoingToBeAutoClosed = TRUE;
 									_shouldBeAutoClosed = TRUE;
 								}
@@ -253,7 +253,7 @@ void textManager::updateL()
 								try
 								{
 									int count = stoi(tempStr.substr(2));
-									if (count > 0) _waitCount = count;
+									if (count > 0) _waitCount = count - 1;
 									_isGoingToBeAutoClosed = TRUE;
 								}
 								catch (const invalid_argument& e)
@@ -263,7 +263,7 @@ void textManager::updateL()
 							}
 							else if (tempStr == "ac") // 자동 닫기이면(즉 <ac>가 있으면)
 							{
-								_waitCount = 60;
+								_waitCount = 60 - 1;
 								_isGoingToBeAutoClosed = TRUE;
 							}
 							else if (tempStr == "c") // 선택지 손가락 아이콘 보이기이면(즉 <c>가 있으면)
@@ -327,7 +327,7 @@ void textManager::updateL()
 												try
 												{
 													int count = stoi(tempStr.substr(1));
-													if (count > 0) _waitCount = count; // 정수가 양수이면 그만큼 기다리도록 변숫값을 변경한다.
+													if (count > 0) _waitCount = count - 1; // 정수가 양수이면 그만큼 기다리도록 변숫값을 변경한다.
 													else if (count < -1) // 정수가 -1보다 작은 음수 n이면(바로 다음 -n 개 문자가 함께 출력되는 조건이면)
 													{
 														while (count < 0) // count가 0이 될 때까지
@@ -351,7 +351,7 @@ void textManager::updateL()
 											}
 											else if (tempStr == "acf") // 강제 자동 닫기(시간이 지나야만 닫는다.)이면(즉 <acf>가 있으면)
 											{
-												_waitCount = 60; // 60 프레임 기다리도록 변숫값을 변경한다.
+												_waitCount = 60 - 1; // 60 프레임 기다리도록 변숫값을 변경한다.
 												_isGoingToBeAutoClosed = TRUE;
 												_shouldBeAutoClosed = TRUE;
 											}
@@ -360,7 +360,7 @@ void textManager::updateL()
 												try
 												{
 													int count = stoi(tempStr.substr(3));
-													if (count > 0) _waitCount = count;
+													if (count > 0) _waitCount = count - 1;
 													_isGoingToBeAutoClosed = TRUE;
 													_shouldBeAutoClosed = TRUE;
 												}
@@ -374,7 +374,7 @@ void textManager::updateL()
 												try
 												{
 													int count = stoi(tempStr.substr(2));
-													if (count > 0) _waitCount = count;
+													if (count > 0) _waitCount = count - 1;
 													_isGoingToBeAutoClosed = TRUE;
 												}
 												catch (const invalid_argument& e)
@@ -384,7 +384,7 @@ void textManager::updateL()
 											}
 											else if (tempStr == "ac") // 자동 닫기이면(즉 <ac>가 있으면)
 											{
-												_waitCount = 60;
+												_waitCount = 60 - 1;
 												_isGoingToBeAutoClosed = TRUE;
 											}
 											else if (tempStr == "c") // 선택지 손가락 아이콘 보이기이면(즉 <c>가 있으면)

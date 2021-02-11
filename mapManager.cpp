@@ -310,7 +310,7 @@ void mapManager::tileMapLoad(string strKey, int width, int height)
 		return;
 	}
 	HBITMAP hTempOBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
-
+	_shouldRenderUsingWindowCoords = TRUE;
 	for (int y = 0; y < _crtYsize; y++)
 	{
 		for (int x = 0; x < _crtXsize - 18; x++)
@@ -322,6 +322,7 @@ void mapManager::tileMapLoad(string strKey, int width, int height)
 			//img->render(hTempDC, TILESIZE * x, TILESIZE * y, tile[y][x].layerPos1.x * 64, tile[y][x].layerPos1.y * 64, 64, 64);
 		}
 	}
+	_shouldRenderUsingWindowCoords = FALSE;
 	BitBlt(img->getMemDC(), 0, 0, width, height, hTempDC, 0, 0, SRCCOPY);
 
 	DeleteObject(SelectObject(hTempDC, hTempOBitmap));

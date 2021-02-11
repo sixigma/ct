@@ -10,21 +10,17 @@ HRESULT bossGatoStage::init()
 	load2("res/mapInfo/가토/saveMap1.map");
 	currPlPos = &pl->getCrono()->getPos();
 
-	if (getPrevMapNum() == 1) *currPlPos = { 644, 850 };
-	else if (getPrevMapNum() == 2) *currPlPos = { 660, 780 };
-	else if (getPrevMapNum() == 4) *currPlPos = { 1050, 1000 }; 
+	pl->getCrono()->setT(1);
+
+	*currPlPos = { 640, 780 };
+
 	setMapNum(3);
 
 	// ========================================================
 
 	tileMapLoad("보스맵", 1024, 1024);
 
-
-	exit.push_back({ 542, 962, 542 + 194, 962 + 56 });
-	prevPlPos = *currPlPos;
-
 	_battle = make_shared<battle>();
-
 
 	//_battle->setLinkTo(pl);
 	_yOffset = 0;
@@ -46,22 +42,23 @@ HRESULT bossGatoStage::init()
 
 	_dialogueStateNum = 0;
 
+
+	exit.push_back({ 542, 962, 542 + 194, 962 + 56 });
+	prevPlPos = *currPlPos;
+	gameScene::setViewport(currPlPos->x, currPlPos->y);
+
 	return S_OK;
 }
 
 void bossGatoStage::update()
 {
-	
-	//if (currPlPos->y - probeY > 1024) gameScene::goToMap(2);
-	zorderUpdate();
 	if (PtInRect(&exit[0], *currPlPos))
 	{
 		gameScene::goToMap(2);
 		return;
 	}
-
+	zorderUpdate();
 	mapCollision();
-	
 
 	_gato->update();
 
@@ -115,6 +112,16 @@ void bossGatoStage::update()
 						"Now w<w1>a<w-2>sn<w1><w-2>'t <w1><w-2>that [4]f<w1>u<w-2>n[0]!<w1>?{"
 					);
 				}
+				else
+				{
+					TXT->enqueueL
+					(
+						"You're [5]so weak[0]{\n"
+						"And I'm [2]so strong[0]{\n"
+						"I punched your lights out{\n"
+						"Now run along{{"
+					);
+				}
 				++_dialogueStateNum;
 			}
 			break;
@@ -134,6 +141,8 @@ void bossGatoStage::update()
 	{
 		_battle->update();
 	}
+	
+	gameScene::updateViewport(currPlPos->x, currPlPos->y);
 	prevPlPos = *currPlPos;
 }
 
@@ -144,7 +153,6 @@ void bossGatoStage::release()
 	eR.clear();
 
 	//_tile.clear();
-
 
 	exit.clear();
 
@@ -163,13 +171,9 @@ void bossGatoStage::release()
 
 void bossGatoStage::render()
 {
+	IMG->renderZ(zGrid, "보스맵Z", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
+	IMG->renderZ(0, "보스맵", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 
-	//IMG->render("bossGato", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
-	//IMG->render("보스맵", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
-	IMG->renderZ(zGrid, IMG->find("보스맵Z"), getMemDC(), 0, 0);
-	IMG->renderZ(0, IMG->find("보스맵"), getMemDC(), 0, 0);
-
-	//IMG->render("bossGato", getMemDC(), _currOrg.x, _currOrg.y, _currOrg.x, _currOrg.y, WINW, WINH);
 	_gato->render();
 	_shouldRenderUsingWindowCoords = TRUE;
 	_battle->render();

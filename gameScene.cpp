@@ -12,7 +12,7 @@
 
 
 int gameScene::_countForReEnablingKeyInput;
-
+BOOL gameScene::_mapChangeComplete;
 player* gameScene::_p;
 vector<shared_ptr<mapManager>> gameScene::_mapList;
 shared_ptr<mapManager> gameScene::_currMap;
@@ -28,8 +28,6 @@ gameScene::gameScene(int anyNum)
 
 	_p = new player;
 	_p->init();
-	//setViewport(_p->getCrono()->getPos().x, _p->getCrono()->getPos().y);
-
 
 	_mapList.emplace_back(new millennialFair);		//0
 	_mapList.emplace_back(new leeneSquare);			//1
@@ -41,15 +39,16 @@ gameScene::gameScene(int anyNum)
 	_totRegion = { 0, 0, 1024, 1024 };
 	_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 
-
-	//_totRegion = { 0 , 0 , WINW, WINH };
 	//_totRegion = { 0, 0, 3072, 1856 }; //테스트용도
 	//_camMovLim = { _totRegion.left, _totRegion.top, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };
 	
 	_currMap = _mapList[4];
 	_currMap->setLinkTo(_p);
 	_currMap->init();
-	
+
+	_isChrUnmovable = TRUE;
+	_countForReEnablingKeyInput = 12;
+	_mapChangeComplete = FALSE;
 }
 
 gameScene::~gameScene() // 주의: 중복 호출이 되어도 문제가 발생하지 않을 것만 나열하여야 한다.
@@ -69,6 +68,12 @@ gameScene::~gameScene() // 주의: 중복 호출이 되어도 문제가 발생�
 
 HRESULT gameScene::init() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
 {
+	// 메뉴를 켤 때 움직이고 있었다면 아래 줄들이 있어야 캐릭터가 멈춘 상태로 다시 보이게 된다.
+	_p->getCrono()->setState(NORMAL_IDLE);
+	_p->getCrono()->stopAni();
+	_p->update();
+
+	// 이름 변경 화면이 있다면 지운다.
 	SC->delScene("이름 변경 화면");
 	return S_OK;
 }
@@ -79,7 +84,7 @@ void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 
 void gameScene::update()
 {
 
-	if (KEY->down('D'))
+	if (KEY->down('D') && !_isInBattle && !_isChrUnmovable && _countForReEnablingKeyInput == 0)
 	{
 		SC->changeScene("스텟 창");
 	}
@@ -94,8 +99,15 @@ void gameScene::update()
 	_currMap->update();
 
 
-
-
+	if (_isChrUnmovable && !_isScrBlackingOut && !_mapChangeComplete)
+	{
+		if (_countForReEnablingKeyInput > 0) --_countForReEnablingKeyInput;
+		else
+		{
+			_isChrUnmovable = FALSE;
+			_mapChangeComplete = TRUE;
+		}
+	}
 
 	// 출력할 글 갱신
 	if (_isInBattle) TXT->updateBM();
@@ -105,15 +117,6 @@ void gameScene::update()
 
 void gameScene::render()
 {
-#ifdef _DEBUG
-	char str[256];
-	//if (KEY->isToggledOn(VK_TAB)) DrawRct(getMemDC(), _p->getCrono()->getPos().x - 32, _p->getCrono()->getPos().y - 8, 64, 8);
-#endif
-	if ((!(_isChrUnmovable)) && _prevMapNum == _mapNum)
-	{
-		if (_countForReEnablingKeyInput == 0) _isChrUnmovable = TRUE;
-		--_countForReEnablingKeyInput;
-	}
 	PatBlt(getMemDC(), 0, 0, WINW, WINH, BLACKNESS);
 	_currMap->render();
 	_p->render();
@@ -129,6 +132,8 @@ void gameScene::render()
 	else if (_isMenuDisplayed) TXT->renderC(getMemDC(), _menuMsgPos.x, _menuMsgPos.y);
 	
 #ifdef _DEBUG
+	char str[256];
+	//if (KEY->isToggledOn(VK_TAB)) DrawRct(getMemDC(), _p->getCrono()->getPos().x - 32, _p->getCrono()->getPos().y - 8, 64, 8);
 		{
 			if (KEY->isToggledOn(VK_SCROLL))
 			{
@@ -159,10 +164,13 @@ void gameScene::render()
 
 void gameScene::goToMap(int num)
 {
-	_isChrUnmovable = FALSE;
+	_isChrUnmovable = TRUE;
+	_isScrBlackingOut = TRUE;
+	_mapChangeComplete = FALSE;
+	_p->getCrono()->setState(NORMAL_IDLE);
 
 	_currMap->release();
-	_countForReEnablingKeyInput = 24;
+	_countForReEnablingKeyInput = 12;
 
 	_prevMapNum = _mapNum;
 
@@ -245,6 +253,8 @@ void gameScene::updateViewport(int x, int y)
 
 void gameScene::setViewport(int x, int y)
 {
+	_currOrg.x = 0;
+	_currOrg.y = 0;
 	if (y - VIEWPORT_UPDATE_OFFSET > _currOrg.y + WINH / 2)
 	{
 		_newOrg.y = min(y - WINH / 2, _camMovLim.bottom);
