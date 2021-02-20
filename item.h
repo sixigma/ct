@@ -2,10 +2,10 @@
 #include "gameNode.h"
 enum equipCategory // 장비 카테고리 equipCategory
 {
+	weapon,
 	helmet,
 	armor,
-	accessory,
-	weapon
+	accessory
 };
 enum playerCategory
 {
@@ -31,7 +31,7 @@ class item : public gameNode
 protected:
 	equipCategory eC;
 	playerCategory pC;
-	category itemCategory;
+	category iC;
 	string itemName;
 	string itemTip;
 	vector<item*> _vItem;
@@ -74,6 +74,8 @@ public:
 	int getMaxHp() { return maxHp; }
 	int getRecoveryMp() { return recoveryMp; }
 	int getMaxMp() { return maxMp; }
+	int getCategory() { return iC; }
+	int getEquipCategory() { return eC; }
 	
 };
 

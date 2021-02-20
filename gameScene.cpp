@@ -35,6 +35,7 @@ gameScene::gameScene(int anyNum)
 	_mapList.emplace_back(new teleport);			//3
 	_mapList.emplace_back(new chronoHome);			//4
 	_mapList.emplace_back(new chronoHome2);			//5
+													
 
 	_totRegion = { 0, 0, 1024, 1024 };
 	_camMovLim = { 0, 0, _totRegion.right - _totRegion.left - WINW, _totRegion.bottom - _totRegion.top - WINH };

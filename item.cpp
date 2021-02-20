@@ -22,9 +22,9 @@ void item::itemlist(string _name)
 {
 	itemName = _name;
 	//equip 장비템
-	if (itemName == "WoodenSword")
+	if (itemName == "WoodSword")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 		attack = 3;
@@ -32,7 +32,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "IronBlade")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -43,7 +43,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "SteelSaber")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -54,7 +54,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "LodeSword")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -65,7 +65,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "RedKatana")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -78,7 +78,7 @@ void item::itemlist(string _name)
 	//=======================================marle====
 	if (itemName == "BronzeBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -90,7 +90,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "IronBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -102,7 +102,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "LodeBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -114,7 +114,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "RobinBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -128,7 +128,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "AirGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -140,7 +140,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "DartGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -152,7 +152,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "AutoGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -164,7 +164,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "PlasmaGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -178,7 +178,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "TinArm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Robo;
 
@@ -190,7 +190,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "HameerArm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Robo;
 
@@ -202,7 +202,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "MirageHand")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Robo;
 
@@ -215,7 +215,7 @@ void item::itemlist(string _name)
 	//========================================Frog===
 	if (itemName == "BronzeEdge")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Frog;
 
@@ -226,7 +226,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "IronSword")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Frog;
 
@@ -237,7 +237,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Masamune")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Frog;
 
@@ -250,7 +250,7 @@ void item::itemlist(string _name)
 	//================================Ayla===============
 	if (itemName == "Fist")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Ayla;
 
@@ -258,7 +258,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "IronFist")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Ayla;
 
@@ -268,7 +268,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "BronzeFist")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Ayla;
 
@@ -278,7 +278,7 @@ void item::itemlist(string _name)
 	//==================Magus ======================
 	if (itemName == "DarkScythe")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Magus;
 
@@ -289,7 +289,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Hurricane")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Magus;
 
@@ -300,7 +300,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "StarScythe")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Magus;
 
@@ -312,7 +312,7 @@ void item::itemlist(string _name)
 	//===================================Armor
 	if (itemName == "HideTunic")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -322,7 +322,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "karateGi")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -333,7 +333,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "BronzeMail")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = Crono, Robo, Frog, Magus;
 
@@ -344,7 +344,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "MaidenSuit")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = Marle, Lucca, Ayla;
 
@@ -355,7 +355,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "IronSuit")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -366,7 +366,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "TitanVest")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -378,7 +378,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "GoldSuit")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -390,7 +390,7 @@ void item::itemlist(string _name)
 	//=================helmet=============
 	if (itemName == "hideCap")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = All;
 
@@ -402,7 +402,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "BronzeHelm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = All;
 
@@ -414,7 +414,7 @@ void item::itemlist(string _name)
 
 	if (itemName == "IronHelm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = All;
 
@@ -425,7 +425,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Beret")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = Marle, Lucca, Ayla;
 
@@ -436,7 +436,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "GoldHelm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = Crono, Robo, Frog, Magus;
 
@@ -448,7 +448,7 @@ void item::itemlist(string _name)
 	//==============================acce======
 	if (itemName == "Bandana")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 
@@ -458,7 +458,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Ribbon")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 
@@ -468,7 +468,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "PowerGlove")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 
@@ -478,7 +478,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Amulet")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 		//모든 상태이상 면역
@@ -490,7 +490,7 @@ void item::itemlist(string _name)
 	//Expendable 소모템
 	if (itemName == "Tonic")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		money = 10;
 		sell = 5;
 		recoveryHp = 50;
@@ -498,7 +498,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Mid Tonic")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		money = 100;
 		sell = 50;
 		recoveryHp = 200;
@@ -506,7 +506,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Full Tonic")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		money = 700;
 		sell = 350;
 		recoveryHp = 500;
@@ -514,7 +514,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Ether")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		money = 800;
 		sell = 400;
 		recoveryMp = 10;
@@ -522,7 +522,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Mid Ether")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		money = 2000;
 		sell = 1000;
 		recoveryMp = 30;
@@ -530,7 +530,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Full Ether")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		money = 6000;
 		sell = 3000;
 		recoveryMp = 60;
@@ -538,7 +538,7 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "Elixer")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		money = 800;
 		sell = 400;
 		recoveryHp = maxHp;
@@ -547,21 +547,21 @@ void item::itemlist(string _name)
 	}
 	if (itemName == "powerTab")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		power = 1;
 		sell = 5;
 		itemTip = "Power + 1";
 	}
 	if (itemName == "magicTab")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		magic = 1;
 		sell = 5;
 		itemTip = "Magic + 1";
 	}
 	if (itemName == "speedTab")
 	{
-		itemCategory = Expendable;
+		iC = Expendable;
 		speed = 1;
 		sell = 5;
 		itemTip = "speed + 1";
@@ -571,14 +571,14 @@ void item::itemlist(string _name)
 
 	if (itemName == "Pendant")
 	{
-		itemCategory = Event;
+		iC = Event;
 		//퀘스트용 팬던트
 		itemTip = "give to Marle";
 	}
 	if (itemName == "SpecialMeal")
 	{
 		// 이벤트용 피 다채워주는 음식
-		itemCategory = Event;
+		iC = Event;
 	}
 
 
