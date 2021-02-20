@@ -5,7 +5,6 @@ class playground : public gameNode
 {
 private:
 	vector<int> keysToCheck;
-	BYTE _blackScreenAlpha;
 	int _fadeCount;
 
 public:

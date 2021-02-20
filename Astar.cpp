@@ -201,12 +201,12 @@ vector<POINT> Astar::pathFinder(POINT _end, POINT _start)
 
 				//G비용 넣어주기
 				vtOpen[vtOpen.size() - 1].G =
-					vtClose[vtClose.size() - 1].G +
+					(int)(vtClose[vtClose.size() - 1].G +
 					(Distance(
 					(_tile[vtOpen[vtOpen.size() - 1].Ynode][vtOpen[vtOpen.size() - 1].Xnode].tilePos.x * 64) + TILESIZE / 2,
 						(_tile[vtOpen[vtOpen.size() - 1].Ynode][vtOpen[vtOpen.size() - 1].Xnode].tilePos.y * 64) + TILESIZE / 2,
 						(vtClose[vtClose.size() - 1].Xnode * 64) + TILESIZE / 2,
-						(vtClose[vtClose.size() - 1].Ynode * 64) + TILESIZE / 2 > 40 ? 14 : 10));
+						(vtClose[vtClose.size() - 1].Ynode * 64) + TILESIZE / 2 > 40 ? 14 : 10)));
 
 				//H비용 넣어주기
 				vtOpen[vtOpen.size() - 1].H =

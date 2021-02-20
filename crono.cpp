@@ -59,7 +59,7 @@ void crono::release()
 void crono::update()
 {
 	//keySetting();
-	if (KEY->down(VK_RETURN))
+	if (KEY->down(VK_RETURN) && !_isChrUnmovable)
 	{
 		Astar* astar;
 		astar = new Astar;
@@ -69,14 +69,15 @@ void crono::update()
 		delete astar;
 		a = b = rich = 0;
 	}
+
 	if (Path.size() != 0)
 	{
 
 		if (rich <= 5.0f)
 		{
 
-			a = Path[Path.size() - 1].x;
-			b = Path[Path.size() - 1].y;
+			a = (float)Path[Path.size() - 1].x;
+			b = (float)Path[Path.size() - 1].y;
 			Path.pop_back();
 
 			a = (a * TILESIZE) + TILESIZE / 2;
@@ -84,8 +85,8 @@ void crono::update()
 
 		}
 
-		int muonX = cosf(atan2f(b - (float)_chaSet.pt.y, a - (float)_chaSet.pt.x)) * 5;
-		int muonY = -sinf(-atan2f(b - (float)_chaSet.pt.y, a - (float)_chaSet.pt.x)) * 5;
+		int muonX = (int)(cosf(atan2f(b - (float)_chaSet.pt.y, a - (float)_chaSet.pt.x)) * 5);
+		int muonY = (int)(-sinf(-atan2f(b - (float)_chaSet.pt.y, a - (float)_chaSet.pt.x)) * 5);
 
 		_chaSet.pt.x += muonX;
 		_chaSet.pt.y += muonY;

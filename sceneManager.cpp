@@ -53,6 +53,7 @@ HRESULT sceneManager::changeScene(string sceneName)
 	if (_sceneListIter->second == _currentScene) return S_OK;
 	if (SUCCEEDED(_sceneListIter->second->init()))
 	{
+		_sceneListIter = _sceneList.find(sceneName); // 지운 장면이 있을 수도 있으므로 다시 찾는다.
 		if (_currentScene) _currentScene->release();
 		_currentScene = _sceneListIter->second;
 		return S_OK;
@@ -64,7 +65,8 @@ void sceneManager::delScene(string sceneName)
 {
 	sceneListIter _sceneListIter = _sceneList.find(sceneName);
 	if (_sceneListIter == _sceneList.end()) return;
-	if (_sceneListIter->second == _currentScene) return;
+	_sceneListIter->second->release();
 	SAFE_DEL(_sceneListIter->second);
 	_sceneList.erase(_sceneListIter);
+	_currentScene = nullptr;
 }
