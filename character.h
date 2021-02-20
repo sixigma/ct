@@ -185,7 +185,7 @@ protected:
 
 	STATE_BATTLE state_b = STATE_BATTLE::INIT;
 	/////////// Astar용 //////////////
-	float a, b, rich;
+	float a, b, reach;
 	vector<POINT> Path;
 	bool Acheck;//a스타 시작 체크용
 	int AmoveC;//a스타 시작 제한용
