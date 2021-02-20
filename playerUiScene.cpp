@@ -21,15 +21,20 @@ HRESULT playerUiScene::init()
 	pl->init();
 
 	_item = new item;
-	_item->itemlist("Wooden Sword");
+	_item->itemlist("WoodSword");
+	_vItem.push_back(_item);
+
+
+	_item = new item;
+	_item->itemlist("HideTunic");
 	_vItem.push_back(_item);
 
 	_item = new item;
-	_item->itemlist("IronBlade");
+	_item->itemlist("hideCap");
 	_vItem.push_back(_item);
-	
+
 	_item = new item;
-	_item->itemlist("BronzeBow");
+	_item->itemlist("Ribbon");
 	_vItem.push_back(_item);
 
 	_shouldRenderUsingWindowCoords = FALSE;
@@ -120,6 +125,7 @@ void playerUiScene::release()
 
 void playerUiScene::update()
 {
+	
 	if (KEY->down('D'))
 	{
 		SC->changeScene("게임 장면");
@@ -181,6 +187,11 @@ void playerUiScene::categoryList(int num)
 	switch (num)
 	{
 	case 0:		//케릭터창
+		_textWindowSkin = 1;
+		IMG->setWindowSkin("글 출력 창 스킨 타일셋", "캐릭터창", 384, 192);//캐릭터 hp mp
+		IMG->setWindowSkin("글 출력 창 스킨 타일셋", "장비창", 384, 128); //아이템 장비 카테고리 출력
+		IMG->setWindowSkin("글 출력 창 스킨 타일셋", "목록", 384, 448);
+		IMG->setWindowSkin("글 출력 창 스킨 타일셋", "0번 스텟창 캐릭터", 512, 768);
 		IMG->render("캐릭터창", getMemDC(), T, T);
 		IMG->render("캐릭터창", getMemDC(), T, 256);
 		IMG->render("캐릭터창", getMemDC(), T, 448);
@@ -232,18 +243,67 @@ void playerUiScene::categoryList(int num)
 		}
 		if (appear >= 1)
 		{
+			
 			IMG->render("장비창", getMemDC(), pos.x, pos.y);
 			IMG->render("목록", getMemDC(), pos.x, pos.y + 128);
 			TXT->render(getMemDC(), itemCategory, pos.x+(T)+E, pos.y+(T));
-			for(int i = 0; i<_vItem.size(); i++)
+			
+			
+			for (int i = 0; i < _vItem.size(); i++)
 			{
-			TXT->render(getMemDC(), _vItem[i]->getName(), pos.x + (T)+32, pos.y + 160);
+				if (_vItem[i]->getCategory() == 1) // 카테고리 1 번 즉 장비품일떄일때 텍스트출력
+				{
+					if (select == 0)
+					{
+						if (_vItem[i]->getEquipCategory() == 0)
+						{
+							TXT->render(getMemDC(), _vItem[i]->getName(), pos.x + (T), pos.y + 160 + (i*T));
+						}
+					}
+				}
+			}
+			for (int i = 0; i < _vItem.size(); i++)
+			{
+				if (_vItem[i]->getCategory() == 1) // 카테고리 1 번 즉 장비품일떄일때 텍스트출력
+				{
+					if (select == 1)
+					{
+						if (_vItem[i]->getEquipCategory() == 1)
+						{
+							TXT->render(getMemDC(), _vItem[i]->getName(), pos.x + (T), pos.y + 160);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < _vItem.size(); i++)
+			{
+				if (_vItem[i]->getCategory() == 1) // 카테고리 1 번 즉 장비품일떄일때 텍스트출력
+				{
+					if (select == 2)
+					{
+						if (_vItem[i]->getEquipCategory() == 2)
+						{
+							TXT->render(getMemDC(), _vItem[i]->getName(), pos.x + (T), pos.y + 160 );
+						}
+					}
+				}
+			}
+			for (int i = 0; i < _vItem.size(); i++)
+			{
+				if (_vItem[i]->getCategory() == 1) // 카테고리 1 번 즉 장비품일떄일때 텍스트출력
+				{
+					if (select == 3)
+					{
+						if (_vItem[i]->getEquipCategory() == 3)
+						{
+							TXT->render(getMemDC(), _vItem[i]->getName(), pos.x + (T), pos.y + 160);
+						}
+					}
+				}		
 			}
 			IMG->frameRender("지건", getMemDC(), (8 * T) - E, gun, 0, 0);
 		}
 		IMG->render("가림막", getMemDC(), 0, WINH - 64);
-	
-		
 	break;
 
 	case 1:		//아이템창
@@ -252,7 +312,7 @@ void playerUiScene::categoryList(int num)
 		IMG->render("소지아이템창", getMemDC(),T, 5 * T);
 		for (int i = 0; i < _vItem.size(); i++)
 		{
-			TXT->render(getMemDC(), _vItem[i]->getName(), T + T / 4, 5 * T + T / 4 + (i*T));
+			TXT->render(getMemDC(), _vItem[i]->getName(), T + (T / 4), (5 * T) + (T / 4) + (i*T));
 		}
 	break;
 
@@ -334,7 +394,7 @@ void playerUiScene::cateControl()
 		if (sT == false)
 		{
 			if (!(pos.y >= WINH - 64))pos.y += 16;
-			else if (pos.y + 16 >= WINH - 64)
+			else if (pos.y + 16 >= WINH - 64)									
 			{
 				appear = 0;
 				pos.y = WINH - 64;
@@ -347,8 +407,7 @@ void playerUiScene::cateControl()
 			else if (PtInRect(&one1, pos) && (pos.y + 16 <= 64 * 4))pos.y = 64 * 4;
 
 		}
-
-
+		
 		if ((appear == 1) && (KEY->down(VK_DOWN)) && select != 3)
 		{
 			select += 1;

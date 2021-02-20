@@ -26,7 +26,7 @@ void EquipmentItem::itemlist()
 {
 	if (itemName == "WoodenSword")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 		attack = 3;
@@ -34,7 +34,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "IronBlade")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -45,7 +45,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "SteelSaber")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -56,7 +56,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "LodeSword")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -67,7 +67,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "RedKatana")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Crono;
 
@@ -80,7 +80,7 @@ void EquipmentItem::itemlist()
 	//=======================================marle====
 	if (itemName == "BronzeBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -92,7 +92,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "IronBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -104,7 +104,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "LodeBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -116,7 +116,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "RobinBow")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Marle;
 
@@ -130,7 +130,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "AirGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -142,7 +142,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "DartGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -154,7 +154,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "AutoGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -166,7 +166,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "PlasmaGun")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Lucca;
 
@@ -180,7 +180,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "TinArm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Robo;
 
@@ -192,7 +192,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "HameerArm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Robo;
 
@@ -204,7 +204,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "MirageHand")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Robo;
 
@@ -217,7 +217,7 @@ void EquipmentItem::itemlist()
 	//========================================Frog===
 	if (itemName == "BronzeEdge")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Frog;
 
@@ -228,7 +228,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "IronSword")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Frog;
 
@@ -239,7 +239,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "Masamune")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Frog;
 
@@ -252,7 +252,7 @@ void EquipmentItem::itemlist()
 	//================================Ayla===============
 	if (itemName == "Fist")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Ayla;
 
@@ -260,7 +260,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "IronFist")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Ayla;
 
@@ -270,7 +270,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "BronzeFist")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Ayla;
 
@@ -280,7 +280,7 @@ void EquipmentItem::itemlist()
 	//==================Magus ======================
 	if (itemName == "DarkScythe")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Magus;
 
@@ -291,7 +291,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "Hurricane")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Magus;
 
@@ -302,7 +302,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "StarScythe")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = weapon;
 		pC = Magus;
 
@@ -314,7 +314,7 @@ void EquipmentItem::itemlist()
 	//===================================Armor
 	if (itemName == "HideTunic")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -324,7 +324,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "karateGi")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -335,7 +335,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "BronzeMail")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = Crono, Robo, Frog, Magus;
 
@@ -346,7 +346,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "MaidenSuit")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = Marle, Lucca, Ayla;
 
@@ -357,7 +357,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "IronSuit")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -368,7 +368,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "TitanVest")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -380,7 +380,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "GoldSuit")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = armor;
 		pC = All;
 
@@ -392,7 +392,7 @@ void EquipmentItem::itemlist()
 	//=================helmet=============
 	if (itemName == "hideCap")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = All;
 
@@ -404,7 +404,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "BronzeHelm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = All;
 
@@ -416,7 +416,7 @@ void EquipmentItem::itemlist()
 
 	if (itemName == "IronHelm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = All;
 
@@ -427,7 +427,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "Beret")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = Marle, Lucca, Ayla;
 
@@ -438,7 +438,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "GoldHelm")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = helmet;
 		pC = Crono, Robo, Frog, Magus;
 
@@ -450,7 +450,7 @@ void EquipmentItem::itemlist()
 	//==============================acce======
 	if (itemName == "Bandana")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 
@@ -460,7 +460,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "Ribbon")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 
@@ -470,7 +470,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "PowerGlove")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 
@@ -480,7 +480,7 @@ void EquipmentItem::itemlist()
 	}
 	if (itemName == "Amulet")
 	{
-		itemCategory = Equipment;
+		iC = Equipment;
 		eC = accessory;
 		pC = All;
 		//모든 상태이상 면역

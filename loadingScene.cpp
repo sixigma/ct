@@ -202,10 +202,12 @@ unsigned CALLBACK loadingScene::threadFunc(LPVOID params)
 	IMG->add("스텟창 뒷 배경", "res/images/ui/background.bmp", WINW, WINH);
 	IMG->add("가림막", "res/images/ui/가림막.bmp", 1024, 64);
 	//스텟창
+	
 	IMG->add("캐릭터창", 384, 192);//캐릭터 hp mp
 	IMG->add("장비창",384 , 128); //아이템 장비 카테고리 출력
 	IMG->add("목록", 384, 448);
 	IMG->add("0번 스텟창 캐릭터", 512, 768);
+
 	//아이템창
 	IMG->add("아이템창1", 896, 128);
 	IMG->add("소지아이템창", 896, 512);
