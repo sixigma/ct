@@ -21,10 +21,10 @@ void Astar::update()
 
 void Astar::render()
 {
-	
+
 }
 
-vector<POINT> Astar::pathFinder(POINT _start, POINT _end)
+vector<POINT> Astar::pathFinder(POINT _end, POINT _start)
 {
 	//1.열린목록엔 아무것도 없고 첫 시작점을 하나 넣는다.
 	//2.열린목록에서 비용이 가장 적게드는 노드를 검색(처음에는 스타트니깐 스타트 노드)
@@ -203,7 +203,7 @@ vector<POINT> Astar::pathFinder(POINT _start, POINT _end)
 				vtOpen[vtOpen.size() - 1].G =
 					vtClose[vtClose.size() - 1].G +
 					(Distance(
-						(_tile[vtOpen[vtOpen.size() - 1].Ynode][vtOpen[vtOpen.size() - 1].Xnode].tilePos.x * 64) + TILESIZE / 2,
+					(_tile[vtOpen[vtOpen.size() - 1].Ynode][vtOpen[vtOpen.size() - 1].Xnode].tilePos.x * 64) + TILESIZE / 2,
 						(_tile[vtOpen[vtOpen.size() - 1].Ynode][vtOpen[vtOpen.size() - 1].Xnode].tilePos.y * 64) + TILESIZE / 2,
 						(vtClose[vtClose.size() - 1].Xnode * 64) + TILESIZE / 2,
 						(vtClose[vtClose.size() - 1].Ynode * 64) + TILESIZE / 2 > 40 ? 14 : 10));
@@ -216,7 +216,7 @@ vector<POINT> Astar::pathFinder(POINT _start, POINT _end)
 				//F비용 넣어주기
 				vtOpen[vtOpen.size() - 1].F = vtOpen[vtOpen.size() - 1].G + vtOpen[vtOpen.size() - 1].H;
 
-				
+
 				//############### F계산 및 주변노드 열린목록에 추가 구문 종료 ###############
 			}
 		}

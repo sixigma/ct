@@ -59,6 +59,52 @@ void crono::release()
 void crono::update()
 {
 	//keySetting();
+	if (KEY->down(VK_RETURN))
+	{
+		Astar* astar;
+		astar = new Astar;
+
+		Path = astar->pathFinder({ _chaSet.pt.x / TILESIZE, _chaSet.pt.y / TILESIZE }, { 8, 12 });
+		astar->release();
+		delete astar;
+		a = b = rich = 0;
+	}
+	if (Path.size() != 0)
+	{
+
+		if (rich <= 5.0f)
+		{
+
+			a = Path[Path.size() - 1].x;
+			b = Path[Path.size() - 1].y;
+			Path.pop_back();
+
+			a = (a * TILESIZE) + TILESIZE / 2;
+			b = (b * TILESIZE) + TILESIZE / 2;
+
+		}
+
+		int muonX = cosf(atan2f(b - (float)_chaSet.pt.y, a - (float)_chaSet.pt.x)) * 5;
+		int muonY = -sinf(-atan2f(b - (float)_chaSet.pt.y, a - (float)_chaSet.pt.x)) * 5;
+
+		_chaSet.pt.x += muonX;
+		_chaSet.pt.y += muonY;
+
+		_chaSet.state = NORMAL_WALK;
+		if (muonX < 0) _T = 3;
+		if (muonX > 0) _T = 2;
+		if (muonY < 0) _T = 1;
+		if (muonY > 0) _T = 0;
+
+		rich = Distance((float)_chaSet.pt.x, (float)_chaSet.pt.y, a, b);
+
+		if (Path.size() == 0)
+		{
+			_chaSet.state = NORMAL_IDLE;
+			_chaSet.ani->stop();
+		}
+
+	}
 	imgSwitch();
 	battleSwitch();
 }
