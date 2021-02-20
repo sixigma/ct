@@ -85,7 +85,7 @@ void character::AstarCheck(int Key, POINT crono, int Count)
 	{
 		float _checkDis = Distance(_chaSet.pt.x, _chaSet.pt.y, crono.x, crono.y);
 
-		if (_checkDis <= _checkDis > TILESIZE * Count)
+		if (_checkDis <= TILESIZE * Count)
 		{
 			_chaSet.ani->stop();
 			_chaSet.state = NORMAL_IDLE;
