@@ -11,8 +11,8 @@ private:
 	image*		_mapImg;
 	DWORD		_attribute[MILLENNIALFAIRTILEX * MILLENNIALFAIRTILEY];
 
-	int  event1;
-	int  event2;
+	int event1, event2;
+	int event2MsgDelay;
 
 public:
 

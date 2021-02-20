@@ -19,7 +19,7 @@ float		_currMasterVolume, _currBGMVolume, _currSFXVolume;
 string		_playChrNames[7]{ "Crono", "Lucca", "Marle", "Frog", "Robo", "Ayla", "Magus" };
 int			_battleGaugeSpeed{ 4 }, _battleMsgSpeed{ 4 }, _textWindowSkin{ 0 }, _battleGaugeType{ 1 };
 vector<int>	_events;
-BYTE		_textWindowAlpha{ 0xFF };
+BYTE		_textWindowAlpha{ 0xFF }, _blackScreenAlpha{ 0x00 };
 
 int _crtXsize, _crtYsize;
 

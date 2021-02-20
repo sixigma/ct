@@ -35,7 +35,7 @@ public:
 
 	
 	void setTrigger(bool trigger) { eventtrigger = trigger; }
-	void setLinkTo(player*& p) { pl = p; }
+	void setLinkTo(player* p) { pl = p; }
 	void mapCollision();
 
 	void addXtile();

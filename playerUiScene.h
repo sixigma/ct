@@ -57,7 +57,7 @@ public:
 	void render() override;
 
 	void categoryList(int num);
-	void setLinkTo(player*& p) { pl = p; }
+	void setLinkTo(player* p) { pl = p; }
 	void cateControl();
 	void equipItemValues(int charNum, string Iname);
 	void unEquipItemValuse(int charNum, string Iname);

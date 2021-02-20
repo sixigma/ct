@@ -53,7 +53,7 @@ extern POINT		_mouse, _currOrg, _newOrg, _menuMsgPos;
 extern RECT			_camMovLim, _totRegion;
 extern BOOL			_isChrUnmovable, _isGamePaused, _isScrBlackingOut, _isMenuDisplayed,
 					_isInBattle, _isActiveBattle, _shouldRenderUsingWindowCoords, _prevRenderMode;
-extern BYTE			_textWindowAlpha;
+extern BYTE			_textWindowAlpha, _blackScreenAlpha;
 extern float		_currMasterVolume, _currBGMVolume, _currSFXVolume;
 extern string		_playChrNames[7];
 extern int			_battleGaugeSpeed, _battleMsgSpeed, _textWindowSkin, _battleGaugeType;

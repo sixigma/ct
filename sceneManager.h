@@ -31,6 +31,13 @@ public:
 	// 장면 제거 함수
 	void delScene(string sceneName);
 
+	gameNode* getScene(string sceneName)
+	{
+		sceneListIter _sceneListIter = _sceneList.find(sceneName);
+		if (_sceneListIter == _sceneList.end()) return nullptr;
+		else return _sceneListIter->second;
+	}
+
 	sceneManager() {};
 	~sceneManager() {};
 };

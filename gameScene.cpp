@@ -70,12 +70,18 @@ gameScene::~gameScene() // 주의: 중복 호출이 되어도 문제가 발생�
 HRESULT gameScene::init() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
 {
 	// 메뉴를 켤 때 움직이고 있었다면 아래 줄들이 있어야 캐릭터가 멈춘 상태로 다시 보이게 된다.
-	_p->getCrono()->setState(NORMAL_IDLE);
-	_p->getCrono()->stopAni();
+	if (_p->getCrono()->getState() != NORMAL_IDLE)
+	{
+		_p->getCrono()->setState(NORMAL_IDLE);
+		_p->getCrono()->stopAni();
+	}
 	_p->update();
 
+	// 시작 화면이 있다면 지운다.
+	SC->delScene("시작 화면");
+
 	// 이름 변경 화면이 있다면 지운다.
-	SC->delScene("이름 변경 화면");
+    SC->delScene("이름 변경 화면");
 	return S_OK;
 }
 void gameScene::release() // 주의: gameScene에서 다른 장면으로 갔다 올 수도 있으므로 중복 호출 하여도 문제가 발생하지 않을 것만 나열하여야 한다.
@@ -87,6 +93,7 @@ void gameScene::update()
 
 	if (KEY->down('D') && !_isInBattle && !_isChrUnmovable && _countForReEnablingKeyInput == 0)
 	{
+		reinterpret_cast<playerUiScene*>(SC->getScene("스텟 창"))->setLinkTo(_p);
 		SC->changeScene("스텟 창");
 	}
 	
@@ -254,24 +261,12 @@ void gameScene::updateViewport(int x, int y)
 
 void gameScene::setViewport(int x, int y)
 {
-	_currOrg.x = 0;
-	_currOrg.y = 0;
-	if (y - VIEWPORT_UPDATE_OFFSET > _currOrg.y + WINH / 2)
-	{
-		_newOrg.y = min(y - WINH / 2, _camMovLim.bottom);
-	}
-	else if (y + VIEWPORT_UPDATE_OFFSET < _currOrg.y + WINH / 2)
-	{
-		_newOrg.y = max(y - WINH / 2, _camMovLim.top);
-	}
-	if (x - VIEWPORT_UPDATE_OFFSET > _currOrg.x + WINW / 2)
-	{
-		_newOrg.x = min(x - WINW / 2, _camMovLim.right);
-	}
-	else if (x + VIEWPORT_UPDATE_OFFSET < _currOrg.x + WINW / 2)
-	{
-		_newOrg.x = max(x - WINW / 2, _camMovLim.left);
-	}
+	if (y > WINH / 2) _newOrg.y = min(y - WINH / 2, _camMovLim.bottom);
+	else _newOrg.y = max(y - WINH / 2, _camMovLim.top);
+
+	if (x > WINW / 2) _newOrg.x = min(x - WINW / 2, _camMovLim.right);
+	else _newOrg.x = max(x - WINW / 2, _camMovLim.left);
+
 	_currOrg.x = _newOrg.x;
 	_currOrg.y = _newOrg.y;
 }

@@ -17,13 +17,9 @@ playerUiScene::~playerUiScene()
 
 HRESULT playerUiScene::init()
 {
-	pl = new player;
-	pl->init();
-
 	_item = new item;
 	_item->itemlist("WoodSword");
 	_vItem.push_back(_item);
-
 
 	_item = new item;
 	_item->itemlist("HideTunic");
@@ -53,7 +49,7 @@ HRESULT playerUiScene::init()
 	{
 	case 0:
 		_chrFaceImg = IMG->find("Crono");
-		playerName = "Crono";
+		playerName = _playChrNames[0];
 		p1E.weapon = "Wood Sword";
 		p1E.helmet = "Hide Cap";
 		p1E.armor = "Hide Tunic";
@@ -76,7 +72,7 @@ HRESULT playerUiScene::init()
 	break;
 	case 1:
 		_chrFaceImg = IMG->find("Lucca");
-		playerName = "Lucca";
+		playerName = _playChrNames[1];
 		playerWeapon = p2E.weapon;
 		playerHelmet = p2E.helmet;
 		playerArmor = p2E.armor;
@@ -94,21 +90,21 @@ HRESULT playerUiScene::init()
 	break;
 	case 2:
 		_chrFaceImg = IMG->find("Frog");
-		playerName = "Frog";
+		playerName = _playChrNames[3];
 		playerWeapon = p3E.weapon;
 		playerHelmet = p3E.helmet;
 		playerArmor = p3E.armor;
 		playerAcc = p3E.acc;
-		playerLevel = to_string(pl->getfrog()->getLV());
-		playerPow = pl->getfrog()->getPower();
-		playerSpd = pl->getfrog()->getSpeed();
-		playerHit = pl->getfrog()->getHit();
-		playerEv = pl->getfrog()->getEvasion();
-		playerMag = pl->getfrog()->getMagic();
-		playerStam = pl->getfrog()->getStamina();
+		playerLevel = to_string(pl->getFrog()->getLV());
+		playerPow = pl->getFrog()->getPower();
+		playerSpd = pl->getFrog()->getSpeed();
+		playerHit = pl->getFrog()->getHit();
+		playerEv = pl->getFrog()->getEvasion();
+		playerMag = pl->getFrog()->getMagic();
+		playerStam = pl->getFrog()->getStamina();
 		playerMdef = 2; //magic.Defence
-		playerExp = pl->getfrog()->getExp();
-		playerMaxExp = pl->getfrog()->getMaxExp();
+		playerExp = pl->getFrog()->getExp();
+		playerMaxExp = pl->getFrog()->getMaxExp();
 	break;
 	}
 	
@@ -117,8 +113,6 @@ HRESULT playerUiScene::init()
 
 void playerUiScene::release()
 {
-	pl->release();
-	SAFE_DEL(pl);
 	for (size_t i = 0; i < _vItem.size(); ++i) SAFE_DEL(_vItem[i]);
 	_vItem.clear();
 }
@@ -198,7 +192,7 @@ void playerUiScene::categoryList(int num)
 		IMG->render("캐릭터창", getMemDC(), T, 640);
 		IMG->render("0번 스텟창 캐릭터", getMemDC(), 7 * T, T);
 		
-		TXT->render(getMemDC(),"Crono LV \t " + to_string(pl->getCrono()->getLV()), T + T / 2, T + T / 2, 0, 0);
+		TXT->render(getMemDC(), _playChrNames[0] + " LV \t " + to_string(pl->getCrono()->getLV()), T + T / 2, T + T / 2, 0, 0);
 		TXT->render(getMemDC(), "HP \t" + to_string(pl->getCrono()->getHP()) +"/ \t" + to_string(pl->getCrono()->getMaxHP()), T + T / 2, T + (T/2) + E, 0, 0);
 		TXT->render(getMemDC(), "MP \t" + to_string(pl->getCrono()->getMP()) + "/ \t" + to_string(pl->getCrono()->getMaxMP()), T + T / 2, T + (T / 2) + 2 *E, 0, 0);
 		//===========================
@@ -312,7 +306,7 @@ void playerUiScene::categoryList(int num)
 		IMG->render("소지아이템창", getMemDC(),T, 5 * T);
 		for (int i = 0; i < _vItem.size(); i++)
 		{
-			TXT->render(getMemDC(), _vItem[i]->getName(), T + (T / 4), (5 * T) + (T / 4) + (i*T));
+			TXT->render(getMemDC(), _vItem[i]->getName(), T + (T / 4), (5 * T) + (T / 4) + (i * T));
 		}
 	break;
 
@@ -393,7 +387,7 @@ void playerUiScene::cateControl()
 
 		if (sT == false)
 		{
-			if (!(pos.y >= WINH - 64))pos.y += 16;
+			if (!(pos.y >= WINH - 64)) pos.y += 16;
 			else if (pos.y + 16 >= WINH - 64)									
 			{
 				appear = 0;
@@ -403,8 +397,8 @@ void playerUiScene::cateControl()
 		}
 		if (sT == true)
 		{
-			if (!(PtInRect(&one1, pos)))pos.y -= 10;
-			else if (PtInRect(&one1, pos) && (pos.y + 16 <= 64 * 4))pos.y = 64 * 4;
+			if (!(PtInRect(&one1, pos))) pos.y -= 10;
+			else if (PtInRect(&one1, pos) && (pos.y + 16 <= 64 * 4)) pos.y = 64 * 4;
 
 		}
 		

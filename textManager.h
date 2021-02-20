@@ -16,7 +16,7 @@ enum class TEXT_WINDOW_STATE
 
 class textManager : public singleton<textManager>
 {
-private:
+	private:
 	fontParser* _fP;
 	vector<CD>* fontInfo;
 	image* _currFontImage;
@@ -44,7 +44,7 @@ private:
 
 	void setCurrFontImage(int searchValue);
 
-public:
+	public:
 	textManager();
 	~textManager();
 
@@ -103,20 +103,22 @@ public:
 	void renderC(HDC hDC, int destX = 0, int destY = 0, int fontIdx = 0, int colorIdx = 0);
 
 	// 현재 선택지 변수 값을 반환하는 함수
-	int getChoiceSelected() { return _choiceSelected; }
+	inline int getChoiceSelected() { return _choiceSelected; }
 
 	// 선택지 변수를 초기화하는 함수
-	void resetChoiceSelected() { _choiceSelected = 0; }
+	inline void resetChoiceSelected() { _choiceSelected = 0; }
 
 	// 글 출력 창 상태를 설정하는 함수(0 INVISIBLE, 1 OPENING, 2 VISIBLE, 3 CLOSING)
-	void setTextWindowState1(int value) { _textWindowState1 = static_cast<TEXT_WINDOW_STATE>(value); }
-	void setTextWindowState2(int value) { _textWindowState2 = static_cast<TEXT_WINDOW_STATE>(value); }
+	inline void setTextWindowState1(int value) { _textWindowState1 = static_cast<TEXT_WINDOW_STATE>(value); }
+	inline void setTextWindowState2(int value) { _textWindowState2 = static_cast<TEXT_WINDOW_STATE>(value); }
 
 	// 글 출력 창 상태를 반환하는 함수
-	TEXT_WINDOW_STATE getTextWindowState1() { return _textWindowState1; }
-	TEXT_WINDOW_STATE getTextWindowState2() { return _textWindowState2; }
+	inline TEXT_WINDOW_STATE getTextWindowState1() { return _textWindowState1; }
+	inline TEXT_WINDOW_STATE getTextWindowState2() { return _textWindowState2; }
 
-	void toggleTextWindowPos() { _shouldWindowUseTheTopPane = !_shouldWindowUseTheTopPane; }
-	BOOL getTextWindowPos() { return _shouldWindowUseTheTopPane; }
+	inline BOOL getIfWholeCurrStrIsShown1() { return _isWholeCurrStrShown1; }
+
+	inline void toggleTextWindowPos() { _shouldWindowUseTheTopPane = !_shouldWindowUseTheTopPane; }
+	inline BOOL getTextWindowPos() { return _shouldWindowUseTheTopPane; }
 };
 

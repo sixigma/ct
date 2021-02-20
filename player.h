@@ -26,5 +26,5 @@ public:
 	//루카 getter
 	lucca* getLucca() { return _lucca; }
 	//개구리 getter
-	frog* getfrog() { return _frog; }
+	frog* getFrog() { return _frog; }
 };
