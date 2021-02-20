@@ -3,14 +3,14 @@
 #include "crono.h"
 #include "lucca.h"
 #include "frog.h"
-
+#include "marle.h"
 class player : public gameNode
 {
 private:
 	crono* _crono;
 	lucca* _lucca;
 	frog* _frog;
-
+	marle* _marle;
 	int _cha;//체인지
 public:
 	player() {};
@@ -27,4 +27,6 @@ public:
 	lucca* getLucca() { return _lucca; }
 	//개구리 getter
 	frog* getFrog() { return _frog; }
+	//마루 getter
+	marle* getMarle() { return _marle; }
 };

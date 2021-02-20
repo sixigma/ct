@@ -637,7 +637,7 @@ void frog::imgSwitch()
 	{
 		_chaSet.rc = MakeRct(_chaSet.pt.x - ((224) / 2), _chaSet.pt.y - (284 - 64), (224), (284));
 	}
-	else { _chaSet.rc = MakeRct(_chaSet.pt.x - ((224) / 2), _chaSet.pt.y - 224, (224), (224)); }
+	else { _chaSet.rc = MakeRct(_chaSet.pt.x - ((224) / 2), _chaSet.pt.y - 192, (224), (224)); }
 
 }
 

@@ -19,6 +19,13 @@ HRESULT millennialFair::init()
 	}
 	else *currPlPos = { 1578, 1334 };
 
+	lucPos = &pl->getLucca()->getPos();
+	*lucPos = *currPlPos;
+	frogPos = &pl->getFrog()->getPos();
+	*frogPos = *currPlPos;
+	marPos = &pl->getMarle()->getPos();
+	*marPos = *currPlPos;
+
 	setMapNum(1);
 
 	eR.push_back({ 464, 1080, 464 + 61, 1080 + 61 }); // 음식 보따리 이벤트

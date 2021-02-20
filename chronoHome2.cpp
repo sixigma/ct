@@ -9,6 +9,13 @@ HRESULT chronoHome2::init()
 	else if (getPrevMapNum() == 2) *currPlPos = { 710, 930 };
 	else *currPlPos = { 765, 385 };
 
+	lucPos = &pl->getLucca()->getPos();
+	*lucPos = *currPlPos;
+	frogPos = &pl->getFrog()->getPos();
+	*frogPos = *currPlPos;
+	marPos = &pl->getMarle()->getPos();
+	*marPos = *currPlPos;
+
 	setMapNum(6);
 	// ========================================================
 

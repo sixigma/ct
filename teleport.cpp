@@ -10,6 +10,13 @@ HRESULT teleport::init()
 	else *currPlPos = { 548, 746 };
 	exit.push_back({ 444, 974 , 444 + 196, 974 +46 });
 
+	lucPos = &pl->getLucca()->getPos();
+	*lucPos = *currPlPos;
+	frogPos = &pl->getFrog()->getPos();
+	*frogPos = *currPlPos;
+	marPos = &pl->getMarle()->getPos();
+	*marPos = *currPlPos;
+
 	prevPlPos = *currPlPos;
 	gameScene::setViewport(currPlPos->x, currPlPos->y);
 	return S_OK;

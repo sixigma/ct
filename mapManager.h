@@ -13,7 +13,12 @@ protected:
 	vector <RECT> eR; // event 활성화 여부 확인해주는 렉트
 	vector <RECT> exit; // 나가버리기
 	POINT prevPlPos;
+
 	POINT* currPlPos;
+	POINT* lucPos;
+	POINT* frogPos;
+	POINT* marPos;
+
 	RECT tempRct;
 	vector<vector<tileInfo>> tile;
 

@@ -9,6 +9,15 @@ HRESULT leeneSquare::init()
 	if (getPrevMapNum() == 6) *currPlPos = { 1495 + 100, 1750 };
 	else if (getPrevMapNum() == 1) *currPlPos = { 1600, 144 }; 
 	else *currPlPos = { 1600, 1400 };
+	lucPos = &pl->getLucca()->getPos();
+	frogPos = &pl->getFrog()->getPos();
+
+	lucPos = &pl->getLucca()->getPos();
+	*lucPos = *currPlPos;
+	frogPos = &pl->getFrog()->getPos();
+	*frogPos = *currPlPos;
+	marPos = &pl->getMarle()->getPos();
+	*marPos = *currPlPos;
 
 	setMapNum(2);
 
