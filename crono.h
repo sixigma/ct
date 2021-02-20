@@ -1,10 +1,12 @@
 #pragma once
 #include"character.h"
+#include "Astar.h"
 
 class crono : public character
 {
 private:
-
+	float a, b, rich;
+	vector<POINT> Path;
 public:
 	crono() {};
 	~crono() {};
