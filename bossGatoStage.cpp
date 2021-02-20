@@ -14,6 +14,13 @@ HRESULT bossGatoStage::init()
 
 	*currPlPos = { 640, 780 };
 
+	lucPos = &pl->getLucca()->getPos();
+	*lucPos = *currPlPos;
+	frogPos = &pl->getFrog()->getPos();
+	*frogPos = *currPlPos;
+	marPos = &pl->getMarle()->getPos();
+	*marPos = *currPlPos;
+
 	setMapNum(3);
 
 	// ========================================================

@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "Astar.h"
 struct tagStatus	//능력치
 {
 	int power;			//힘(근접무기공격력 + )	(최대 100)
@@ -179,10 +180,17 @@ protected:
 	bool aniReset;	//애니메이션 스탑용 bool
 	bool Latk;		//원거리 공격 체크용 bool
 	int dia;		//(임시)포인트 확인용 지름
-
+	int _moveC;
 	int _id; // 캐릭터 ID
 
 	STATE_BATTLE state_b = STATE_BATTLE::INIT;
+	/////////// Astar용 //////////////
+	float a, b, rich;
+	vector<POINT> Path;
+	bool Acheck;//a스타 시작 체크용
+	int AmoveC;//a스타 시작 제한용
+	int muonX, muonY;
+	////////// Astar용 ///////////////
 public:
 	virtual HRESULT init();
 	virtual void release();
@@ -349,7 +357,12 @@ public:
 
 
 	void stopAni() { _chaSet.ani->stop(); }
-
+	//단순하게 크로노 따라가기 crono -> 따라갈 대상(보통 첫번째 캐릭터는 크로노) / Count -> 따라가기 시작하는 거리 및 시작하는 시간에 곱하는 값
+	//void follow(POINT crono, int Count);
+	//A스타 설정하기
+	void AstarCheck(int Key, POINT crono, int Count);
+	//A스타로 따라가기
+	void AstarFollow(POINT crono, int Count);
 	bool atkCheck()
 	{
 		if (_chaSet.state == BATTLE_ATK)
