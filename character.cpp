@@ -110,7 +110,7 @@ void character::AstarCheck(int Key, POINT crono, int Count)
 		Path = astar->pathFinder({ _chaSet.pt.x / TILESIZE, _chaSet.pt.y / TILESIZE }, { crono.x / TILESIZE, crono.y / TILESIZE });
 		astar->release();
 		delete astar;
-		a = b = rich = 0;
+		a = b = reach = 0;
 	}
 }
 
@@ -151,7 +151,7 @@ void character::AstarFollow(POINT crono, int Count)
 			Path = astar->pathFinder({ _chaSet.pt.x / TILESIZE, _chaSet.pt.y / TILESIZE }, { crono.x / TILESIZE, crono.y / TILESIZE });
 			astar->release();
 			delete astar;
-			a = b = rich = 0;
+			a = b = reach = 0;
 
 			Acheck = false;
 			AmoveC = 0;
@@ -162,7 +162,7 @@ void character::AstarFollow(POINT crono, int Count)
 	if (Path.size() != 0)
 	{
 
-		if (rich <= 5.0f)
+		if (reach <= 5.0f)
 		{
 
 			a = (float)Path[Path.size() - 1].x;
@@ -203,7 +203,7 @@ void character::AstarFollow(POINT crono, int Count)
 			_chaSet.ani->stop();
 		}
 
-		rich = Distance((float)_chaSet.pt.x, (float)_chaSet.pt.y, a, b);
+		reach = Distance((float)_chaSet.pt.x, (float)_chaSet.pt.y, a, b);
 
 	}
 

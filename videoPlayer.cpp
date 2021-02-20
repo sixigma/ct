@@ -166,9 +166,8 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 
 	bitmapData.reserve(totPixels);
 
-	//double frameRate = 
-	double avgFrameRate = av_q2d(ps->_formatContext->streams[ps->_videoStreamIndex]->avg_frame_rate);
-	chrono::nanoseconds sleepTime = static_cast<chrono::duration<long long, nano>>(static_cast<long long>(pow(10, 9) / avgFrameRate));
+	const double avgFrameRate = av_q2d(ps->_formatContext->streams[ps->_videoStreamIndex]->avg_frame_rate);
+	const chrono::nanoseconds sleepTime = static_cast<chrono::duration<long long, nano>>(static_cast<long long>(pow(10, 9) / avgFrameRate));
 	
 	// ARGB 데이터 저장 공간
 	BYTE* bufBGRA = static_cast<BYTE*>(av_malloc(static_cast<size_t>(av_image_get_buffer_size(AV_PIX_FMT_RGB32,
@@ -196,7 +195,6 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 
 	FMOD::Channel* audioCh = SND->findChannel("오프닝");
 
-	int tempInt;
 	while (ps->_isPlayingVideo)
 	{
 
@@ -220,8 +218,6 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 			return 0;
 		}
 
-		tempInt = 999;
-
 		av_packet_unref(ps->_packet);
 		if (av_read_frame(ps->_formatContext, ps->_packet) == 0)
 		{
@@ -238,7 +234,8 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 				if (avcodec_send_packet(ps->_videoCodecContext, ps->_packet) == 0)  // 화상 패킷 데이터를 디코더에 보낸다. 성공한다면
 				{
 					ps->_elapsedTime -= sleepTime;
-					while (true)
+
+					//while (true)
 					{
 						if (avcodec_receive_frame(ps->_videoCodecContext, ps->_videoFrame) == 0) // 디코더가 반환한 데이터를 받는다. 성공한다면
 						{
@@ -257,7 +254,7 @@ unsigned videoPlayer::threadForVideo(LPVOID params)
 							}
 							BitBlt(ps->getMemDC(), 0, 0, scrWidth, scrHeight, hTempDC, 0, 0, SRCCOPY);
 						}
-						else break;
+						//else break;
 					}
 					if (ps->_elapsedTime > sleepTime) continue;
 					ps->_prevTime = ps->_currTime;

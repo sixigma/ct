@@ -46,7 +46,7 @@ void marle::release()
 	SAFE_DEL(an.SB_0); SAFE_DEL(an.SB_1); SAFE_DEL(an.SB_2);				//배틀 _ 스탠바이 애니
 	SAFE_DEL(an.atk_0); SAFE_DEL(an.atk_1); SAFE_DEL(an.atk_2);				//배틀 _ 근거리 공격 애니
 	SAFE_DEL(an.atk2_0); SAFE_DEL(an.atk2_1); SAFE_DEL(an.atk2_2);			//배틀 _ 원거리 공격 애니
-	SAFE_DEL(an.Bwin_0); SAFE_DEL(an.Bwin_1); SAFE_DEL(an.Bwin_2);			//배틀 _ 승리
+	SAFE_DEL(an.Bwin_0); SAFE_DEL(an.Bwin_1); SAFE_DEL(an.Bwin_2); SAFE_DEL(an.Bwin_3);			//배틀 _ 승리
 	SAFE_DEL(an.cantRun_0); SAFE_DEL(an.cantRun_1); SAFE_DEL(an.cantRun_2);	//노말 _ 못달린다
 	SAFE_DEL(an.win);
 	SAFE_DEL(an.ladder);
