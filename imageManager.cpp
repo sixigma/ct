@@ -295,13 +295,29 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 
 	if (shouldSaveAsImage)
 	{
-		BITMAPINFO bI{ 0 };
-		bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-		bI.bmiHeader.biBitCount = 32;
-		bI.bmiHeader.biWidth = width;
-		bI.bmiHeader.biHeight = height;
-		bI.bmiHeader.biCompression = BI_RGB; // 무압축 RGB
-		bI.bmiHeader.biPlanes = 1;
+		BITMAPINFOHEADER bitmapInfoHeader{ 0 };
+
+		bitmapInfoHeader.biSize = sizeof(BITMAPINFOHEADER);
+		bitmapInfoHeader.biWidth = width;
+		bitmapInfoHeader.biHeight = height;
+		bitmapInfoHeader.biPlanes = 1;
+		bitmapInfoHeader.biBitCount = 32;
+		bitmapInfoHeader.biCompression = BI_RGB; // 무압축 RGB
+		bitmapInfoHeader.biSizeImage = 0; // 무압축 RGB 비트맵에는 0을 쓴다.
+		bitmapInfoHeader.biXPelsPerMeter = 0;
+		bitmapInfoHeader.biYPelsPerMeter = 0;
+		bitmapInfoHeader.biClrUsed = 0; // 0으로 지정하여 '2의 biBitCount 제곱' 색을 사용한다.
+		bitmapInfoHeader.biClrImportant = 0; // 모든 색이 중요하면 0으로 지정한다.
+
+		BITMAPINFO& bI = *(LPBITMAPINFO)&bitmapInfoHeader;
+
+		//// BITMAPINFO bI{ 0 };
+		//// bI.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+		//// bI.bmiHeader.biBitCount = 32;
+		//// bI.bmiHeader.biWidth = width;
+		//// bI.bmiHeader.biHeight = height;
+		//// bI.bmiHeader.biCompression = BI_RGB; // 무압축 RGB
+		//// bI.bmiHeader.biPlanes = 1;
 
 		BYTE* bitmapData = nullptr;
 
@@ -319,32 +335,19 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 		BitBlt(hTempDC, 0, 0, width, height, hDC, x, y, SRCCOPY);
 
 		BITMAPFILEHEADER bitmapFileHeader{ 0 };
-		BITMAPINFOHEADER bitmapInfoHeader{ 0 };
 
 		bitmapFileHeader.bfOffBits = static_cast<DWORD>(sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER));
 		bitmapFileHeader.bfSize = static_cast<DWORD>(dIBSize);
 		bitmapFileHeader.bfType = 0x4D42; // 0x4D42는 'BM'을 나타낸다.
 
-		bitmapInfoHeader.biSize = sizeof(BITMAPINFOHEADER);
-		bitmapInfoHeader.biWidth = width;
-		bitmapInfoHeader.biHeight = height;
-		bitmapInfoHeader.biPlanes = 1;
-		bitmapInfoHeader.biBitCount = 32;
-		bitmapInfoHeader.biCompression = BI_RGB; // 무압축 RGB
-		bitmapInfoHeader.biSizeImage = 0; // 무압축 RGB 비트맵에는 0을 쓴다.
-		bitmapInfoHeader.biXPelsPerMeter = 0;
-		bitmapInfoHeader.biYPelsPerMeter = 0;
-		bitmapInfoHeader.biClrUsed = 0; // 0으로 지정하여 '2의 biBitCount 제곱' 색을 사용한다.
-		bitmapInfoHeader.biClrImportant = 0; // 모든 색이 중요하면 0으로 지정한다.
-
-		HGLOBAL hDIB = GlobalAlloc(GMEM_MOVEABLE, dIBSize); // 32 비트 윈도즈부터 GlobalAlloc은 HeapAlloc의 wrapper function이다. GMEM_MOVEABLE을 사용하면 이동이 될 수 있는 메모리 공간이 할당된다.
-		if (hDIB)
+		//// HGLOBAL hDIB = GlobalAlloc(GMEM_MOVEABLE, dIBSize); // 32 비트 윈도즈부터 GlobalAlloc은 HeapAlloc의 wrapper function이다. GMEM_MOVEABLE을 사용하면 이동이 될 수 있는 메모리 공간이 할당된다.
+		//// if (hDIB)
 		{
-			BYTE* dIB = (BYTE*)GlobalLock(hDIB); // 핸들을 포인터로 번역하려면 GlobalLock을 호출하여야 한다.
+			//// BYTE* dIB = (BYTE*)GlobalLock(hDIB); // 핸들을 포인터로 번역하려면 GlobalLock을 호출하여야 한다.
 
-			copy_n(reinterpret_cast<BYTE*>(&bitmapFileHeader), sizeof(BITMAPFILEHEADER), dIB);
-			copy_n(reinterpret_cast<BYTE*>(&bitmapInfoHeader), sizeof(BITMAPINFOHEADER), dIB + sizeof(BITMAPFILEHEADER));
-			copy_n(bitmapData, bitmapSize, dIB + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER));
+			//// copy_n(reinterpret_cast<BYTE*>(&bitmapFileHeader), sizeof(BITMAPFILEHEADER), dIB);
+			//// copy_n(reinterpret_cast<BYTE*>(&bitmapInfoHeader), sizeof(BITMAPINFOHEADER), dIB + sizeof(BITMAPFILEHEADER));
+			//// copy_n(bitmapData, bitmapSize, dIB + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER));
 
 			SYSTEMTIME localTime{0};
 			GetLocalTime(&localTime);
@@ -353,18 +356,25 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 				+ to_string(localTime.wHour) + "시 " + to_string(localTime.wMinute) + "분 " + to_string(localTime.wSecond) + "초 " + to_string(localTime.wMilliseconds) + ".bmp";
 
 			HANDLE hFile = CreateFile(fileName.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-			WriteFile(hFile, dIB, static_cast<DWORD>(dIBSize), NULL, NULL);
+
+			//// WriteFile(hFile, dIB, static_cast<DWORD>(dIBSize), NULL, NULL);
+
+			WriteFile(hFile, reinterpret_cast<BYTE*>(&bitmapFileHeader), static_cast<DWORD>(sizeof(BITMAPFILEHEADER)), NULL, NULL);
+			WriteFile(hFile, reinterpret_cast<BYTE*>(&bitmapInfoHeader), static_cast<DWORD>(sizeof(BITMAPINFOHEADER)), NULL, NULL);
+			WriteFile(hFile, bitmapData, static_cast<DWORD>(bitmapSize), NULL, NULL);
+
 			CloseHandle(hFile); // 파일 작성을 마쳤으면 CloseHandle을 호출하여야 한다.
 
-			GlobalUnlock(hDIB); // GlobalLock을 호출하였으면 GlobalUnlock을 호출하여야 한다.
-			GlobalFree(hDIB); // GlobalAlloc을 호출하였으면 GlobalFree를 호출하여야 한다.
+			//// GlobalUnlock(hDIB); // GlobalLock을 호출하였으면 GlobalUnlock을 호출하여야 한다.
+			//// GlobalFree(hDIB); // GlobalAlloc을 호출하였으면 GlobalFree를 호출하여야 한다.
 		}
 
 		DeleteObject(SelectObject(hTempDC, hOTempBitmap));
 	}
 	else
 	{
-		HBITMAP hTempBitmap = CreateBitmap(width, height, 1, 32, NULL);
+		//HBITMAP hTempBitmap = CreateBitmap(width, height, 1, 32, NULL);
+		HBITMAP hTempBitmap = CreateCompatibleBitmap(hDC, width, height);
 		HBITMAP hOTempBitmap = (HBITMAP)SelectObject(hTempDC, hTempBitmap);
 		BitBlt(hTempDC, 0, 0, width, height, hDC, x, y, SRCCOPY);
 		SelectObject(hTempDC, hOTempBitmap); // 주의: 복사할 비트맵이 DC에 선택되어 있으면 안 되므로 이 줄이 필요하다.
@@ -375,7 +385,7 @@ void imageManager::takeScreenshot(HDC hDC, BOOL shouldSaveAsImage, int x, int y,
 			SetClipboardData(CF_BITMAP, hTempBitmap);
 			CloseClipboard();
 		}
-		DeleteObject(SelectObject(hTempDC, hOTempBitmap));
+		DeleteObject(hTempBitmap);
 	}
 
 	DeleteDC(hTempDC);
